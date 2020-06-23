@@ -6,6 +6,7 @@ env:
   global:
     - DOCKER_COMPOSE_VERSION: 1.18.0
     - APPLICATION_NAME: aquila
+    - SERVICE_NAME: aquila-web
 before_install:
   - sudo rm /usr/local/bin/docker-compose
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
@@ -14,6 +15,8 @@ before_install:
   - cp ${APPLICATION_NAME}/config.py.example ${APPLICATION_NAME}/config.py
   - docker-compose up -d
   - sleep 20s
+  - docker-compose exec ${SERVICE_NAME} pip install coverage pre-commit
+  - docker-compose exec ${SERVICE_NAME} pre-commit install
 install: true
 script:
-  - docker-compose exec web python manage.py test
+  - docker-compose exec ${SERVICE_NAME} pre-commit run --all-files --show-diff-on-failure
