@@ -17,3 +17,7 @@ class RightsAssembler(object):
     def create_json(self):
         """docstring for create_json"""
     pass
+
+    def return_rights(self):
+        """docstring for return_rights"""
+    pass
