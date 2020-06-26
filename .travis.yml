@@ -18,10 +18,5 @@ before_install:
   - docker-compose exec ${SERVICE_NAME} pip install coverage pre-commit
   - docker-compose exec ${SERVICE_NAME} pre-commit install
 install: true
-before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
-    > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
 script:
   - docker-compose exec ${SERVICE_NAME} pre-commit run --all-files --show-diff-on-failure
