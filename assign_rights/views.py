@@ -1,8 +1,8 @@
+from assign_rights.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
-from django.views.generic import CreateView, DetailView, ListView, UpdateView, TemplateView
-
-from assign_rights.models import User
+from django.views.generic import (CreateView, DetailView, ListView,
+                                  TemplateView, UpdateView)
 
 
 def RightsShellsListView(ListView):
