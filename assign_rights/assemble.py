@@ -6,11 +6,10 @@
 class RightsAssembler(object):
     """docstring for RightsCalculator"""
 
-    def retrieve_rights(self):
+    def retrieve_rights(self, item):
         """docstring for retrieve_rights"""
-        for id in request:
-            shell = RightsShell.objects.get(rights_id=id)
-            pass
+        shell = RightsShell.objects.get(rights_id=id)
+        return shell
 
     def calculate_dates(self):
         """docstring for calculate_dates"""
@@ -23,3 +22,8 @@ class RightsAssembler(object):
     def return_rights(self):
         """docstring for return_rights"""
     pass
+
+    def run(self, request_list):
+        for item in request_list:
+            self.retrieve_rights(item)
+            return 'test'

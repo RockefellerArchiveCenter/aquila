@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from rest_framework.views import APIView
+
+from .assemble import RightsAssembler
 
 
 class RightsShellsListView(ListView):
@@ -27,16 +30,26 @@ class GroupingsListView(ListView):
     pass
 
 
-def GroupingsCreateView(CreateView):
+class GroupingsCreateView(CreateView):
     '''create groupings'''
     pass
 
 
-def GroupingsDetailView(DetailView):
+class GroupingsDetailView(DetailView):
     '''view a grouping'''
     pass
 
 
-def GroupingsUpdateView(UpdateView):
+class GroupingsUpdateView(UpdateView):
     '''update grouping'''
     pass
+
+class RightsAssemblerView(APIView):
+    '''
+    Calls the RightsAssembler class from assemblers.
+    '''
+    def post(self, request, format=None):
+        request_list = request.data.get('items')
+        shell_list = RightsAssembler().run(object_list)
+        print(shell_list)
+        return Response(process_list, status=200)
