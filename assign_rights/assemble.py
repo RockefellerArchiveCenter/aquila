@@ -8,7 +8,9 @@ class RightsAssembler(object):
 
     def retrieve_rights(self):
         """docstring for retrieve_rights"""
-    pass
+        for id in request:
+            shell = RightsShell.objects.get(rights_id=id)
+            pass
 
     def calculate_dates(self):
         """docstring for calculate_dates"""
