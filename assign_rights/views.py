@@ -2,27 +2,27 @@ from django.shortcuts import render
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
 
-def RightsShellsListView(ListView):
+class RightsShellsListView(ListView):
     '''browse and search rights shells'''
     pass
 
 
-def RightsShellsCreateView(CreateView):
+class RightsShellsCreateView(CreateView):
     '''create rights shells'''
     pass
 
 
-def RightsShellsDetailView(DetailView):
+class RightsShellsDetailView(DetailView):
     '''view a rights shell'''
     pass
 
 
-def RightsShellsUpdateView(UpdateView):
+class RightsShellsUpdateView(UpdateView):
     '''update rights shell'''
     pass
 
 
-def GroupingsListView(ListView):
+class GroupingsListView(ListView):
     '''browse and search groupings'''
     pass
 
