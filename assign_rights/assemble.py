@@ -1,3 +1,5 @@
+from .models import RightsShell
+
 # Receive POST request that contains multiple rights IDs and one date
 # For each rights ID, take date to calculate and return rights json (that looks like what Aurora returns)
 # Send rights json back
@@ -8,6 +10,8 @@ class RightsAssembler(object):
 
     def retrieve_rights(self, item):
         """docstring for retrieve_rights"""
+        id = 1
+        print(RightsShell.objects.all())
         shell = RightsShell.objects.get(rights_id=id)
         return shell
 

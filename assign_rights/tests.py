@@ -9,5 +9,5 @@ class TestViews(TestCase):
 
     def test_rightsassemblerview(self):
         factory = APIRequestFactory()
-        request = factory.post(reverse('rights-assemble'), {"items": ["/repositories/2/archival_objects/8457"]}, format='json')
+        request = factory.post(reverse('rights-assemble'), {"items": [1,2,3]}, format='json')
         response = RightsAssemblerView.as_view()(request)
