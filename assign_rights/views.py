@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .assemble import RightsAssembler
@@ -52,4 +53,4 @@ class RightsAssemblerView(APIView):
         request_list = request.data.get('items')
         shell_list = RightsAssembler().run(request_list)
         print(shell_list)
-        return Response(process_list, status=200)
+        return Response(request_list, status=200)
