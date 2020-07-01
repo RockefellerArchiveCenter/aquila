@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.urls import reverse
 from rest_framework.test import APIRequestFactory
 
 from .assemble import RightsAssembler
@@ -9,4 +10,4 @@ class TestViews(TestCase):
     def test_rightsassemblerview(self):
         factory = APIRequestFactory()
         request = factory.post(reverse('rights-assemble'), {"items": ["/repositories/2/archival_objects/8457"]}, format='json')
-        response = ProcessRequestView.as_view()(request)
+        response = RightsAssemblerView.as_view()(request)

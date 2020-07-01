@@ -50,6 +50,6 @@ class RightsAssemblerView(APIView):
     '''
     def post(self, request, format=None):
         request_list = request.data.get('items')
-        shell_list = RightsAssembler().run(object_list)
+        shell_list = RightsAssembler().run(request_list)
         print(shell_list)
         return Response(process_list, status=200)
