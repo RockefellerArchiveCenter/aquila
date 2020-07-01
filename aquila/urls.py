@@ -15,7 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework import routers
+
+from assign_rights.views import RightsAssemblerView
+
+router = routers.DefaultRouter()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include(router.urls)),
+    path('api/rights-assemble/', RightsAssembler.as_view(), name='rights-assemble')
 ]
