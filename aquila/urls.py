@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from rest_framework import routers
 
 from assign_rights.views import RightsAssemblerView
@@ -24,5 +24,5 @@ router = routers.DefaultRouter()
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
-    path('api/rights-assemble/', RightsAssembler.as_view(), name='rights-assemble')
+    path('api/rights-assemble/', RightsAssemblerView.as_view(), name='rights-assemble')
 ]
