@@ -10,8 +10,6 @@ class RightsAssembler(object):
 
     def retrieve_rights(self, item):
         """docstring for retrieve_rights"""
-        id = 1
-        print(RightsShell.objects.all())
         shell = RightsShell.objects.get(rights_id=id)
         return shell
 
@@ -29,5 +27,8 @@ class RightsAssembler(object):
 
     def run(self, request_list):
         for item in request_list:
-            self.retrieve_rights(item)
-            return 'test'
+            try:
+                self.retrieve_rights(item)
+                return 'test'
+            except Exception as e:
+                print("Could not find matching Rights Shell")
