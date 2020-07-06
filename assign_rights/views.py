@@ -45,10 +45,12 @@ class GroupingsUpdateView(UpdateView):
     '''update grouping'''
     pass
 
+
 class RightsAssemblerView(APIView):
     '''
     Calls the RightsAssembler class from assemblers.
     '''
+
     def post(self, request, format=None):
         request_list = request.data.get('objects')
         shell_list = RightsAssembler().run(request_list)
