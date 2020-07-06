@@ -34,5 +34,5 @@ class TestViews(TestCase):
     def test_rightsassemblerview(self):
         TestModels.create_rightsshell(self)
         factory = APIRequestFactory()
-        request = factory.post(reverse('rights-assemble'), {"objects": [{"identifier": 1, "start_date": "2019-12-09", "end_date": "2020-01-01"}, {"identifier": 2, "start_date": "2019-12-01", "end_date": "2020-02-01"}, {"identifier": 3, "start_date": "2019-11-09", "end_date": "2020-03-01"}]}, format='json')
+        request = factory.post(reverse('rights-assemble'), {"identifiers": [1, 2, 3, 4], "end_date": "2020-03-01"}, format='json')
         response = RightsAssemblerView.as_view()(request)
