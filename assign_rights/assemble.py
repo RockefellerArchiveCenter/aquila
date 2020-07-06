@@ -8,12 +8,12 @@ from .models import RightsShell
 class RightsAssembler(object):
     """docstring for RightsCalculator"""
 
-    def retrieve_rights(self, item, shell_list):
-        """docstring for retrieve_rights"""
+    def retrieve_rights(self, item):
+        """Retrieves a rights shell whose rights_id matches an identifier from
+        a post request.
+        """
         identifier = item.get("identifier")
-        shell = RightsShell.objects.get(rights_id=identifier)
-        shell_list.append(shell)
-        return shell_list
+        return RightsShell.objects.get(rights_id=identifier)
 
     def calculate_dates(self):
         """docstring for calculate_dates"""
@@ -28,10 +28,10 @@ class RightsAssembler(object):
     pass
 
     def run(self, request_list):
-        shell_list = []
+        shells = []
         for item in request_list:
             try:
-                self.retrieve_rights(item, shell_list)
+                shells.append(self.retrieve_rights(item))
             except Exception as e:
                 print("Error retrieving rights shell: {}".format(str(e)))
-        print(shell_list)
+        print(shells)
