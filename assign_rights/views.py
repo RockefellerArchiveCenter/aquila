@@ -1,4 +1,8 @@
-from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from assign_rights.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render
+from django.views.generic import (CreateView, DetailView, ListView,
+                                  TemplateView, UpdateView)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -55,3 +59,7 @@ class RightsAssemblerView(APIView):
         end_date = request.data.get("end_date")
         assembled = RightsAssembler().run(rights_ids, end_date)
         return Response(assembled)
+
+
+class LoggedInView(LoginRequiredMixin, TemplateView):
+    template_name = "users/logged_in.html"
