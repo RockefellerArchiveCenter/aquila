@@ -20,3 +20,4 @@ before_install:
 install: true
 script:
   - docker-compose exec ${SERVICE_NAME} pre-commit run --all-files --show-diff-on-failure
+  - docker-compose exec ${SERVICE_NAME} coverage run manage.py test
