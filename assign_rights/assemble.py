@@ -12,7 +12,7 @@ class RightsAssembler(object):
         """Retrieves a rights shell whose rights_id matches an identifier from
         a post request.
         """
-        return RightsShell.objects.get(rights_id=identifier)
+        return RightsShell.objects.get(pk=identifier)
 
     def calculate_dates(self):
         """docstring for calculate_dates"""
