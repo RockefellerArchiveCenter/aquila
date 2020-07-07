@@ -14,11 +14,7 @@ class RightsAssembler(object):
         """
         rights_shells = []
         for ident in rights_ids:
-            try:
-                rights_shells.append(RightsShell.objects.get(pk=ident))
-            except RightsShell.DoesNotExist:
-                error = "Could not find matching shell with identifier: {}".format(str(ident))
-                print(error)
+            rights_shells.append(RightsShell.objects.get(pk=ident))
         return rights_shells
 
     def calculate_dates(self, end_date):
@@ -38,5 +34,5 @@ class RightsAssembler(object):
             rights_shells = self.retrieve_rights(rights_ids)
             for shell in rights_shells:
                 self.calculate_dates(end_date)
-        except Exception as e:
+        except RightsShell.DoesNotExist as e:
             print("Error retrieving rights shell: {}".format(str(e)))
