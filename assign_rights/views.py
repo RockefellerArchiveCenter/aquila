@@ -4,6 +4,10 @@ from django.contrib.auth.views import LoginView
 from django.shortcuts import render
 from django.views.generic import (CreateView, DetailView, ListView,
                                   TemplateView, UpdateView)
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from .assemble import RightsAssembler
 
 
 class PageTitleMixin(object):
@@ -22,48 +26,59 @@ class PageTitleMixin(object):
         return context
 
 
-def RightsShellsListView(ListView):
+def RightsShellListView(ListView):
     '''browse and search rights shells'''
     pass
 
 
-def RightsShellsCreateView(CreateView):
+class RightsShellCreateView(CreateView):
     '''create rights shells'''
     pass
 
 
-def RightsShellsDetailView(DetailView):
+class RightsShellDetailView(DetailView):
     '''view a rights shell'''
     pass
 
 
-def RightsShellsUpdateView(UpdateView):
+class RightsShellUpdateView(UpdateView):
     '''update rights shell'''
     pass
 
 
-def GroupingsListView(ListView):
+class GroupingsListView(ListView):
     '''browse and search groupings'''
     pass
 
 
-def GroupingsCreateView(CreateView):
+class GroupingsCreateView(CreateView):
     '''create groupings'''
     pass
 
 
-def GroupingsDetailView(DetailView):
+class GroupingsDetailView(DetailView):
     '''view a grouping'''
     pass
 
 
-def GroupingsUpdateView(UpdateView):
+class GroupingsUpdateView(UpdateView):
     '''update grouping'''
     pass
 
 
 class AquilaLoginView(PageTitleMixin, LoginView):
+    """Custom Login View to set page title."""
     page_title = "Login"
+
+
+class RightsAssemblerView(APIView):
+    """Calls the RightsAssembler class from assemblers."""
+
+    def post(self, request, format=None):
+        rights_ids = request.data.get("identifiers")
+        end_date = request.data.get("end_date")
+        assembled = RightsAssembler().run(rights_ids, end_date)
+        return Response(assembled)
 
 
 class LoggedInView(PageTitleMixin, LoginRequiredMixin, TemplateView):
