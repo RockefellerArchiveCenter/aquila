@@ -6,9 +6,9 @@ from .models import RightsShell
 from .views import RightsAssemblerView
 
 
-class TestModels(TestCase):
+class TestViews(TestCase):
 
-    def create_rightsshell(self):
+    def setUp(self):
         return RightsShell.objects.create(
             rights_id=1,
             rights_basis="Copyright",
@@ -24,15 +24,7 @@ class TestModels(TestCase):
             statute_citation=None
         )
 
-    def test_rightsshell_creation(self):
-        s = self.create_rightsshell()
-        self.assertTrue(isinstance(s, RightsShell))
-
-
-class TestViews(TestCase):
-
     def test_rightsassemblerview(self):
-        TestModels.create_rightsshell(self)
         factory = APIRequestFactory()
         request = factory.post(reverse('rights-assemble'), {"identifiers": [1, 2, 3, 4], "end_date": "2020-03-01"}, format='json')
         response = RightsAssemblerView.as_view()(request)
