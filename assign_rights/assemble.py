@@ -1,4 +1,3 @@
-from django.http import Http404
 from .models import RightsShell
 
 # Receive POST request that contains multiple rights IDs and one date
