@@ -5,22 +5,22 @@ from rest_framework.views import APIView
 from .assemble import RightsAssembler
 
 
-class RightsShellsListView(ListView):
+class RightsShellListView(ListView):
     '''browse and search rights shells'''
     pass
 
 
-class RightsShellsCreateView(CreateView):
+class RightsShellCreateView(CreateView):
     '''create rights shells'''
     pass
 
 
-class RightsShellsDetailView(DetailView):
+class RightsShellDetailView(DetailView):
     '''view a rights shell'''
     pass
 
 
-class RightsShellsUpdateView(UpdateView):
+class RightsShellUpdateView(UpdateView):
     '''update rights shell'''
     pass
 
