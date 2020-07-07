@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .assemble import RightsAssembler
+from .forms import GroupingForm
 from .models import Grouping
 
 
@@ -30,25 +31,30 @@ class RightsShellUpdateView(UpdateView):
     pass
 
 
-class GroupingListView(ListView):
+class GroupingListView(LoginRequiredMixin, ListView):
     """Browse and search groupings."""
     model = Grouping
     template_name = "groupings/list.html"
 
 
-class GroupingsCreateView(CreateView):
-    '''create groupings'''
-    pass
+class GroupingCreateView(LoginRequiredMixin, CreateView):
+    """Create a grouping."""
+    model = Grouping
+    template_name = "groupings/manage.html"
+    form_class = GroupingForm
 
 
-class GroupingDetailView(DetailView):
-    '''view a grouping'''
-    pass
+class GroupingDetailView(LoginRequiredMixin, DetailView):
+    """View a grouping."""
+    model = Grouping
+    template_name = "groupings/detail.html"
 
 
-class GroupingUpdateView(UpdateView):
-    '''update grouping'''
-    pass
+class GroupingUpdateView(LoginRequiredMixin, UpdateView):
+    """Update a grouping."""
+    model = Grouping
+    template_name = "groupings/manage.html"
+    form_class = GroupingForm
 
 
 class RightsAssemblerView(APIView):
