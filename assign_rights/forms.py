@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Grouping, RightsShell
+from .models import Grouping
 
 
 class GroupingForm(forms.ModelForm):
