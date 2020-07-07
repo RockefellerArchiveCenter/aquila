@@ -11,13 +11,13 @@
 
       <div class="content-wrapper container">
 
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-          <h1 class="text-center">{% block h1_title %}{{page_title}}{% endblock %}</h1>
-        </section>
-
         <!-- Main content -->
         <main class="content">
+          <div class="row">
+            <div class="col-sm">
+              <h1 class="text-center">{% block h1_title %}{{page_title}}{% endblock %}</h1>
+            </div>
+          </div>
           <div class="row">
             <div class="col-sm">
               {% block content %}{% endblock %}
