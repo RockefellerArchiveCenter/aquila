@@ -46,7 +46,7 @@ class RightsShellCreateView(CreateView):
 
 class RightsShellDetailView(DetailView):
     '''view a rights shell'''
-    pass
+    queryset = RightsShell.objects.all()
 
 
 class RightsShellUpdateView(UpdateView):

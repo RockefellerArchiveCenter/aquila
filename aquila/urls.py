@@ -15,7 +15,7 @@ Including another URLconf
 """
 from assign_rights.views import (AquilaLoginView, LoggedInView,
                                  RightsAssemblerView, RightsShellCreateView,
-                                 RightsShellListView, RightsShellUpdateView)
+                                 RightsShellDetailView, RightsShellListView, RightsShellUpdateView)
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.urls import path
@@ -28,5 +28,6 @@ urlpatterns = [
     path('logged-in', LoggedInView.as_view(), name="logged-in"),
     path('rights/', RightsShellListView.as_view(), name='rights-list'),
     path('rights/create/', RightsShellCreateView.as_view(), name='rights-create'),
-    path('rights/<int:pk>/update/', RightsShellUpdateView.as_view(), name='rights-update')
+    path('rights/<int:pk>/update/', RightsShellUpdateView.as_view(), name='rights-update'),
+    path('rights/<int:pk>', RightsShellDetailView.as_view(), name='rights-detail'),
 ]
