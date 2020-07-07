@@ -1,3 +1,4 @@
+from django.http import Http404
 from .models import RightsShell
 
 # Receive POST request that contains multiple rights IDs and one date
@@ -33,4 +34,4 @@ class RightsAssembler(object):
                 shells.append(self.retrieve_rights(identifier))
             except Exception as e:
                 print("Error retrieving rights shell: {}".format(str(e)))
-        print(shells)
+        return shells

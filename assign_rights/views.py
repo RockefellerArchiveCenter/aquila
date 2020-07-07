@@ -54,4 +54,4 @@ class RightsAssemblerView(APIView):
         rights_ids = request.data.get("identifiers")
         end_date = request.data.get("end_date")
         assembled = RightsAssembler().run(rights_ids, end_date)
-        return Response(assembled, status=200)
+        return Response(assembled)
