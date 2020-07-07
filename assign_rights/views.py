@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .assemble import RightsAssembler
+from .forms import RightsShellModelForm
 
 
 class PageTitleMixin(object):
@@ -33,7 +34,14 @@ def RightsShellListView(ListView):
 
 class RightsShellCreateView(CreateView):
     '''create rights shells'''
-    pass
+    template_name = "assign_rights/rightsshell_create.html"
+    form_class = RightsShellModelForm
+    queryset = RightsShell.objects.all()
+
+    def form_valid(self, form):
+        """docstring for form_valid"""
+        print(form.cleaned_data)
+        return super().form_valid(form)
 
 
 class RightsShellDetailView(DetailView):
