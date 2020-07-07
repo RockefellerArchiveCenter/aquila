@@ -51,7 +51,14 @@ class RightsShellDetailView(DetailView):
 
 class RightsShellUpdateView(UpdateView):
     '''update rights shell'''
-    pass
+    template_name = "assign_rights/rightsshell_create.html"
+    form_class = RightsShellModelForm
+    queryset = RightsShell.objects.all()
+
+    def form_valid(self, form):
+        """docstring for form_valid"""
+        print(form.cleaned_data)
+        return super().form_valid(form)
 
 
 class GroupingsListView(ListView):
