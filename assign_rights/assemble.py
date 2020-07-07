@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from .models import RightsShell
 
 # Receive POST request that contains multiple rights IDs and one date
@@ -8,13 +9,22 @@ from .models import RightsShell
 class RightsAssembler(object):
     """docstring for RightsCalculator"""
 
-    def retrieve_rights(self, identifier):
+    def retrieve_rights(self, rights_ids):
         """Retrieves a rights shell whose rights_id matches an identifier from
         a post request.
         """
-        return RightsShell.objects.get(pk=identifier)
+        rights_shells = []
+        for ident in rights_ids:
+            try:
+                rights_shells.append(RightsShell.objects.get(pk=ident))
+            except RightsShell.DoesNotExist:
+                error = "Could not find matching shell with identifier: {}".format(
+                str(ident)
+                )
+                print(error)
+        return rights_shells
 
-    def calculate_dates(self):
+    def calculate_dates(self, end_date):
         """docstring for calculate_dates"""
     pass
 
@@ -27,10 +37,9 @@ class RightsAssembler(object):
     pass
 
     def run(self, rights_ids, end_date):
-        shells = []
-        for identifier in rights_ids:
-            try:
-                shells.append(self.retrieve_rights(identifier))
-            except Exception as e:
-                print("Error retrieving rights shell: {}".format(str(e)))
-        return shells
+        try:
+            rights_shells = self.retrieve_rights(rights_ids)
+            for shell in rights_shells:
+                self.calculate_dates(end_date)
+        except Exception as e:
+            print("Error retrieving rights shell: {}".format(str(e)))
