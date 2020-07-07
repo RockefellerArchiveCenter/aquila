@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 
 
 class RightsShell(models.Model):
@@ -73,6 +74,9 @@ class Grouping(models.Model):
     rights_shells = models.ManyToManyField(RightsShell)
     created = models.DateTimeField(auto_now=True)
     last_modified = models.DateTimeField(auto_now_add=True)
+
+    def get_absolute_url(self):
+        return reverse("groupings-detail", kwargs={"pk": self.pk})
 
 
 class User(AbstractUser):
