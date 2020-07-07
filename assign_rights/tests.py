@@ -4,7 +4,7 @@ from datetime import date
 
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import AnonymousUser
-ffrom django.test import RequestFactory, TestCase
+from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from rest_framework.test import APIRequestFactory
 
