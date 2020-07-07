@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from assign_rights.views import (AquilaLoginView, LoggedInView,
-                                 RightsAssemblerView)
+                                 RightsAssemblerView, RightsShellListView)
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.urls import path
@@ -24,5 +24,6 @@ urlpatterns = [
     path('login/', AquilaLoginView.as_view(template_name="users/login.html"), name="login"),
     path('api/rights-assemble/', RightsAssemblerView.as_view(), name='rights-assemble'),
     path('logout/', LogoutView.as_view(next_page="/login"), name="logout"),
-    path('logged-in', LoggedInView.as_view(), name="logged-in")
+    path('logged-in', LoggedInView.as_view(), name="logged-in"),
+    path('rights/', RightsShellListView.as_view(), name='rights-list')
 ]

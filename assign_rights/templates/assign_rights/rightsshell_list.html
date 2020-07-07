@@ -1,0 +1,30 @@
+{% block content %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="box box-default">
+      <div class="box-body">
+
+        <table class="table table-striped" id="org-admin-table">
+        	<thead>
+        		<tr>
+        			<th>ID</th>
+              <th>Basis</th>
+              <th>Note</th>
+        		</tr>
+        	<thead>
+        	<tbody>
+        	{% for rightsshell in object_list %}
+        	<tr tabindex="0">
+        		<td>{{ rightsshell.rights_id }}</td>
+            <td>{{ rightsshell.rights_basis }}</td>
+            <td>{{ rightsshell.note }}</td>
+		</tr>
+        	{% endfor %}
+        	</tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

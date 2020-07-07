@@ -1,4 +1,4 @@
-from assign_rights.models import User
+from assign_rights.models import RightsShell, User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render
@@ -28,7 +28,7 @@ class PageTitleMixin(object):
 
 def RightsShellListView(ListView):
     '''browse and search rights shells'''
-    pass
+    queryset = RightsShell.objects.all()
 
 
 class RightsShellCreateView(CreateView):
