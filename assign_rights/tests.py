@@ -29,7 +29,6 @@ class TestViews(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         return RightsShell.objects.create(
-            rights_id=1,
             rights_basis="Copyright",
             copyright_status="copyrighted",
             determination_date="2020-01-01",
@@ -54,7 +53,6 @@ class TestRightsAssembler(TestCase):
         self.factory = APIRequestFactory()
         for x in range(5):
             RightsShell.objects.create(
-                rights_id=random.randint(1, 10),
                 rights_basis=random.choice(["Copyright", "Statute", "License", "Other"]),
                 copyright_status="copyrighted",
                 determination_date=random_date(),
