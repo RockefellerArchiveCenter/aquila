@@ -26,9 +26,9 @@ class RightsAssembler(object):
         """docstring for return_rights"""
     pass
 
-    def run(self, request_list):
+    def run(self, rights_ids, end_date):
         shells = []
-        for identifier in request_list.get('identifiers'):
+        for identifier in rights_ids:
             try:
                 shells.append(self.retrieve_rights(identifier))
             except Exception as e:

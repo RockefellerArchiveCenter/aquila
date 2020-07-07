@@ -51,6 +51,7 @@ class RightsAssemblerView(APIView):
     '''
 
     def post(self, request, format=None):
-        request_list = request.data
-        shell_list = RightsAssembler().run(request_list)
-        return Response(request_list, status=200)
+        rights_ids = request.data.get("identifiers")
+        end_date = request.data.get("end_date")
+        assembled = RightsAssembler().run(rights_ids, end_date)
+        return Response(assembled, status=200)
