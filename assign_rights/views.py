@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .assemble import RightsAssembler
+from .models import Grouping
 
 
 class RightsShellListView(ListView):
@@ -29,9 +30,10 @@ class RightsShellUpdateView(UpdateView):
     pass
 
 
-class GroupingsListView(ListView):
-    '''browse and search groupings'''
-    pass
+class GroupingListView(ListView):
+    """Browse and search groupings."""
+    model = Grouping
+    template_name = "groupings/list.html"
 
 
 class GroupingsCreateView(CreateView):
@@ -39,12 +41,12 @@ class GroupingsCreateView(CreateView):
     pass
 
 
-class GroupingsDetailView(DetailView):
+class GroupingDetailView(DetailView):
     '''view a grouping'''
     pass
 
 
-class GroupingsUpdateView(UpdateView):
+class GroupingUpdateView(UpdateView):
     '''update grouping'''
     pass
 
