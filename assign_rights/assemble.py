@@ -1,4 +1,3 @@
-from django.core.exceptions import ObjectDoesNotExist
 from .models import RightsShell
 
 # Receive POST request that contains multiple rights IDs and one date
@@ -18,9 +17,7 @@ class RightsAssembler(object):
             try:
                 rights_shells.append(RightsShell.objects.get(pk=ident))
             except RightsShell.DoesNotExist:
-                error = "Could not find matching shell with identifier: {}".format(
-                str(ident)
-                )
+                error = "Could not find matching shell with identifier: {}".format(str(ident))
                 print(error)
         return rights_shells
 
