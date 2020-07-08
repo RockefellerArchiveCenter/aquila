@@ -39,7 +39,6 @@ def add_groupings(count=5):
 def add_rights_shells(count=5):
     for x in range(count):
         RightsShell.objects.create(
-            rights_id=random.randint(1, 10),
             rights_basis=random.choice(["Copyright", "Statute", "License", "Other"]),
             copyright_status="copyrighted",
             determination_date=random_date(),
@@ -123,7 +122,6 @@ class TestAssignRightsViews(TestCase):
     def test_restricted_views(self):
         """Asserts that restricted views are only available to logged-in users."""
         restricted_views = [
-            ("logged-in", LoggedInView, None),
             ("groupings-list", GroupingListView, None),
             ("groupings-detail", GroupingDetailView, random.choice(Grouping.objects.all()).pk),
             ("groupings-create", GroupingCreateView, False),

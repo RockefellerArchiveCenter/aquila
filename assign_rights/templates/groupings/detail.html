@@ -12,5 +12,5 @@
   {% for rights in object.rights_shells.all %}<li>{{rights}}</li>{% endfor %}
 </ul>
 
-<a href="{% url 'groupings-update' pk=object.pk %}">Edit</a>
+<a class="btn btn-warning" href="{% url 'groupings-update' pk=object.pk %}">Edit</a>
 {% endblock %}

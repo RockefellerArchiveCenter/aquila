@@ -48,30 +48,38 @@ class RightsShellUpdateView(UpdateView):
     pass
 
 
-class GroupingListView(LoginRequiredMixin, ListView):
+class GroupingListView(PageTitleMixin, LoginRequiredMixin, ListView):
     """Browse and search groupings."""
     model = Grouping
     template_name = "groupings/list.html"
+    page_title = "Groupings"
 
 
-class GroupingCreateView(LoginRequiredMixin, CreateView):
+class GroupingCreateView(PageTitleMixin, LoginRequiredMixin, CreateView):
     """Create a grouping."""
     model = Grouping
     template_name = "groupings/manage.html"
     form_class = GroupingForm
+    page_title = "Create New Grouping"
 
 
-class GroupingDetailView(LoginRequiredMixin, DetailView):
+class GroupingDetailView(PageTitleMixin, LoginRequiredMixin, DetailView):
     """View a grouping."""
     model = Grouping
     template_name = "groupings/detail.html"
 
+    def get_page_title(self, context):
+        return context["object"].title
 
-class GroupingUpdateView(LoginRequiredMixin, UpdateView):
+
+class GroupingUpdateView(PageTitleMixin, LoginRequiredMixin, UpdateView):
     """Update a grouping."""
     model = Grouping
     template_name = "groupings/manage.html"
     form_class = GroupingForm
+
+    def get_page_title(self, context):
+        return "Update {}".format(context["object"].title)
 
 
 class AquilaLoginView(PageTitleMixin, LoginView):
@@ -87,10 +95,3 @@ class RightsAssemblerView(APIView):
         end_date = request.data.get("end_date")
         assembled = RightsAssembler().run(rights_ids, end_date)
         return Response(assembled)
-
-
-class LoggedInView(PageTitleMixin, LoginRequiredMixin, TemplateView):
-    template_name = "users/logged_in.html"
-
-    def get_page_title(self, context):
-        return("You are logged in, {}!".format(self.request.user.username))
