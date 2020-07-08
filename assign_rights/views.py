@@ -27,7 +27,7 @@ class PageTitleMixin(object):
         return context
 
 
-def RightsShellListView(ListView):
+class RightsShellListView(ListView):
     '''browse and search rights shells'''
     queryset = RightsShell.objects.all()
 
