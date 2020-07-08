@@ -15,7 +15,7 @@
         	<tbody>
         	{% for rightsshell in object_list %}
         	<tr tabindex="0">
-        		<td>{{ rightsshell.rights_id }}</td>
+        		<td><a href=' {{ rightsshell.get_absolute_url }}'>{{ rightsshell.pk }}</a></td>
             <td>{{ rightsshell.rights_basis }}</td>
             <td>{{ rightsshell.note }}</td>
 		</tr>
