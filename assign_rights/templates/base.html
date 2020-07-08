@@ -1,20 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    {% include 'head.html' %}
     {% block extra_css %}{% endblock %}
   </head>
   <body>
     <div class="wrapper">
-      <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-          <h1>{% block h1_title %}{% endblock %}</h1>
-        </section>
+
+      {% include 'navbar.html' %}
+
+      <div class="content-wrapper container">
+
         <!-- Main content -->
         <main class="content">
-          {% block content %}{% endblock %}
+          <div class="row">
+            <div class="col-sm">
+              <h1 class="text-center">{% block h1_title %}{{page_title}}{% endblock %}</h1>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm">
+              {% block content %}{% endblock %}
+            </div>
+          </div>
         </main>
+
       </div>
     </div>
+
+    {% include 'scripts.html' %}
+    {% block extra_js %}{% endblock %}
+
   </body>
 </html>
