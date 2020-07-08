@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 
 
 class RightsShell(models.Model):
@@ -34,6 +35,9 @@ class RightsShell(models.Model):
     statute_citation = models.TextField(blank=True, null=True)
     created = models.DateTimeField(auto_now=True)
     last_modified = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "{} ({})".format(self.note, self.rights_basis)
 
 
 class RightsGranted(models.Model):
@@ -70,6 +74,9 @@ class Grouping(models.Model):
     rights_shells = models.ManyToManyField(RightsShell)
     created = models.DateTimeField(auto_now=True)
     last_modified = models.DateTimeField(auto_now_add=True)
+
+    def get_absolute_url(self):
+        return reverse("groupings-detail", kwargs={"pk": self.pk})
 
 
 class User(AbstractUser):

@@ -13,16 +13,20 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from assign_rights.views import (AquilaLoginView, LoggedInView,
-                                 RightsAssemblerView)
+from assign_rights.views import (AquilaLoginView, GroupingCreateView,
+                                 GroupingDetailView, GroupingListView,
+                                 GroupingUpdateView, RightsAssemblerView)
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', AquilaLoginView.as_view(template_name="users/login.html"), name="login"),
     path('api/rights-assemble/', RightsAssemblerView.as_view(), name='rights-assemble'),
+    path('groupings/', GroupingListView.as_view(), name="groupings-list"),
+    path('groupings/<int:pk>/', GroupingDetailView.as_view(), name="groupings-detail"),
+    path('groupings/create/', GroupingCreateView.as_view(), name="groupings-create"),
+    path('groupings/<int:pk>/edit/', GroupingUpdateView.as_view(), name="groupings-update"),
+    path('login/', AquilaLoginView.as_view(template_name="users/login.html"), name="login"),
     path('logout/', LogoutView.as_view(next_page="/login"), name="logout"),
-    path('logged-in', LoggedInView.as_view(), name="logged-in")
 ]
