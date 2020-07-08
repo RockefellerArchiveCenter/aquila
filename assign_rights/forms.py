@@ -1,6 +1,7 @@
 from django import forms
+from django.forms import formset_factory
 
-from .models import RightsShell
+from .models import RightsGranted, RightsShell
 
 
 class RightsShellModelForm(forms.ModelForm):
@@ -20,3 +21,22 @@ class RightsShellModelForm(forms.ModelForm):
             'license_terms',
             'statute_citation'
         ]
+
+
+class RightsGrantedModelForm(forms.ModelForm):
+    """docstring for RightsShellForm"""
+    class Meta:
+        model = RightsGranted
+        fields = [
+            'basis',
+            'act',
+            'note',
+            'start_date',
+            'end_date',
+            'start_date_period',
+            'end_date_period',
+            'end_date_open',
+        ]
+
+
+RightsGrantedFormSet = formset_factory(RightsGrantedModelForm)

@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .assemble import RightsAssembler
-from .forms import RightsShellModelForm
+from .forms import RightsGrantedFormSet, RightsShellModelForm
 
 
 class PageTitleMixin(object):
