@@ -20,6 +20,7 @@ class RightsAssembler(object):
 
     def calculate_dates(self, shell, end_date):
         """docstring for calculate_dates"""
+        rights_info = {}
         grants_end = []
         if not shell.end_date_open:
             period = shell.end_date_period
@@ -28,7 +29,7 @@ class RightsAssembler(object):
             else:
                 shell_end = shell.applicable_end_date + relativedelta(years=period)
         else:
-            shell_end = 0
+            shell_end = None
         grants = shell.rightsgranted_set.all()
         for grant in grants:
             act = {}
@@ -42,7 +43,12 @@ class RightsAssembler(object):
                     act["grant_id"] = grant.pk
                     act["act_end"] = grant.end_date + relativedelta(years=period)
                     grants_end.append(act)
-        print(shell_end, grants_end)
+            else:
+                act["grant_id"] = grant.pk
+                act["act_end"] = None
+        rights_info["shell_end"] = shell_end
+        rights_info["acts"] = grants_end
+        print(rights_info)
 
     def create_json(self):
         """docstring for create_json"""
@@ -57,5 +63,6 @@ class RightsAssembler(object):
             rights_shells = self.retrieve_rights(rights_ids)
             for shell in rights_shells:
                 self.calculate_dates(shell, end_date)
+
         except RightsShell.DoesNotExist as e:
             print("Error retrieving rights shell: {}".format(str(e)))
