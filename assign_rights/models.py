@@ -6,7 +6,6 @@ from django.urls import reverse
 
 
 class RightsShell(models.Model):
-    rights_id = models.PositiveSmallIntegerField()
     RIGHTS_BASIS_CHOICES = (
         ("Copyright", "Copyright"),
         ("Statute", "Statute"),
@@ -19,10 +18,11 @@ class RightsShell(models.Model):
         ("public domain", "public domain"),
         ("unknown", "unknown"),
     )
-    copyright_status = models.CharField(choices=PREMIS_COPYRIGHT_STATUSES, max_length=64)
+    copyright_status = models.CharField(choices=PREMIS_COPYRIGHT_STATUSES, max_length=64, blank=True, null=True)
     determination_date = models.DateField(
         blank=True, null=True, default=datetime.now
     )
+    jurisdiction = models.CharField(max_length=2, blank=True, null=True)
     note = models.TextField()
     applicable_start_date = models.DateField(blank=True, null=True)
     applicable_end_date = models.DateField(blank=True, null=True)
