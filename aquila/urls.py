@@ -18,7 +18,7 @@ from assign_rights.views import (AquilaLoginView, GroupingCreateView,
                                  GroupingUpdateView, RightsAssemblerView)
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView
-from django.urls import path
+from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,6 +27,7 @@ urlpatterns = [
     path('groupings/<int:pk>/', GroupingDetailView.as_view(), name="groupings-detail"),
     path('groupings/create/', GroupingCreateView.as_view(), name="groupings-create"),
     path('groupings/<int:pk>/edit/', GroupingUpdateView.as_view(), name="groupings-update"),
-    path('login/', AquilaLoginView.as_view(template_name="users/login.html"), name="login"),
-    path('logout/', LogoutView.as_view(next_page="/login"), name="logout"),
+    # path('login/', AquilaLoginView.as_view(template_name="users/login.html"), name="login"),
+    # path('logout/', LogoutView.as_view(next_page="/login"), name="logout"),
+    path('oauth2/', include('django_auth_adfs.urls')),
 ]

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'assign_rights',
+    'django_auth_adfs',
 ]
 
 MIDDLEWARE = [
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_auth_adfs.middleware.LoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'aquila.urls'
@@ -98,6 +100,24 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'assign_rights.User'
+
+AUTHENTICATION_BACKENDS = [
+    'django_auth_adfs.backend.AdfsAuthCodeBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+AUTH_ADFS = {
+    "SERVER": "adfs.yourcompany.com",
+    "CLIENT_ID": "your-configured-client-id",
+    "RELYING_PARTY_ID": "your-adfs-RPT-name",
+    # Make sure to read the documentation about the AUDIENCE setting
+    # when you configured the identifier as a URL!
+    "AUDIENCE": "microsoft:identityserver:your-RelyingPartyTrust-identifier",
+    # "CA_BUNDLE": "/path/to/ca-bundle.pem",
+    "CLAIM_MAPPING": {"first_name": "given_name",
+                      "last_name": "family_name",
+                      "email": "email"},
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
