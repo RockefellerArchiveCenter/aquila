@@ -1,4 +1,4 @@
-from .models import RightsShell
+from .models import RightsGranted, RightsShell
 from dateutil.relativedelta import relativedelta
 
 # Receive POST request that contains multiple rights IDs and one date
@@ -20,10 +20,27 @@ class RightsAssembler(object):
 
     def calculate_dates(self, shell, end_date):
         """docstring for calculate_dates"""
+        grants_end = {}
         if not shell.end_date_open:
             period = shell.end_date_period
-            rights_end = end_date + relativedelta(years=period)
-            print(end_date, period, rights_end)
+            if not shell.applicable_end_date:
+                shell_end = end_date + relativedelta(years=period)
+            else:
+                shell_end = shell.applicable_end_date + relativedelta(years=period)
+        else:
+            shell_end = 0
+        grants = shell.rightsgranted_set.all()
+        for grant in grants:
+            if not grant.end_date_open:
+                period = grant.end_date_period
+                if not grant.end_date:
+                    act_end = end_date + relativedelta(years=period)
+                    grants_end[grant.pk] = act_end
+                else:
+                    act_end = grant.end_date + relativedelta(years=period)
+                    print(act_end)
+                    grants_end[grant.pk] = act_end
+        print(shell_end, grants_end)
 
     def create_json(self):
         """docstring for create_json"""

@@ -10,7 +10,7 @@ from rest_framework.test import APIRequestFactory
 
 from .assemble import RightsAssembler
 from .forms import GroupingForm
-from .models import Grouping, RightsShell, User
+from .models import Grouping, RightsGranted, RightsShell, User
 from .views import (GroupingCreateView, GroupingDetailView, GroupingListView,
                     GroupingUpdateView, RightsAssemblerView)
 
@@ -43,13 +43,27 @@ def add_rights_shells(count=5):
             copyright_status="copyrighted",
             determination_date=random_date(),
             note=random_string(),
-            start_date=random_date(),
-            end_date=random_date(),
+            applicable_start_date=random_date(),
+            applicable_end_date=random_date(),
             start_date_period=None,
             end_date_period=random.randint(0, 10),
             end_date_open=False,
             license_terms=None,
             statute_citation=None)
+
+
+def add_rights_acts(count=5):
+    for x in range(count):
+        RightsGranted.objects.create(
+            basis=random.choice(RightsShell.objects.all()),
+            act=random.choice(["publish", "disseminate", "replicate", "migrate", "modify", "use", "delete"]),
+            restriction=random.choice(["allow", "disallow", "conditional"]),
+            start_date=random_date(),
+            end_date=random_date(),
+            start_date_period=None,
+            end_date_period=random.randint(0, 10),
+            end_date_open=random.choice(["True", "False"]),
+        )
 
 
 class TestViews(TestCase):
@@ -95,6 +109,7 @@ class TestViews(TestCase):
 class TestRightsAssembler(TestCase):
     def setUp(self):
         add_rights_shells()
+        add_rights_acts()
         self.assembler = RightsAssembler()
 
     def test_retrieve_rights(self):
@@ -117,10 +132,12 @@ class TestRightsAssembler(TestCase):
         rights_ids = [obj.pk for obj in RightsShell.objects.all()]
         assembled = self.assembler.retrieve_rights(rights_ids)
         now = date.today()
-        end_date = now - relativedelta(years=random.randint(2, 50))
-        end_date.isoformat()
+        grouping_end_date = now - relativedelta(years=random.randint(2, 50))
+        grouping_end_date.isoformat()
         for shell in assembled:
-            dates = self.assembler.calculate_dates(shell, end_date)
+            dates = self.assembler.calculate_dates(shell, grouping_end_date)
+            self.assertTrue(isinstance(dates, dict))
+
 
 class TestAssignRightsViews(TestCase):
 
