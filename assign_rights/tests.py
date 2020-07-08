@@ -107,10 +107,20 @@ class TestRightsAssembler(TestCase):
         self.assertTrue(isinstance(assembled, list))
         self.assertEqual(len(rights_ids), len(assembled))
 
-        rights_ids.append(len(rights_ids) + 1)
+        deleted = random.choice(RightsShell.objects.all())
+        deleted.delete()
+        rights_ids.append(deleted.pk)
         with self.assertRaises(RightsShell.DoesNotExist):
             assembled = self.assembler.retrieve_rights(rights_ids)
 
+    def test_calculate_dates(self):
+        rights_ids = [obj.pk for obj in RightsShell.objects.all()]
+        assembled = self.assembler.retrieve_rights(rights_ids)
+        now = date.today()
+        end_date = now - relativedelta(years=random.randint(2, 50))
+        end_date.isoformat()
+        for shell in assembled:
+            dates = self.assembler.calculate_dates(shell, end_date)
 
 class TestAssignRightsViews(TestCase):
 
