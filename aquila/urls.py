@@ -15,7 +15,8 @@ Including another URLconf
 """
 from assign_rights.views import (AquilaLoginView, LoggedInView,
                                  RightsAssemblerView, RightsShellCreateView,
-                                 RightsShellDetailView, RightsShellListView, RightsShellUpdateView)
+                                 RightsShellDetailView, RightsShellListView,
+                                 RightsShellUpdateView)
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.urls import path
