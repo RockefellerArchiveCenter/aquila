@@ -12,7 +12,7 @@ from .assemble import RightsAssembler
 from .forms import GroupingForm
 from .models import Grouping, RightsShell, User
 from .views import (GroupingCreateView, GroupingDetailView, GroupingListView,
-                    GroupingUpdateView, LoggedInView, RightsAssemblerView)
+                    GroupingUpdateView, RightsAssemblerView)
 
 
 def random_date():
