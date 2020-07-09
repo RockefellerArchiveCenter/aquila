@@ -47,7 +47,7 @@ def add_rights_shells(count=5):
             end_date=random.choice([None, random_date()]),
             start_date_period=None,
             end_date_period=random.randint(0, 10),
-            end_date_open=random.choice(["True", "False"]),
+            end_date_open=random.choice([True, False]),
             license_terms=None,
             statute_citation=None)
 
@@ -62,7 +62,7 @@ def add_rights_acts(count=5):
             end_date=random.choice([None, random_date()]),
             start_date_period=None,
             end_date_period=random.randint(0, 10),
-            end_date_open=random.choice(["True", "False"]),
+            end_date_open=random.choice([True, False]),
         )
 
 
