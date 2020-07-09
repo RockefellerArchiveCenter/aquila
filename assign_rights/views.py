@@ -92,6 +92,6 @@ class RightsAssemblerView(APIView):
 
     def post(self, request, format=None):
         rights_ids = request.data.get("identifiers")
-        end_date = request.data.get("end_date")
-        assembled = RightsAssembler().run(rights_ids, end_date)
+        grouping_end_date = request.data.get("end_date")
+        assembled = RightsAssembler().run(rights_ids, grouping_end_date)
         return Response(assembled)
