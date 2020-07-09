@@ -133,7 +133,7 @@ class TestRightsAssembler(TestCase):
 
         Asserts the method returns a DateTimeField or None if the end date is open.
         Asserts that the relative delta of the calculated date and the correct end date
-        is equal to the end date period of the object. 
+        is equal to the end date period of the object.
         """
         assembled = self.assembler.retrieve_rights(self.rights_ids)
         # grouping_end_date = random_date() wasn't working here because it returned a string
