@@ -24,6 +24,36 @@ def random_string(length=20):
     return "".join(random.choice(string.ascii_letters) for m in range(length))
 
 
+def add_rights_shells(count=5):
+    for x in range(count):
+        RightsShell.objects.create(
+            rights_basis=random.choice(["Copyright", "Statute", "License", "Other"]),
+            copyright_status="copyrighted",
+            determination_date=random_date(),
+            note=random_string(),
+            applicable_start_date=random_date(),
+            applicable_end_date=random_date(),
+            start_date_period=None,
+            end_date_period=random.randint(0, 10),
+            end_date_open=False,
+            license_terms=None,
+            statute_citation=None)
+
+
+def add_rights_acts(count=5):
+    for x in range(count):
+        RightsGranted.objects.create(
+            basis=random.choice(RightsShell.objects.all()),
+            act=random.choice(["publish", "disseminate", "replicate", "migrate", "modify", "use", "delete"]),
+            restriction=random.choice(["allow", "disallow", "conditional"]),
+            start_date=random_date(),
+            end_date=random_date(),
+            start_date_period=None,
+            end_date_period=random.randint(0, 10),
+            end_date_open=random.choice(["True", "False"]),
+        )
+
+
 class TestViews(TestCase):
 
     def setUp(self):
@@ -66,34 +96,9 @@ class TestViews(TestCase):
 
 class TestRightsAssembler(TestCase):
     def setUp(self):
-        self.factory = APIRequestFactory()
-        for x in range(5):
-            RightsShell.objects.create(
-                rights_basis=random.choice(["Copyright", "Statute", "License", "Other"]),
-                copyright_status="copyrighted",
-                determination_date=random_date(),
-                note=random_string(),
-                applicable_start_date=random_date(),
-                applicable_end_date=random_date(),
-                start_date_period=None,
-                end_date_period=random.randint(0, 10),
-                end_date_open=random.choice([True, False]),
-                license_terms=None,
-                statute_citation=None
-            )
-
-            RightsGranted.objects.create(
-                basis=random.choice(RightsShell.objects.all()),
-                act=random.choice(["publish", "disseminate", "replicate", "migrate", "modify", "use", "delete"]),
-                restriction=random.choice(["allow", "disallow", "conditional"]),
-                start_date=random_date(),
-                end_date=random_date(),
-                start_date_period=None,
-                end_date_period=random.randint(0, 10),
-                end_date_open=random.choice(["True", "False"]),
-            )
-
-            self.assembler = RightsAssembler()
+        add_rights_shells()
+        add_rights_acts()
+        self.assembler = RightsAssembler()
 
     def test_retrieve_rights(self):
         """Tests the retrieve_rights method.
