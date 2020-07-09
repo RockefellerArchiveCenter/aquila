@@ -138,7 +138,6 @@ class TestRightsAssembler(TestCase):
             dates = self.assembler.calculate_dates(shell, grouping_end_date)
             self.assertTrue(isinstance(dates, dict))
 
-
 class TestAssignRightsViews(TestCase):
 
     def setUp(self):

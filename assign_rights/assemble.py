@@ -49,6 +49,7 @@ class RightsAssembler(object):
         rights_info["shell_end"] = shell_end
         rights_info["acts"] = grants_end
         print(rights_info)
+        return rights_info
 
     def create_json(self):
         """docstring for create_json"""
