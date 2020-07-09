@@ -24,8 +24,8 @@ class RightsShell(models.Model):
     )
     jurisdiction = models.CharField(max_length=2, blank=True, null=True)
     note = models.TextField()
-    applicable_start_date = models.DateField(blank=True, null=True)
-    applicable_end_date = models.DateField(blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
     start_date_period = models.PositiveSmallIntegerField(
         blank=True, null=True
     )
