@@ -43,11 +43,11 @@ def add_rights_shells(count=5):
             copyright_status="copyrighted",
             determination_date=random_date(),
             note=random_string(),
-            applicable_start_date=random_date(),
-            applicable_end_date=random_date(),
+            start_date=random_date(),
+            end_date=random.choice([None, random_date()]),
             start_date_period=None,
             end_date_period=random.randint(0, 10),
-            end_date_open=False,
+            end_date_open=random.choice(["True", "False"]),
             license_terms=None,
             statute_citation=None)
 
@@ -59,7 +59,7 @@ def add_rights_acts(count=5):
             act=random.choice(["publish", "disseminate", "replicate", "migrate", "modify", "use", "delete"]),
             restriction=random.choice(["allow", "disallow", "conditional"]),
             start_date=random_date(),
-            end_date=random_date(),
+            end_date=random.choice([None, random_date()]),
             start_date_period=None,
             end_date_period=random.randint(0, 10),
             end_date_open=random.choice(["True", "False"]),
@@ -111,32 +111,58 @@ class TestRightsAssembler(TestCase):
         add_rights_shells()
         add_rights_acts()
         self.assembler = RightsAssembler()
+        self.rights_ids = [obj.pk for obj in RightsShell.objects.all()]
 
     def test_retrieve_rights(self):
         """Tests the retrieve_rights method.
 
         Asserts the method returns a list or DoesNotExist exception.
         """
-        rights_ids = [obj.pk for obj in RightsShell.objects.all()]
-        assembled = self.assembler.retrieve_rights(rights_ids)
+        assembled = self.assembler.retrieve_rights(self.rights_ids)
         self.assertTrue(isinstance(assembled, list))
-        self.assertEqual(len(rights_ids), len(assembled))
+        self.assertEqual(len(self.rights_ids), len(assembled))
 
         deleted = random.choice(RightsShell.objects.all())
         deleted.delete()
-        rights_ids.append(deleted.pk)
+        self.rights_ids.append(deleted.pk)
         with self.assertRaises(RightsShell.DoesNotExist):
-            assembled = self.assembler.retrieve_rights(rights_ids)
+            assembled = self.assembler.retrieve_rights(self.rights_ids)
 
     def test_calculate_dates(self):
-        rights_ids = [obj.pk for obj in RightsShell.objects.all()]
-        assembled = self.assembler.retrieve_rights(rights_ids)
+        """Tests the calculate_dates method.
+
+        Asserts the method returns a DateTimeField or None if the end date is open.
+        Asserts that the relative delta of the calculated date and the correct end date
+        is equal to the end date period of the object. 
+        """
+        assembled = self.assembler.retrieve_rights(self.rights_ids)
+        # grouping_end_date = random_date() wasn't working here because it returned a string
         now = date.today()
         grouping_end_date = now - relativedelta(years=random.randint(2, 50))
         grouping_end_date.isoformat()
+        for object in assembled:
+            object_date = self.assembler.calculate_dates(object, grouping_end_date)
+            if object.end_date_open:
+                self.assertEqual(object_date, None)
+            elif object.end_date:
+                self.assertEqual(relativedelta(object_date, object.end_date).years, object.end_date_period)
+                self.assertTrue(isinstance(object_date, date))
+            else:
+                self.assertEqual(relativedelta(object_date, grouping_end_date).years, object.end_date_period)
+                self.assertTrue(isinstance(object_date, date))
+
         for shell in assembled:
-            dates = self.assembler.calculate_dates(shell, grouping_end_date)
-            self.assertTrue(isinstance(dates, dict))
+            grants = shell.rightsgranted_set.all()
+            for object in grants:
+                object_date = self.assembler.calculate_dates(object, grouping_end_date)
+                if object.end_date_open:
+                    self.assertEqual(object_date, None)
+                elif object.end_date:
+                    self.assertEqual(relativedelta(object_date, object.end_date).years, object.end_date_period)
+                    self.assertTrue(isinstance(object_date, date))
+                else:
+                    self.assertEqual(relativedelta(object_date, grouping_end_date).years, object.end_date_period)
+                    self.assertTrue(isinstance(object_date, date))
 
 
 class TestAssignRightsViews(TestCase):
