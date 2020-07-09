@@ -18,7 +18,7 @@ from .views import (GroupingCreateView, GroupingDetailView, GroupingListView,
 def random_date():
     now = date.today()
     r = now - relativedelta(years=random.randint(2, 50))
-    return r.isoformat()
+    return r
 
 
 def random_string(length=20):
@@ -128,18 +128,7 @@ class TestRightsAssembler(TestCase):
         with self.assertRaises(RightsShell.DoesNotExist):
             assembled = self.assembler.retrieve_rights(self.rights_ids)
 
-    def test_calculate_dates(self):
-        """Tests the calculate_dates method.
-
-        Asserts the method returns a DateTimeField or None if the end date is open.
-        Asserts that the relative delta of the calculated date and the correct end date
-        is equal to the end date period of the object.
-        """
-        assembled = self.assembler.retrieve_rights(self.rights_ids)
-        # grouping_end_date = random_date() wasn't working here because it returned a string
-        now = date.today()
-        grouping_end_date = now - relativedelta(years=random.randint(2, 50))
-        grouping_end_date.isoformat()
+    def check_end_dates(self, assembled, grouping_end_date):
         for object in assembled:
             object_date = self.assembler.calculate_dates(object, grouping_end_date)
             if object.end_date_open:
@@ -151,18 +140,20 @@ class TestRightsAssembler(TestCase):
                 self.assertEqual(relativedelta(object_date, grouping_end_date).years, object.end_date_period)
                 self.assertTrue(isinstance(object_date, date))
 
-        for shell in assembled:
-            grants = shell.rightsgranted_set.all()
-            for object in grants:
-                object_date = self.assembler.calculate_dates(object, grouping_end_date)
-                if object.end_date_open:
-                    self.assertEqual(object_date, None)
-                elif object.end_date:
-                    self.assertEqual(relativedelta(object_date, object.end_date).years, object.end_date_period)
-                    self.assertTrue(isinstance(object_date, date))
-                else:
-                    self.assertEqual(relativedelta(object_date, grouping_end_date).years, object.end_date_period)
-                    self.assertTrue(isinstance(object_date, date))
+    def test_calculate_dates(self):
+        """Tests the calculate_dates method.
+
+        Asserts the method returns a DateTimeField or None if the end date is open.
+        Asserts that the relative delta of the calculated date and the correct end date
+        is equal to the end date period of the object.
+        """
+        assembled = self.assembler.retrieve_rights(self.rights_ids)
+        grouping_end_date = random_date()
+        self.check_end_dates(assembled, grouping_end_date)
+
+        assembled = RightsShell.objects.all()
+        grouping_end_date = random_date()
+        self.check_end_dates(assembled, grouping_end_date)
 
 
 class TestAssignRightsViews(TestCase):
