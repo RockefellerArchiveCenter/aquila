@@ -1,5 +1,6 @@
-from .models import RightsGranted, RightsShell
 from dateutil.relativedelta import relativedelta
+
+from .models import RightsGranted, RightsShell
 
 # Receive POST request that contains multiple rights IDs and one date
 # For each rights ID, take date to calculate and return rights json (that looks like what Aurora returns)
