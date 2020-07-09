@@ -27,11 +27,9 @@ class RightsShell(models.Model):
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     start_date_period = models.PositiveSmallIntegerField(
-        blank=True, null=True, default=0
+        blank=True, null=True
     )
-    end_date_period = models.PositiveSmallIntegerField(
-        blank=True, null=True, default=0
-    )
+    end_date_period = models.PositiveSmallIntegerField(blank=True, null=True)
     end_date_open = models.BooleanField(default=False)
     license_terms = models.TextField(blank=True, null=True)
     statute_citation = models.TextField(blank=True, null=True)
@@ -62,12 +60,8 @@ class RightsGranted(models.Model):
     restriction = models.CharField(choices=RESTRICTION_CHOICES, max_length=64)
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
-    start_date_period = models.PositiveSmallIntegerField(
-        blank=True, null=True, default=0
-    )
-    end_date_period = models.PositiveSmallIntegerField(
-        blank=True, null=True, default=0
-    )
+    start_date_period = models.PositiveSmallIntegerField(blank=True, null=True)
+    end_date_period = models.PositiveSmallIntegerField(blank=True, null=True)
     end_date_open = models.BooleanField(default=False)
     note = models.TextField(blank=True, null=True)
     created = models.DateTimeField(auto_now=True)
