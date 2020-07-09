@@ -9,10 +9,8 @@ from django.urls import reverse
 from rest_framework.test import APIRequestFactory
 
 from .assemble import RightsAssembler
-from .forms import GroupingForm
-from .models import Grouping, RightsGranted, RightsShell, User
-from .views import (GroupingCreateView, GroupingDetailView, GroupingListView,
-                    GroupingUpdateView, RightsAssemblerView)
+from .models import RightsGranted, RightsShell, User
+from .views import LoggedInView, RightsAssemblerView
 
 
 def random_date():
@@ -24,46 +22,6 @@ def random_date():
 def random_string(length=20):
     """Returns a random string of specified length."""
     return "".join(random.choice(string.ascii_letters) for m in range(length))
-
-
-def add_groupings(count=5):
-    for x in range(count):
-        grouping = Grouping.objects.create(
-            title=random_string(10),
-            description=random_string(50))
-        if RightsShell.objects.all():
-            for x in range(random.randint(1, 3)):
-                grouping.rights_shells.add(random.choice(RightsShell.objects.all()))
-
-
-def add_rights_shells(count=5):
-    for x in range(count):
-        RightsShell.objects.create(
-            rights_basis=random.choice(["Copyright", "Statute", "License", "Other"]),
-            copyright_status="copyrighted",
-            determination_date=random_date(),
-            note=random_string(),
-            applicable_start_date=random_date(),
-            applicable_end_date=random_date(),
-            start_date_period=None,
-            end_date_period=random.randint(0, 10),
-            end_date_open=False,
-            license_terms=None,
-            statute_citation=None)
-
-
-def add_rights_acts(count=5):
-    for x in range(count):
-        RightsGranted.objects.create(
-            basis=random.choice(RightsShell.objects.all()),
-            act=random.choice(["publish", "disseminate", "replicate", "migrate", "modify", "use", "delete"]),
-            restriction=random.choice(["allow", "disallow", "conditional"]),
-            start_date=random_date(),
-            end_date=random_date(),
-            start_date_period=None,
-            end_date_period=random.randint(0, 10),
-            end_date_open=random.choice(["True", "False"]),
-        )
 
 
 class TestViews(TestCase):
@@ -108,9 +66,34 @@ class TestViews(TestCase):
 
 class TestRightsAssembler(TestCase):
     def setUp(self):
-        add_rights_shells()
-        add_rights_acts()
-        self.assembler = RightsAssembler()
+        self.factory = APIRequestFactory()
+        for x in range(5):
+            RightsShell.objects.create(
+                rights_basis=random.choice(["Copyright", "Statute", "License", "Other"]),
+                copyright_status="copyrighted",
+                determination_date=random_date(),
+                note=random_string(),
+                applicable_start_date=random_date(),
+                applicable_end_date=random_date(),
+                start_date_period=None,
+                end_date_period=random.randint(0, 10),
+                end_date_open=random.choice([True, False]),
+                license_terms=None,
+                statute_citation=None
+            )
+
+            RightsGranted.objects.create(
+                basis=random.choice(RightsShell.objects.all()),
+                act=random.choice(["publish", "disseminate", "replicate", "migrate", "modify", "use", "delete"]),
+                restriction=random.choice(["allow", "disallow", "conditional"]),
+                start_date=random_date(),
+                end_date=random_date(),
+                start_date_period=None,
+                end_date_period=random.randint(0, 10),
+                end_date_open=random.choice(["True", "False"]),
+            )
+
+            self.assembler = RightsAssembler()
 
     def test_retrieve_rights(self):
         """Tests the retrieve_rights method.
@@ -144,25 +127,20 @@ class TestAssignRightsViews(TestCase):
     def setUp(self):
         self.user = User.objects.create_user("test", "test@example.com", "testpass")
         self.factory = RequestFactory()
-        add_groupings()
 
     def test_restricted_views(self):
         """Asserts that restricted views are only available to logged-in users."""
-        restricted_views = [
-            ("groupings-list", GroupingListView, None),
-            ("groupings-detail", GroupingDetailView, random.choice(Grouping.objects.all()).pk),
-            ("groupings-create", GroupingCreateView, False),
-            ("groupings-update", GroupingUpdateView, random.choice(Grouping.objects.all()).pk)]
-        for view_name, view, pk in restricted_views:
-            request = self.factory.get(reverse(view_name, kwargs={"pk": pk})) if pk else self.factory.get(reverse(view_name))
+        restricted_views = [("logged-in", LoggedInView)]
+        for view_name, view in restricted_views:
+            request = self.factory.get(reverse(view_name))
             request.user = AnonymousUser()
-            response = view.as_view()(request, pk=pk) if pk else view.as_view()(request)
+            response = LoggedInView.as_view()(request)
             self.assertEqual(
                 response.status_code, 302,
                 "Restricted view {} available without authentication".format(view))
 
             request.user = self.user
-            authenticated_response = view.as_view()(request, pk=pk) if pk else view.as_view()(request)
+            authenticated_response = LoggedInView.as_view()(request)
             self.assertEqual(
                 authenticated_response.status_code, 200,
                 "Restricted view {} not reachable by authenticated user".format(view))
