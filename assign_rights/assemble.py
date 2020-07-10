@@ -24,22 +24,24 @@ class RightsAssembler(object):
         return rights_shells
 
     def calculate_dates(self, object, request_start_date, request_end_date):
-        """Calculate rights end dates for a given object based on whether the end
-        date is open, and then based on the period and end_dates in the object.
+        """Calculate rights start and end dates for a given object.
 
-        If no end date in the object, use the grouping end date.
+        If there is no start date, use the start date from the request for calculations.
+        Otherwise, use the object's start date.
+
+        If the object's end date is open, return None.
+
+        If the object doesn't have an end date, use the end date from the request.
+        Otherwise, use the object's end date.
         """
         start_period = object.start_date_period
         end_period = object.end_date_period
-        if not object.start_date:
-            object_start = request_start_date + relativedelta(years=start_period)
+        object_start = request_start_date + relativedelta(years=start_period)
+        object_end = request_end_date + relativedelta(years=end_period)
         if object.start_date:
             object_start = object.start_date + relativedelta(years=start_period)
         if not object.end_date_open:
-            end_period = object.end_date_period
-            if not object.end_date:
-                object_end = request_end_date + relativedelta(years=end_period)
-            else:
+            if object.end_date:
                 object_end = object.end_date + relativedelta(years=end_period)
         if object.end_date_open:
             object_end = None
@@ -58,10 +60,10 @@ class RightsAssembler(object):
             rights_shells = self.retrieve_rights(rights_ids)
             for shell in rights_shells:
                 act_dates = []
-                self.calculate_dates(shell, request_end_date)
+                self.calculate_dates(shell, request_start_date, request_end_date)
                 grants = shell.rightsgranted_set.all()
                 for grant in grants:
-                    act_dates.append(self.calculate_dates(grant, request_end_date))
+                    act_dates.append(self.calculate_dates(grant, request_start_date, request_end_date))
 
         except RightsShell.DoesNotExist as e:
             print("Error retrieving rights shell: {}".format(str(e)))
