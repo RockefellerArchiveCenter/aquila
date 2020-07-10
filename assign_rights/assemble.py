@@ -23,27 +23,28 @@ class RightsAssembler(object):
             rights_shells.append(RightsShell.objects.get(pk=ident))
         return rights_shells
 
+    def check_dates(self, object, field_name, request_date, period):
+        """Checks object.field_name and returns a variable based on whether fields
+        exist or not.
+        """
+        if not getattr(object, field_name):
+            d = request_date + relativedelta(years=period)
+            return d
+        else:
+            d = getattr(object, field_name) + relativedelta(years=period)
+            return d
+
     def calculate_dates(self, object, request_start_date, request_end_date):
-        """Calculate rights start and end dates for a given object.
-
-        If there is no start date, use the start date from the request for calculations.
-        Otherwise, use the object's start date.
-
-        If the object's end date is open, return None.
-
-        If the object doesn't have an end date, use the end date from the request.
-        Otherwise, use the object's end date.
+        """Calculate rights end dates for a given object based on whether the end
+        date is open, and then based on the period and end_dates in the object.
+        If no end date in the object, use the grouping end date.
         """
         start_period = object.start_date_period
         end_period = object.end_date_period
-        object_start = request_start_date + relativedelta(years=start_period)
-        object_end = request_end_date + relativedelta(years=end_period)
-        if object.start_date:
-            object_start = object.start_date + relativedelta(years=start_period)
+        object_start = self.check_dates(object, "start_date", request_start_date, start_period)
         if not object.end_date_open:
-            if object.end_date:
-                object_end = object.end_date + relativedelta(years=end_period)
-        if object.end_date_open:
+            object_end = self.check_dates(object, "end_date", request_end_date, end_period)
+        elif object.end_date_open:
             object_end = None
         return object_start, object_end
 

@@ -43,7 +43,7 @@ def add_rights_shells(count=5):
             copyright_status="copyrighted",
             determination_date=random_date(),
             note=random_string(),
-            start_date=random_date(),
+            start_date=random.choice([None, random_date()]),
             end_date=random.choice([None, random_date()]),
             start_date_period=random.randint(0, 10),
             end_date_period=random.randint(0, 10),
@@ -58,7 +58,7 @@ def add_rights_acts(count=5):
             basis=random.choice(RightsShell.objects.all()),
             act=random.choice(["publish", "disseminate", "replicate", "migrate", "modify", "use", "delete"]),
             restriction=random.choice(["allow", "disallow", "conditional"]),
-            start_date=random_date(),
+            start_date=random.choice([None, random_date()]),
             end_date=random.choice([None, random_date()]),
             start_date_period=random.randint(0, 10),
             end_date_period=random.randint(0, 10),
@@ -128,7 +128,7 @@ class TestRightsAssembler(TestCase):
         with self.assertRaises(RightsShell.DoesNotExist):
             assembled = self.assembler.retrieve_rights(self.rights_ids)
 
-    def check_end_dates(self, assembled, request_start_date, request_end_date):
+    def check_object_dates(self, assembled, request_start_date, request_end_date):
         for object in assembled:
             object_date = self.assembler.calculate_dates(object, request_start_date, request_end_date)
             if object.start_date:
@@ -156,12 +156,12 @@ class TestRightsAssembler(TestCase):
         assembled = self.assembler.retrieve_rights(self.rights_ids)
         request_end_date = random_date()
         request_start_date = random_date()
-        self.check_end_dates(assembled, request_start_date, request_end_date)
+        self.check_object_dates(assembled, request_start_date, request_end_date)
 
         assembled = RightsShell.objects.all()
         request_end_date = random_date()
         request_start_date = random_date()
-        self.check_end_dates(assembled, request_start_date, request_end_date)
+        self.check_object_dates(assembled, request_start_date, request_end_date)
 
 
 class TestAssignRightsViews(TestCase):
