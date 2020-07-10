@@ -44,11 +44,11 @@ class RightsAssembler(object):
         """
         object_start = self.get_date_value(
             object, "start_date", request_start_date, object.start_date_period)
-        if not object.end_date_open:
+        if object.end_date_open:
+            object_end = None
+        else:
             object_end = self.get_date_value(
                 object, "end_date", request_end_date, object.end_date_period)
-        elif object.end_date_open:
-            object_end = None
         return object_start, object_end
 
     def create_json(self):
