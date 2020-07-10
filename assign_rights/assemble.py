@@ -15,35 +15,38 @@ class RightsAssembler(object):
     """
 
     def retrieve_rights(self, rights_ids):
-        """Retrieves a rights shell whose rights_id matches an identifier from
-        a post request.
-        """
+        """Retrieves rights shells matching identifiers."""
         rights_shells = []
         for ident in rights_ids:
             rights_shells.append(RightsShell.objects.get(pk=ident))
         return rights_shells
 
-    def check_dates(self, object, field_name, request_date, period):
-        """Checks object.field_name and returns a variable based on whether fields
-        exist or not.
+    def get_date_value(self, object, field_name, request_date, period):
+        """Calculates the value for a date.
+
+        Args:
+            object: the object for which a date is to be calculated.
+            field_name: the object attribute containing date data.
+            request_date: date data sumbitted in a request.
+            period: the numbe of years to be used in calculating the date.
         """
         if not getattr(object, field_name):
-            d = request_date + relativedelta(years=period)
-            return d
+            return request_date + relativedelta(years=period)
         else:
-            d = getattr(object, field_name) + relativedelta(years=period)
-            return d
+            return getattr(object, field_name) + relativedelta(years=period)
 
     def calculate_dates(self, object, request_start_date, request_end_date):
-        """Calculate rights end dates for a given object based on whether the end
+        """Calculate rights end dates for a given object.
+
+        based on whether the end
         date is open, and then based on the period and end_dates in the object.
         If no end date in the object, use the grouping end date.
         """
-        start_period = object.start_date_period
-        end_period = object.end_date_period
-        object_start = self.check_dates(object, "start_date", request_start_date, start_period)
+        object_start = self.get_date_value(
+            object, "start_date", request_start_date, object.start_date_period)
         if not object.end_date_open:
-            object_end = self.check_dates(object, "end_date", request_end_date, end_period)
+            object_end = self.get_date_value(
+                object, "end_date", request_end_date, object.end_date_period)
         elif object.end_date_open:
             object_end = None
         return object_start, object_end
@@ -67,4 +70,4 @@ class RightsAssembler(object):
                     act_dates.append(self.calculate_dates(grant, request_start_date, request_end_date))
 
         except RightsShell.DoesNotExist as e:
-            print("Error retrieving rights shell: {}".format(str(e)))
+            raise Exception("Error retrieving rights shell: {}".format(str(e)))
