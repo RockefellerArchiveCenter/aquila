@@ -45,7 +45,7 @@ def add_rights_shells(count=5):
             note=random_string(),
             start_date=random_date(),
             end_date=random.choice([None, random_date()]),
-            start_date_period=None,
+            start_date_period=random.randint(0, 10),
             end_date_period=random.randint(0, 10),
             end_date_open=random.choice([True, False]),
             license_terms=None,
@@ -60,7 +60,7 @@ def add_rights_acts(count=5):
             restriction=random.choice(["allow", "disallow", "conditional"]),
             start_date=random_date(),
             end_date=random.choice([None, random_date()]),
-            start_date_period=None,
+            start_date_period=random.randint(0, 10),
             end_date_period=random.randint(0, 10),
             end_date_open=random.choice([True, False]),
         )
