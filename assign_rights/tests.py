@@ -76,7 +76,7 @@ class TestViews(TestCase):
         add_groupings()
 
     def test_rightsassembler_pass(self):
-        request = self.factory.post(reverse('rights-assemble'), {"identifiers": [1, 2, 3, 4], "end_date": "2020-03-01"}, format='json')
+        request = self.factory.post(reverse('rights-assemble'), {"identifiers": [1, 2, 3, 4], "start_date": "2000-01-01", "end_date": "2020-03-01"}, format='json')
         response = RightsAssemblerView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
@@ -128,17 +128,23 @@ class TestRightsAssembler(TestCase):
         with self.assertRaises(RightsShell.DoesNotExist):
             assembled = self.assembler.retrieve_rights(self.rights_ids)
 
-    def check_end_dates(self, assembled, grouping_end_date):
+    def check_end_dates(self, assembled, request_start_date, request_end_date):
         for object in assembled:
-            object_date = self.assembler.calculate_dates(object, grouping_end_date)
+            object_date = self.assembler.calculate_dates(object, request_start_date, request_end_date)
+            if object.start_date:
+                self.assertEqual(relativedelta(object_date[0], object.start_date).years, object.start_date_period)
+                self.assertTrue(isinstance(object_date[0], date))
+            if not object.start_date:
+                self.assertEqual(relativedelta(object_date[0], request_start_date).years, object.start_date_period)
+                self.assertTrue(isinstance(object_date[0], date))
             if object.end_date_open:
-                self.assertEqual(object_date, None)
+                self.assertEqual(object_date[1], None)
             elif object.end_date:
-                self.assertEqual(relativedelta(object_date, object.end_date).years, object.end_date_period)
-                self.assertTrue(isinstance(object_date, date))
-            else:
-                self.assertEqual(relativedelta(object_date, grouping_end_date).years, object.end_date_period)
-                self.assertTrue(isinstance(object_date, date))
+                self.assertEqual(relativedelta(object_date[1], object.end_date).years, object.end_date_period)
+                self.assertTrue(isinstance(object_date[1], date))
+            elif not object.end_date:
+                self.assertEqual(relativedelta(object_date[1], request_end_date).years, object.end_date_period)
+                self.assertTrue(isinstance(object_date[1], date))
 
     def test_calculate_dates(self):
         """Tests the calculate_dates method.
@@ -148,12 +154,14 @@ class TestRightsAssembler(TestCase):
         is equal to the end date period of the object.
         """
         assembled = self.assembler.retrieve_rights(self.rights_ids)
-        grouping_end_date = random_date()
-        self.check_end_dates(assembled, grouping_end_date)
+        request_end_date = random_date()
+        request_start_date = random_date()
+        self.check_end_dates(assembled, request_start_date, request_end_date)
 
         assembled = RightsShell.objects.all()
-        grouping_end_date = random_date()
-        self.check_end_dates(assembled, grouping_end_date)
+        request_end_date = random_date()
+        request_start_date = random_date()
+        self.check_end_dates(assembled, request_start_date, request_end_date)
 
 
 class TestAssignRightsViews(TestCase):
