@@ -16,10 +16,7 @@ class RightsAssembler(object):
 
     def retrieve_rights(self, rights_ids):
         """Retrieves rights shells matching identifiers."""
-        rights_shells = []
-        for ident in rights_ids:
-            rights_shells.append(RightsShell.objects.get(pk=ident))
-        return rights_shells
+        return [RightsShell.objects.get(pk=ident) for ident in rights_ids]
 
     def get_date_value(self, object, field_name, request_date, period):
         """Calculates the value for a date.
