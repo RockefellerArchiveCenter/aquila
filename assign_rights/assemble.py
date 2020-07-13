@@ -8,11 +8,7 @@ from .models import RightsShell
 
 
 class RightsAssembler(object):
-    """Reads through a list of ids from a POST request and gets matching RightsShells
-    for each identifier (matching against the primary key). Gets all RightsGranted
-    objects related to each shell. Then, calculates rights start and end dates based
-    on variables passed in from the POST request or rights shells.
-    """
+    """Assembles and returns a list of rights statements."""
 
     def retrieve_rights(self, rights_ids):
         """Retrieves rights shells matching identifiers."""
@@ -33,11 +29,12 @@ class RightsAssembler(object):
             return getattr(object, field_name) + relativedelta(years=period)
 
     def calculate_dates(self, object, request_start_date, request_end_date):
-        """Calculate rights end dates for a given object.
+        """Calculate rights start and end dates for a given object.
 
-        based on whether the end
-        date is open, and then based on the period and end_dates in the object.
-        If no end date in the object, use the grouping end date.
+        Args:
+            object (obj): a RightsShell or RightsGranted object.
+            request_start_date (date): the start date for a group of records.
+            request_end_date (date): the end date for a group of records.
         """
         object_start = self.get_date_value(
             object, "start_date", request_start_date, object.start_date_period)
@@ -54,6 +51,14 @@ class RightsAssembler(object):
     pass
 
     def run(self, rights_ids, request_start_date, request_end_date):
+        """Assembles and returns rights statements given rights shell IDs and
+        start and end dates.
+
+        Args:
+            rights_ids (list): a list of identifiers for rights shells.
+            request_start_date (string): a string representation of the earliest date of a group of records
+            request_end_date (string): a string representation of the latest date of a group of records
+        """
         try:
             rights_shells = self.retrieve_rights(rights_ids)
             for shell in rights_shells:
