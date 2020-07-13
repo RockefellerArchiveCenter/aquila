@@ -20,10 +20,10 @@ class RightsAssembler(object):
         """Calculates the value for a date.
 
         Args:
-            object: the object for which a date is to be calculated.
-            field_name: the object attribute containing date data.
-            request_date: representation of a date sumbitted in a request.
-            period: the numbe of years to be used in calculating the date.
+            object (obj): the RightsShell or RightsGranted object for which a date is to be calculated.
+            field_name (str): the object attribute containing date data.
+            request_date (str): string representation of a date in ISO format.
+            period (int): the number of years to be used in calculating the date.
 
         Returns:
             A date object representation of the date after calculation.
