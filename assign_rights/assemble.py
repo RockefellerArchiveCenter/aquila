@@ -42,7 +42,7 @@ class RightsAssembler(object):
             request_end_date (string): the end date for a group of records.
 
         Returns:
-            object_start, object_end (list): a list with two datetime objects
+            object_start, object_end (tuple): a tuple with two datetime objects
                 representing the group of object's start and end dates after
                 calculation.
         """
