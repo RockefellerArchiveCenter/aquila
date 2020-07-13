@@ -2,18 +2,96 @@
 
 {% block content %}
 
-<p>{{ rightsshell.pk }} </p>
-<p>{{ rightsshell.rights_basis }} </p>
-<p>{{ rightsshell.copyright_status }} </p>
-<p>{{ rightsshell.determination_date }} </p>
-<p>{{ rightsshell.note }} </p>
-<p>{{ rightsshell.start_date }} </p>
-<p>{{ rightsshell.end_date }} </p>
-<p>{{ rightsshell.start_date_period }} </p>
-<p>{{ rightsshell.end_date_period }} </p>
-<p>{{ rightsshell.end_date_open }} </p>
-<p>{{ rightsshell.license_terms }} </p>
-<p>{{ rightsshell.statute_citation }} </p>
+<small>Created on {{ rightsshell.created }}</small><br/>
+<small>Last modified on {{ rightsshell.last_modified }}</small>
+
+<table class="table">
+<tbody>
+  <tr>
+    <td>ID</td>
+    <td>{{ rightsshell.pk }}</td>
+  </tr>
+  <tr>
+    <td>Basis</td>
+    <td>{{ rightsshell.rights_basis }}</td>
+  </tr>
+  <tr>
+    <td>Copyright Status</td>
+    <td>{{ rightsshell.copyright_status }}</td>
+  </tr>
+  <tr>
+    <td>Determination Date</td>
+    <td>{{ rightsshell.determination_date }}</td>
+  </tr>
+  <tr>
+    <td>Note</td>
+    <td>{{ rightsshell.note }}</td>
+  </tr>
+  <tr>
+    <td>Start Date</td>
+    <td>{{ rightsshell.start_date }}</td>
+  </tr>
+  <tr>
+    <td>End Date</td>
+    <td>{{ rightsshell.end_date }}</td>
+  </tr>
+  <tr>
+    <td>Start Date Period</td>
+    <td>{{ rightsshell.start_date_period }}</td>
+  </tr>
+  <tr>
+    <td>End Date Period</td>
+    <td>{{ rightsshell.end_date_period }}</td>
+  </tr>
+  <tr>
+    <td>Open End Date</td>
+    <td>{{ rightsshell.end_date_open }}</td>
+  </tr>
+  <tr>
+    <td>License Terms</td>
+    <td>{{ rightsshell.license_terms }}</td>
+  </tr>
+  <tr>
+    <td>Statute Citation</td>
+    <td>{{ rightsshell.statute_citation }}</td>
+  </tr>
+    {% for acts in rightsshell.rightsgranted_set.all %}
+	<tr>
+		<td>Act</td>
+		<td>{{acts.act}}</td>
+	</tr>
+	<tr>
+		<td>Restriction</td>
+		<td>{{acts.restriction}}</td>
+	</tr>
+	<tr>
+		<td>Act Note</td>
+		<td>{{acts.note}}</td>
+	</tr>
+	<tr>
+		<td>Act Start Date</td>
+		<td>{{acts.start_date}}</td>
+	</tr>
+	<tr>
+		<td>Act End Date</td>
+		<td>{{acts.end_date}}</td>
+	</tr>
+	<tr>
+		<td>Act Start Date Period</td>
+		<td>{{acts.start_date_period}}</td>
+	</tr>
+	<tr>
+		<td>Act End Date Period</td>
+		<td>{{acts.end_date_period}}</td>
+	</tr>
+	<tr>
+		<td>Act Open End Date</td>
+		<td>{{acts.end_date_open}}</td>
+	</tr>
+	{% endfor %}
+</tbody>
+</table>
+
 
 {% endblock %}
 
