@@ -19,8 +19,8 @@ class RightsShellForm(ModelForm):
             'copyright_status',
             'determination_date',
             'note',
-            'applicable_start_date',
-            'applicable_end_date',
+            'start_date',
+            'end_date',
             'start_date_period',
             'end_date_period',
             'end_date_open',
@@ -35,6 +35,7 @@ class RightsGrantedForm(ModelForm):
         model = RightsGranted
         fields = [
             'basis',
+            'restriction',
             'act',
             'note',
             'start_date',
