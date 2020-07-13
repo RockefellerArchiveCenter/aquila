@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 
 from dateutil.relativedelta import relativedelta
 
@@ -29,7 +29,7 @@ class RightsAssembler(object):
             A date object representation of the date after calculation.
         """
         if not getattr(object, field_name):
-            return datetime.strptime(request_date, "%Y-%m-%d").date() + relativedelta(years=period)
+            return date.fromisoformat(request_date) + relativedelta(years=period)
         else:
             return getattr(object, field_name) + relativedelta(years=period)
 

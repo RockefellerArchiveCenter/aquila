@@ -94,13 +94,13 @@ class TestRightsAssembler(TestCase):
         start_date, end_date = self.assembler.calculate_dates(object, request_start_date, request_end_date)
         self.assertEqual(relativedelta(
             start_date,
-            datetime.strptime(request_start_date, "%Y-%m-%d").date()).years,
+            date.fromisoformat(request_start_date)).years,
             object.start_date_period
         )
         self.assertTrue(isinstance(start_date, date))
         self.assertEqual(relativedelta(
             end_date,
-            datetime.strptime(request_end_date, "%Y-%m-%d").date()).years,
+            date.fromisoformat(request_end_date)).years,
             object.end_date_period
         )
         self.assertTrue(isinstance(end_date, date))
