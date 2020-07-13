@@ -1,3 +1,4 @@
+from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 from .models import RightsShell
@@ -20,11 +21,14 @@ class RightsAssembler(object):
         Args:
             object: the object for which a date is to be calculated.
             field_name: the object attribute containing date data.
-            request_date: date data sumbitted in a request.
+            request_date: representation of a date sumbitted in a request.
             period: the numbe of years to be used in calculating the date.
+
+        Returns:
+            A date object representation of the date after calculation.
         """
         if not getattr(object, field_name):
-            return request_date + relativedelta(years=period)
+            return datetime.strptime(request_date, "%Y-%m-%d").date() + relativedelta(years=period)
         else:
             return getattr(object, field_name) + relativedelta(years=period)
 
@@ -33,8 +37,13 @@ class RightsAssembler(object):
 
         Args:
             object (obj): a RightsShell or RightsGranted object.
-            request_start_date (date): the start date for a group of records.
-            request_end_date (date): the end date for a group of records.
+            request_start_date (string): the start date for a group of records.
+            request_end_date (string): the end date for a group of records.
+
+        Returns:
+            object_start, object_end (list): a list with two datetime objects
+                representing the group of object's start and end dates after
+                calculation.
         """
         object_start = self.get_date_value(
             object, "start_date", request_start_date, object.start_date_period)

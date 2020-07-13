@@ -1,5 +1,5 @@
 import random
-from datetime import date
+from datetime import date, datetime
 
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import AnonymousUser
@@ -9,11 +9,11 @@ from rest_framework.test import APIRequestFactory
 
 from .assemble import RightsAssembler
 from .forms import GroupingForm
-from .models import Grouping, RightsGranted, RightsShell, User
+from .models import Grouping, RightsShell, User
 from .test_helpers import (add_groupings, add_rights_acts, add_rights_shells,
                            random_date, random_string)
 from .views import (GroupingCreateView, GroupingDetailView, GroupingListView,
-                    GroupingUpdateView, RightsAssemblerView)
+                    GroupingUpdateView)
 
 
 class TestViews(TestCase):
@@ -92,9 +92,17 @@ class TestRightsAssembler(TestCase):
         object.start_date = None
         object.end_date = None
         start_date, end_date = self.assembler.calculate_dates(object, request_start_date, request_end_date)
-        self.assertEqual(relativedelta(start_date, request_start_date).years, object.start_date_period)
+        self.assertEqual(relativedelta(
+            start_date,
+            datetime.strptime(request_start_date, "%Y-%m-%d").date()).years,
+            object.start_date_period
+        )
         self.assertTrue(isinstance(start_date, date))
-        self.assertEqual(relativedelta(end_date, request_end_date).years, object.end_date_period)
+        self.assertEqual(relativedelta(
+            end_date,
+            datetime.strptime(request_end_date, "%Y-%m-%d").date()).years,
+            object.end_date_period
+        )
         self.assertTrue(isinstance(end_date, date))
 
         object.end_date_open = True
@@ -104,8 +112,8 @@ class TestRightsAssembler(TestCase):
     def test_calculate_dates(self):
         """Tests the calculate_dates method."""
         shell = random.choice(RightsShell.objects.all())
-        request_end_date = random_date()
-        request_start_date = random_date()
+        request_end_date = random_date().isoformat()
+        request_start_date = random_date().isoformat()
         self.check_object_dates(shell, request_start_date, request_end_date)
 
         for granted in shell.rightsgranted_set.all():
