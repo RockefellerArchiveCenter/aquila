@@ -1,7 +1,6 @@
 from assign_rights.models import RightsShell, User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
-from django.db import transaction
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import (CreateView, DetailView, ListView,
@@ -80,7 +79,7 @@ class RightsShellUpdateView(UpdateView):
             context['rights_granted'] = RightsGrantedFormSet(self.request.POST, instance=self.object)
         else:
             context['rights_granted'] = RightsGrantedFormSet(instance=self.object)
-        return data
+        return context
 
     def form_valid(self, form):
         context = self.get_context_data(form=form)
