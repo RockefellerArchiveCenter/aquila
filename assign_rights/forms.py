@@ -1,10 +1,9 @@
-from django import forms
-from django.forms import inlineformset_factory
+from django.forms import ModelForm, inlineformset_factory
 
 from .models import RightsGranted, RightsShell
 
 
-class RightsShellModelForm(forms.ModelForm):
+class RightsShellForm(ModelForm):
     """docstring for RightsShellForm"""
     class Meta:
         model = RightsShell
@@ -23,7 +22,7 @@ class RightsShellModelForm(forms.ModelForm):
         ]
 
 
-class RightsGrantedModelForm(forms.ModelForm):
+class RightsGrantedForm(ModelForm):
     """docstring for RightsShellForm"""
     class Meta:
         model = RightsGranted
@@ -39,12 +38,9 @@ class RightsGrantedModelForm(forms.ModelForm):
         ]
 
 
-class Rights(object):
-    """docstring for Rights"""
-
-    def __init__(self, arg):
-        super(Rights, self).__init__()
-        self.arg = arg
-
-
-RightsShellFormSet = inlineformset_factory(RightsShell, RightsGranted, form=RightsShellModelForm)
+RightsGrantedFormSet = inlineformset_factory(
+    RightsShell,
+    RightsGranted,
+    extra=1,
+    form=RightsGrantedForm,
+)

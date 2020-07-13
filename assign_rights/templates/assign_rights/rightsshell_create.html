@@ -1,8 +1,12 @@
 {% block content %}
 
-<form action="." method="POST" accept-charset="utf-8"> {% csrf_token %}
+<form action="." method="POST" accept-charset="utf-8">
+	{% csrf_token %}
 	{{ form.as_p }}
+      {{ rights_granted.as_p }} 
+	  {{ rights_granted.management_form }} 
 	<p><input type="submit" value="Save"></p>
 </form>
 
 {% endblock %}
+
