@@ -1,14 +1,14 @@
-from assign_rights.models import User
+from assign_rights.models import RightsShell, User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render
-from django.views.generic import (CreateView, DetailView, ListView,
-                                  TemplateView, UpdateView)
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DetailView, ListView, UpdateView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .assemble import RightsAssembler
-from .forms import GroupingForm
+from .forms import GroupingForm, RightsGrantedFormSet, RightsShellForm
 from .models import Grouping
 
 
@@ -28,24 +28,73 @@ class PageTitleMixin(object):
         return context
 
 
-def RightsShellListView(ListView):
+class RightsShellListView(ListView):
     '''browse and search rights shells'''
     pass
 
 
 class RightsShellCreateView(CreateView):
-    '''create rights shells'''
-    pass
+    model = RightsShell
+    template_name = "rights/manage.html"
+    form_class = RightsShellForm
+    success_url = None
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['rights_granted'] = RightsGrantedFormSet(self.request.POST)
+        else:
+            context['rights_granted'] = RightsGrantedFormSet()
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data(form=form)
+        rights_granted = context['rights_granted']
+        if rights_granted.is_valid():
+            response = super().form_valid(form)
+            rights_granted.instance = self.object
+            rights_granted.save()
+            return response
+        else:
+            return super().form_invalid(form)
+
+    def get_success_url(self):
+        return reverse_lazy("rights-detail", kwargs={"pk": self.object.pk})
 
 
-class RightsShellDetailView(DetailView):
+class RightsShellDetailView(LoginRequiredMixin, DetailView):
     '''view a rights shell'''
-    pass
+    queryset = RightsShell.objects.all()
+    template_name = "rights/detail.html"
 
 
 class RightsShellUpdateView(UpdateView):
-    '''update rights shell'''
-    pass
+    model = RightsShell
+    template_name = "rights/manage.html"
+    form_class = RightsShellForm
+    success_url = None
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['rights_granted'] = RightsGrantedFormSet(self.request.POST, instance=self.object)
+        else:
+            context['rights_granted'] = RightsGrantedFormSet(instance=self.object)
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data(form=form)
+        rights_granted = context['rights_granted']
+        if rights_granted.is_valid():
+            response = super().form_valid(form)
+            rights_granted.instance = self.object
+            rights_granted.save()
+            return response
+        else:
+            return super().form_invalid(form)
+
+    def get_success_url(self):
+        return reverse_lazy("rights-detail", kwargs={"pk": self.object.pk})
 
 
 class GroupingListView(PageTitleMixin, LoginRequiredMixin, ListView):
