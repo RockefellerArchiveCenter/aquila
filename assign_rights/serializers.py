@@ -30,3 +30,25 @@ class RightsShellSerializer(serializers.ModelSerializer):
             "terms",
             "citation"
         )
+
+
+class RightsGrantedSerializer(serializers.ModelSerializer):
+    """docstring"""
+    start_date = serializers.SerializerMethodField()
+    end_date = serializers.SerializerMethodField()
+
+    def get_start_date(self, object_start):
+        return self.context.get("start_date")
+
+    def get_end_date(self, object_end):
+        return self.context.get("end_date")
+
+    class Meta:
+        model = RightsGranted
+        fields = (
+            "act",
+            "restriction",
+            "start_date",
+            "end_date",
+            "note"
+        )
