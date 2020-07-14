@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<a class="btn btn-primary mb-2" href="{% url 'rights-create' %}">Create new rights shell</a>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Basis</th>
+      <th scope="col">Note</th>
+	  <th scope="col">Rights Granted or Restricted</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for rightsshell in object_list %}
+    <tr>
+  		<td><a href=' {{ rightsshell.get_absolute_url }}'>{{ rightsshell.pk }}</a></td>
+      <td>{{ rightsshell.rights_basis }}</td>
+      <td>{{ rightsshell.note }}</td>
+      <td>{% for acts in rightsshell.rightsgranted_set.all %} {{acts.act}} - {{acts.restriction}} {% if not forloop.last %}<br/>{% endif %}{% endfor %}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
