@@ -28,7 +28,7 @@ urlpatterns = [
     path('groupings/', GroupingListView.as_view(), name="groupings-list"),
     path('groupings/<int:pk>/', GroupingDetailView.as_view(), name="groupings-detail"),
     path('groupings/create/', GroupingCreateView.as_view(), name="groupings-create"),
-    path('groupings/<int:pk>/edit/', GroupingUpdateView.as_view(), name="groupings-update"),
+    path('groupings/<int:pk>/update/', GroupingUpdateView.as_view(), name="groupings-update"),
     path('login/', AquilaLoginView.as_view(template_name="users/login.html"), name="login"),
     path('logout/', LogoutView.as_view(next_page="/login"), name="logout"),
     path('rights/', RightsShellListView.as_view(), name='rights-list'),
