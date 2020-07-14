@@ -28,17 +28,19 @@ class PageTitleMixin(object):
         return context
 
 
-class RightsShellListView(LoginRequiredMixin, ListView):
+class RightsShellListView(PageTitleMixin, LoginRequiredMixin, ListView):
     '''browse and search rights shells'''
     queryset = RightsShell.objects.all()
     template_name = "rights/list.html"
+    page_title = "Rights"
 
 
-class RightsShellCreateView(LoginRequiredMixin, CreateView):
+class RightsShellCreateView(PageTitleMixin, LoginRequiredMixin, CreateView):
     model = RightsShell
     template_name = "rights/manage.html"
     form_class = RightsShellForm
     success_url = None
+    page_title = "Create New Rights Shell"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -63,13 +65,16 @@ class RightsShellCreateView(LoginRequiredMixin, CreateView):
         return reverse_lazy("rights-detail", kwargs={"pk": self.object.pk})
 
 
-class RightsShellDetailView(LoginRequiredMixin, DetailView):
+class RightsShellDetailView(PageTitleMixin, LoginRequiredMixin, DetailView):
     '''view a rights shell'''
     model = RightsShell
     template_name = "rights/detail.html"
 
+    def get_page_title(self, context):
+        return "Rights Shell {}".format(context["object"].pk)
 
-class RightsShellUpdateView(LoginRequiredMixin, UpdateView):
+
+class RightsShellUpdateView(PageTitleMixin, LoginRequiredMixin, UpdateView):
     model = RightsShell
     template_name = "rights/manage.html"
     form_class = RightsShellForm
@@ -92,6 +97,9 @@ class RightsShellUpdateView(LoginRequiredMixin, UpdateView):
             return response
         else:
             return super().form_invalid(form)
+
+    def get_page_title(self, context):
+        return "Update Rights Shell {}".format(context["object"].pk)
 
 
 class GroupingListView(PageTitleMixin, LoginRequiredMixin, ListView):
