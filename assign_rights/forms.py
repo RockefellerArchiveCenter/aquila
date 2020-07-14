@@ -4,14 +4,12 @@ from .models import Grouping, RightsGranted, RightsShell
 
 
 class GroupingForm(ModelForm):
-    """docstring for RightsShellForm"""
     class Meta:
         model = Grouping
         fields = ["title", "description", "rights_shells"]
 
 
 class RightsShellForm(ModelForm):
-    """docstring for RightsShellForm"""
     class Meta:
         model = RightsShell
         fields = [
@@ -30,7 +28,6 @@ class RightsShellForm(ModelForm):
 
 
 class RightsGrantedForm(ModelForm):
-    """docstring for RightsShellForm"""
     class Meta:
         model = RightsGranted
         fields = [
