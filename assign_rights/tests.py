@@ -8,7 +8,7 @@ from django.urls import reverse
 from rest_framework.test import APIRequestFactory
 
 from .assemble import RightsAssembler
-from .forms import GroupingForm
+from .forms import GroupingForm, RightsShellForm
 from .models import Grouping, RightsShell, User
 from .test_helpers import (add_groupings, add_rights_acts, add_rights_shells,
                            random_date, random_string)
@@ -47,6 +47,31 @@ class TestViews(TestCase):
         for field in ["title", "description", "rights_shells"]:
             del form_data[field]
             form = GroupingForm(data=form_data)
+            self.assertFalse(form.is_valid(), "Form unexpectedly valid")
+            self.assertIsNot(
+                form.errors[field], False,
+                "Field-specific error message not raised for {}".format(field))
+
+    def test_rightshell_views(self):
+        """Ensures that views are returning successful responses."""
+        for view_str, view, pk_required in [
+                ("rights-list", RightsShellListView, False),
+                ("rights-detail", RightsShellDetailView, True),
+                ("rights-create", RightsShellCreateView, False),
+                ("rights-update", RightsShellUpdateView, True)]:
+            pk = random.choice(RightsShell.objects.all()).pk if pk_required else None
+            request = self.factory.get(reverse(view_str, kwargs={"pk": pk})) if pk else self.factory.get(reverse(view_str))
+            request.user = self.user
+            response = view.as_view()(request, pk=pk) if pk else view.as_view()(request)
+            self.assertEqual(response.status_code, 200)
+
+    def test_rightsshell_form(self):
+        form_data = {"rights_basis": random.choice(["Copyright", "Statute", "License", "Other"]), "note": random_string(), "start_date_period": random.randint(0, 10), "end_date_period": random.randint(0, 10)}
+        form = RightsShellForm(data=form_data)
+        self.assertTrue(form.is_valid(), form.errors)
+        for field in ["rights_basis", "note", "start_date_period", "end_date_period"]:
+            del form_data[field]
+            form = RightsShellForm(data=form_data)
             self.assertFalse(form.is_valid(), "Form unexpectedly valid")
             self.assertIsNot(
                 form.errors[field], False,

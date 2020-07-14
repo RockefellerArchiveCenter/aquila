@@ -43,14 +43,14 @@ class RightsShellCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
-            context['rights_granted'] = RightsGrantedFormSet(self.request.POST)
+            context['rights_granted_form'] = RightsGrantedFormSet(self.request.POST)
         else:
-            context['rights_granted'] = RightsGrantedFormSet()
+            context['rights_granted_form'] = RightsGrantedFormSet()
         return context
 
     def form_valid(self, form):
         context = self.get_context_data(form=form)
-        rights_granted = context['rights_granted']
+        rights_granted = context['rights_granted_form']
         if rights_granted.is_valid():
             response = super().form_valid(form)
             rights_granted.instance = self.object
@@ -84,11 +84,11 @@ class RightsShellUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         context = self.get_context_data(form=form)
-        rights_granted = context['rights_granted']
+        rights_granted_form = context['rights_granted_form']
         if rights_granted_form.is_valid():
             response = super().form_valid(form)
             rights_granted_form.instance = self.object
-            rights_granted.save()
+            rights_granted_form.save()
             return response
         else:
             return super().form_invalid(form)
