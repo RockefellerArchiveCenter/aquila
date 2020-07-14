@@ -127,9 +127,8 @@ class TestRightsAssembler(TestCase):
         object_start = random_date()
         object_end = random_date()
         serialized = self.assembler.create_json(obj, object_start, object_end)
-        print(serialized.is_valid(raise_exception=True))
-        #print(serialized.data)
-
+        print(serialized)
+        self.assertTrue(isinstance(serialized, bytes))
 
 
 class TestAssignRightsViews(TestCase):

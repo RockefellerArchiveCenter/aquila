@@ -1,6 +1,8 @@
 from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
+from rest_framework.parsers import JSONParser
+from rest_framework.renderers import JSONRenderer
 
 from .models import RightsShell
 from .serializers import RightsShellSerializer
@@ -55,8 +57,9 @@ class RightsAssembler(object):
 
     def create_json(self, obj, object_start, object_end):
         """docstring for create_json"""
-        serializer = RightsShellSerializer('json', obj, context={"start_date": object_start, "end_date": object_end})
-        return serializer
+        serializer = RightsShellSerializer(obj, context={"start_date": object_start, "end_date": object_end})
+        json = JSONRenderer().render(serializer.data)
+        return json
 
     def return_rights(self):
         """docstring for return_rights"""
