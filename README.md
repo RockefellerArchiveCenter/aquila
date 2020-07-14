@@ -6,7 +6,7 @@ An application to store, calculate, and assign PREMIS rights statements.
 
 Install [git](https://git-scm.com/) and clone the repository
 
-    $ git clone https://github.com/RockefellerArchiveCenter/zorya.git
+    $ git clone https://github.com/RockefellerArchiveCenter/aquila.git
 
 Install [Docker](https://store.docker.com/search?type=edition&offering=community) and run docker-compose from the root directory
 
