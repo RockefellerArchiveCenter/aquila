@@ -65,7 +65,7 @@ class RightsShellCreateView(LoginRequiredMixin, CreateView):
 
 class RightsShellDetailView(LoginRequiredMixin, DetailView):
     '''view a rights shell'''
-    queryset = RightsShell.objects.all()
+    model = RightsShell
     template_name = "rights/detail.html"
 
 
