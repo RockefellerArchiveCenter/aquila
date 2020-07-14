@@ -5,92 +5,89 @@
 <small>Created on {{ rightsshell.created }}</small><br/>
 <small>Last modified on {{ rightsshell.last_modified }}</small>
 
-<table class="table">
-<tbody>
-  <tr>
-    <td>ID</td>
-    <td>{{ rightsshell.pk }}</td>
-  </tr>
-  <tr>
-    <td>Basis</td>
-    <td>{{ rightsshell.rights_basis }}</td>
-  </tr>
-  <tr>
-    <td>Copyright Status</td>
-    <td>{{ rightsshell.copyright_status }}</td>
-  </tr>
-  <tr>
-    <td>Determination Date</td>
-    <td>{{ rightsshell.determination_date }}</td>
-  </tr>
-  <tr>
-    <td>Note</td>
-    <td>{{ rightsshell.note }}</td>
-  </tr>
-  <tr>
-    <td>Start Date</td>
-    <td>{{ rightsshell.start_date }}</td>
-  </tr>
-  <tr>
-    <td>End Date</td>
-    <td>{{ rightsshell.end_date }}</td>
-  </tr>
-  <tr>
-    <td>Start Date Period</td>
-    <td>{{ rightsshell.start_date_period }}</td>
-  </tr>
-  <tr>
-    <td>End Date Period</td>
-    <td>{{ rightsshell.end_date_period }}</td>
-  </tr>
-  <tr>
-    <td>Open End Date</td>
-    <td>{{ rightsshell.end_date_open }}</td>
-  </tr>
-  <tr>
-    <td>License Terms</td>
-    <td>{{ rightsshell.license_terms }}</td>
-  </tr>
-  <tr>
-    <td>Statute Citation</td>
-    <td>{{ rightsshell.statute_citation }}</td>
-  </tr>
+<dl class="row">
+   <dt class="col-sm-3">ID</dt>
+	<dd class="col-sm-3">{{ rightsshell.pk }}</dd>
+</dl> 
+<dl class="row"> 
+   <dt class="col-sm-3">Basis</dt>
+	<dd class="col-sm-3">{{ rightsshell.rights_basis }}</dd>
+</dl> 
+<dl class="row">  
+   <dt class="col-sm-3">Copyright Status</dt>
+	<dd class="col-sm-3">{{ rightsshell.copyright_status }}</dd>
+</dl> 
+<dl class="row">  
+   <dt class="col-sm-3">Determination Date</dt>
+	<dd class="col-sm-3">{{ rightsshell.determination_date }}</dd>
+</dl> 
+<dl class="row">  
+   <dt class="col-sm-3">Note</dt>
+	<dd class="col-sm-3">{{ rightsshell.note }}</dd>
+</dl> 
+<dl class="row">  
+   <dt class="col-sm-3">Start Date</dt>
+	<dd class="col-sm-3">{{ rightsshell.start_date }}</dd>
+</dl> 
+<dl class="row">  
+   <dt class="col-sm-3">End Date</dt>
+	<dd class="col-sm-3">{{ rightsshell.end_date }}</dd>
+</dl> 
+<dl class="row">  
+   <dt class="col-sm-3">Start Date Period</dt>
+	<dd class="col-sm-3">{{ rightsshell.start_date_period }}</dd>
+</dl> 
+<dl class="row">  
+   <dt class="col-sm-3">End Date Period</dt>
+	<dd class="col-sm-3">{{ rightsshell.end_date_period }}</dd>
+</dl> 
+<dl class="row">  
+   <dt class="col-sm-3">Open End Date</dt>
+	<dd class="col-sm-3">{{ rightsshell.end_date_open }}</dd>
+</dl> 
+<dl class="row">  
+   <dt class="col-sm-3">License Terms</dt>
+	<dd class="col-sm-3">{{ rightsshell.license_terms }}</dd>
+</dl> 
+<dl class="row">  
+   <dt class="col-sm-3">Statute Citation</dt>
+	<dd class="col-sm-3">{{ rightsshell.statute_citation }}</dd>
+</dl> 
     {% for acts in rightsshell.rightsgranted_set.all %}
-	<tr>
-		<td>Act</td>
-		<td>{{acts.act}}</td>
-	</tr>
-	<tr>
-		<td>Restriction</td>
-		<td>{{acts.restriction}}</td>
-	</tr>
-	<tr>
-		<td>Act Note</td>
-		<td>{{acts.note}}</td>
-	</tr>
-	<tr>
-		<td>Act Start Date</td>
-		<td>{{acts.start_date}}</td>
-	</tr>
-	<tr>
-		<td>Act End Date</td>
-		<td>{{acts.end_date}}</td>
-	</tr>
-	<tr>
-		<td>Act Start Date Period</td>
-		<td>{{acts.start_date_period}}</td>
-	</tr>
-	<tr>
-		<td>Act End Date Period</td>
-		<td>{{acts.end_date_period}}</td>
-	</tr>
-	<tr>
-		<td>Act Open End Date</td>
-		<td>{{acts.end_date_open}}</td>
-	</tr>
+<dl class="row">  	
+	 <dt class="col-sm-3">Act</dt>
+	<dd class="col-sm-3">{{acts.act}}</dd>
+</dl> 
+<dl class="row">  	
+	 <dt class="col-sm-3">Restriction</dt>
+	<dd class="col-sm-3">{{acts.restriction}}</dd>
+</dl> 
+<dl class="row">  	
+	 <dt class="col-sm-3">Act Note</dt>
+	<dd class="col-sm-3">{{acts.note}}</dd>
+</dl> 
+<dl class="row">  	
+	 <dt class="col-sm-3">Act Start Date</dt>
+	<dd class="col-sm-3">{{acts.start_date}}</dd>
+</dl> 
+<dl class="row">  	
+	 <dt class="col-sm-3">Act End Date</dt>
+	<dd class="col-sm-3">{{acts.end_date}}</dd>
+</dl> 
+<dl class="row">  	
+	 <dt class="col-sm-3">Act Start Date Period</dt>
+	<dd class="col-sm-3">{{acts.start_date_period}}</dd>
+</dl> 
+<dl class="row">  	
+	 <dt class="col-sm-3">Act End Date Period</dt>
+	<dd class="col-sm-3">{{acts.end_date_period}}</dd>
+</dl> 
+<dl class="row">  	
+	 <dt class="col-sm-3">Act Open End Date</dt>
+	<dd class="col-sm-3">{{acts.end_date_open}}</dd>
+</dl>
+	
 	{% endfor %}
-</tbody>
-</table>
 
 <a class="btn btn-warning" href="{% url 'rights-update' pk=object.pk %}">Edit</a>
 
