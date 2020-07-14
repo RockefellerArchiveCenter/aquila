@@ -93,8 +93,6 @@ class RightsShellUpdateView(LoginRequiredMixin, UpdateView):
         else:
             return super().form_invalid(form)
 
-    def get_success_url(self):
-        return reverse_lazy("rights-detail", kwargs={"pk": self.object.pk})
 
 
 class GroupingListView(PageTitleMixin, LoginRequiredMixin, ListView):
