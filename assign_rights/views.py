@@ -2,7 +2,6 @@ from assign_rights.models import RightsShell, User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render
-from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -40,7 +39,6 @@ class RightsShellCreateView(PageTitleMixin, LoginRequiredMixin, CreateView):
     model = RightsShell
     template_name = "rights/manage.html"
     form_class = RightsShellForm
-    success_url = None
     page_title = "Create New Rights Shell"
 
     def get_context_data(self, **kwargs):
@@ -61,9 +59,6 @@ class RightsShellCreateView(PageTitleMixin, LoginRequiredMixin, CreateView):
             return response
         else:
             return super().form_invalid(form)
-
-    def get_success_url(self):
-        return reverse_lazy("rights-detail", kwargs={"pk": self.object.pk})
 
 
 class RightsShellDetailView(PageTitleMixin, LoginRequiredMixin, DetailView):
