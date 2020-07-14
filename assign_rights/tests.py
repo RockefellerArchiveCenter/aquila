@@ -10,7 +10,6 @@ from rest_framework.test import APIRequestFactory
 from .assemble import RightsAssembler
 from .forms import GroupingForm
 from .models import Grouping, RightsShell, User
-from .serializers import RightsShellSerializer
 from .test_helpers import (add_groupings, add_rights_acts, add_rights_shells,
                            random_date, random_string)
 from .views import (GroupingCreateView, GroupingDetailView, GroupingListView,
@@ -119,14 +118,6 @@ class TestRightsAssembler(TestCase):
 
         for granted in shell.rightsgranted_set.all():
             self.check_object_dates(granted, request_start_date, request_end_date)
-
-    def test_create_json(self):
-        obj = random.choice(RightsShell.objects.all())
-        object_start = random_date()
-        object_end = random_date()
-        serialized = self.assembler.create_json(obj, object_start, object_end)
-        print(serialized.data)
-
 
 
 class TestAssignRightsViews(TestCase):
