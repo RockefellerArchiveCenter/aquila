@@ -5,9 +5,9 @@
 <form action="." method="POST" accept-charset="utf-8">
 	{% csrf_token %}
 	{{ form.as_p }}
-      {{ rights_granted_form.as_p }}
-      {{ rights_granted_form.management_form }} 
-	<p><button type="submit" class="btn btn-primary">Save</button></p>
+	{{ rights_granted_form.as_p }}
+	{{ rights_granted_form.management_form }}
+	<button type="submit" class="btn btn-primary">Save</button>
 </form>
 
 {% endblock %}
