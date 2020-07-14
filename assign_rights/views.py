@@ -30,7 +30,7 @@ class PageTitleMixin(object):
 
 class RightsShellListView(PageTitleMixin, LoginRequiredMixin, ListView):
     """Browse and search rights shells."""
-    queryset = RightsShell.objects.all()
+    model = RightsShell
     template_name = "rights/list.html"
     page_title = "Rights"
 
