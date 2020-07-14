@@ -34,5 +34,5 @@ urlpatterns = [
     path('rights/', RightsShellListView.as_view(), name='rights-list'),
     path('rights/create/', RightsShellCreateView.as_view(), name='rights-create'),
     path('rights/<int:pk>/update/', RightsShellUpdateView.as_view(), name='rights-update'),
-    path('rights/<int:pk>', RightsShellDetailView.as_view(), name='rights-detail'),
+    path('rights/<int:pk>/', RightsShellDetailView.as_view(), name='rights-detail'),
 ]
