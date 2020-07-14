@@ -73,7 +73,6 @@ class RightsShellUpdateView(LoginRequiredMixin, UpdateView):
     model = RightsShell
     template_name = "rights/manage.html"
     form_class = RightsShellForm
-    success_url = None
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
