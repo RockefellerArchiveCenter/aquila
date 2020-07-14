@@ -13,7 +13,9 @@ from .models import Grouping, RightsShell, User
 from .test_helpers import (add_groupings, add_rights_acts, add_rights_shells,
                            random_date, random_string)
 from .views import (GroupingCreateView, GroupingDetailView, GroupingListView,
-                    GroupingUpdateView)
+                    GroupingUpdateView, RightsShellCreateView,
+                    RightsShellDetailView, RightsShellListView,
+                    RightsShellUpdateView)
 
 
 class TestViews(TestCase):
@@ -126,6 +128,7 @@ class TestAssignRightsViews(TestCase):
         self.user = User.objects.create_user("test", "test@example.com", "testpass")
         self.factory = RequestFactory()
         add_groupings()
+        add_rights_shells()
 
     def test_restricted_views(self):
         """Asserts that restricted views are only available to logged-in users."""
@@ -133,7 +136,11 @@ class TestAssignRightsViews(TestCase):
             ("groupings-list", GroupingListView, None),
             ("groupings-detail", GroupingDetailView, random.choice(Grouping.objects.all()).pk),
             ("groupings-create", GroupingCreateView, False),
-            ("groupings-update", GroupingUpdateView, random.choice(Grouping.objects.all()).pk)]
+            ("groupings-update", GroupingUpdateView, random.choice(Grouping.objects.all()).pk),
+            ("rights-list", RightsShellListView, None),
+            ("rights-detail", RightsShellDetailView, random.choice(RightsShell.objects.all()).pk),
+            ("rights-create", RightsShellCreateView, False),
+            ("rights-update", RightsShellUpdateView, random.choice(RightsShell.objects.all()).pk)]
         for view_name, view, pk in restricted_views:
             request = self.factory.get(reverse(view_name, kwargs={"pk": pk})) if pk else self.factory.get(reverse(view_name))
             request.user = AnonymousUser()
