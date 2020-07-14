@@ -94,7 +94,6 @@ class RightsShellUpdateView(LoginRequiredMixin, UpdateView):
             return super().form_invalid(form)
 
 
-
 class GroupingListView(PageTitleMixin, LoginRequiredMixin, ListView):
     """Browse and search groupings."""
     model = Grouping
