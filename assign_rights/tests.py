@@ -1,6 +1,5 @@
 import random
-import string
-from datetime import date
+from datetime import date, datetime
 
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import AnonymousUser
@@ -11,45 +10,10 @@ from rest_framework.test import APIRequestFactory
 from .assemble import RightsAssembler
 from .forms import GroupingForm
 from .models import Grouping, RightsShell, User
+from .test_helpers import (add_groupings, add_rights_acts, add_rights_shells,
+                           random_date, random_string)
 from .views import (GroupingCreateView, GroupingDetailView, GroupingListView,
-                    GroupingUpdateView, RightsAssemblerView)
-
-
-def random_date():
-    now = date.today()
-    r = now - relativedelta(years=random.randint(2, 50))
-    return r.isoformat()
-
-
-def random_string(length=20):
-    """Returns a random string of specified length."""
-    return "".join(random.choice(string.ascii_letters) for m in range(length))
-
-
-def add_groupings(count=5):
-    for x in range(count):
-        grouping = Grouping.objects.create(
-            title=random_string(10),
-            description=random_string(50))
-        if RightsShell.objects.all():
-            for x in range(random.randint(1, 3)):
-                grouping.rights_shells.add(random.choice(RightsShell.objects.all()))
-
-
-def add_rights_shells(count=5):
-    for x in range(count):
-        RightsShell.objects.create(
-            rights_basis=random.choice(["Copyright", "Statute", "License", "Other"]),
-            copyright_status="copyrighted",
-            determination_date=random_date(),
-            note=random_string(),
-            start_date=random_date(),
-            end_date=random_date(),
-            start_date_period=None,
-            end_date_period=random.randint(0, 10),
-            end_date_open=False,
-            license_terms=None,
-            statute_citation=None)
+                    GroupingUpdateView)
 
 
 class TestViews(TestCase):
@@ -60,11 +24,6 @@ class TestViews(TestCase):
         self.user = User.objects.create_user("test_user", "test@example.com", "testpass")
         add_rights_shells()
         add_groupings()
-
-    def test_rightsassembler_pass(self):
-        request = self.factory.post(reverse('rights-assemble'), {"identifiers": [1, 2, 3, 4], "end_date": "2020-03-01"}, format='json')
-        response = RightsAssemblerView.as_view()(request)
-        self.assertEqual(response.status_code, 200)
 
     def test_grouping_views(self):
         """Ensures that views are returning successful responses."""
@@ -95,21 +54,70 @@ class TestViews(TestCase):
 class TestRightsAssembler(TestCase):
     def setUp(self):
         add_rights_shells()
+        add_rights_acts()
         self.assembler = RightsAssembler()
+        self.rights_ids = [obj.pk for obj in RightsShell.objects.all()]
 
     def test_retrieve_rights(self):
         """Tests the retrieve_rights method.
 
         Asserts the method returns a list or DoesNotExist exception.
         """
-        rights_ids = [obj.pk for obj in RightsShell.objects.all()]
-        assembled = self.assembler.retrieve_rights(rights_ids)
+        assembled = self.assembler.retrieve_rights(self.rights_ids)
         self.assertTrue(isinstance(assembled, list))
-        self.assertEqual(len(rights_ids), len(assembled))
+        self.assertEqual(len(self.rights_ids), len(assembled))
 
-        rights_ids.append(len(rights_ids) + 1)
+        deleted = random.choice(RightsShell.objects.all())
+        deleted.delete()
+        self.rights_ids.append(deleted.pk)
         with self.assertRaises(RightsShell.DoesNotExist):
-            assembled = self.assembler.retrieve_rights(rights_ids)
+            assembled = self.assembler.retrieve_rights(self.rights_ids)
+
+    def check_object_dates(self, object, request_start_date, request_end_date):
+        """Tests different cases for date calculation.
+
+        Asserts the method returns a DateTimeField or None if the end date is open.
+        Asserts that the relative delta of the calculated date and the correct end date
+        is equal to the end date period of the object.
+        """
+        object.end_date_open = False
+        object.start_date = random_date()
+        object.end_date = random_date()
+        start_date, end_date = self.assembler.calculate_dates(object, request_start_date, request_end_date)
+        self.assertEqual(relativedelta(start_date, object.start_date).years, object.start_date_period)
+        self.assertTrue(isinstance(start_date, date))
+        self.assertEqual(relativedelta(end_date, object.end_date).years, object.end_date_period)
+        self.assertTrue(isinstance(end_date, date))
+
+        object.start_date = None
+        object.end_date = None
+        start_date, end_date = self.assembler.calculate_dates(object, request_start_date, request_end_date)
+        self.assertEqual(relativedelta(
+            start_date,
+            datetime.strptime(request_start_date, "%Y-%m-%d").date()).years,
+            object.start_date_period
+        )
+        self.assertTrue(isinstance(start_date, date))
+        self.assertEqual(relativedelta(
+            end_date,
+            datetime.strptime(request_end_date, "%Y-%m-%d").date()).years,
+            object.end_date_period
+        )
+        self.assertTrue(isinstance(end_date, date))
+
+        object.end_date_open = True
+        start_date, end_date = self.assembler.calculate_dates(object, request_start_date, request_end_date)
+        self.assertEqual(end_date, None)
+
+    def test_calculate_dates(self):
+        """Tests the calculate_dates method."""
+        shell = random.choice(RightsShell.objects.all())
+        request_end_date = random_date().isoformat()
+        request_start_date = random_date().isoformat()
+        self.check_object_dates(shell, request_start_date, request_end_date)
+
+        for granted in shell.rightsgranted_set.all():
+            self.check_object_dates(granted, request_start_date, request_end_date)
 
 
 class TestAssignRightsViews(TestCase):
