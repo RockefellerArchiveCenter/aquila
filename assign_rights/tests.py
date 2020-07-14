@@ -5,6 +5,8 @@ from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import AnonymousUser
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
+from rest_framework.parsers import JSONParser
+from rest_framework.renderers import JSONRenderer
 from rest_framework.test import APIRequestFactory
 
 from .assemble import RightsAssembler
@@ -125,7 +127,8 @@ class TestRightsAssembler(TestCase):
         object_start = random_date()
         object_end = random_date()
         serialized = self.assembler.create_json(obj, object_start, object_end)
-        print(serialized.data)
+        print(serialized.is_valid(raise_exception=True))
+        #print(serialized.data)
 
 
 

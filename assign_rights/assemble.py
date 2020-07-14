@@ -55,7 +55,7 @@ class RightsAssembler(object):
 
     def create_json(self, obj, object_start, object_end):
         """docstring for create_json"""
-        serializer = RightsShellSerializer(obj, context={"start_date": object_start, "end_date": object_end})
+        serializer = RightsShellSerializer('json', obj, context={"start_date": object_start, "end_date": object_end})
         return serializer
 
     def return_rights(self):
