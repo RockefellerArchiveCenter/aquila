@@ -3,6 +3,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 from .models import RightsShell
+from .serializers import RightsShellSerializer
 
 # Receive POST request that contains multiple rights IDs and one date
 # For each rights ID, take date to calculate and return rights json (that looks like what Aurora returns)
@@ -52,9 +53,10 @@ class RightsAssembler(object):
             object, "end_date", request_end_date, object.end_date_period)
         return object_start, object_end
 
-    def create_json(self):
+    def create_json(self, obj, object_start, object_end):
         """docstring for create_json"""
-    pass
+        serializer = RightsShellSerializer(obj, context={"start_date": object_start, "end_date": object_end})
+        return serializer
 
     def return_rights(self):
         """docstring for return_rights"""
