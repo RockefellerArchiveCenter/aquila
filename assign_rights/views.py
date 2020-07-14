@@ -28,13 +28,13 @@ class PageTitleMixin(object):
         return context
 
 
-class RightsShellListView(ListView):
+class RightsShellListView(LoginRequiredMixin, ListView):
     '''browse and search rights shells'''
     queryset = RightsShell.objects.all()
     template_name = "rights/list.html"
 
 
-class RightsShellCreateView(CreateView):
+class RightsShellCreateView(LoginRequiredMixin, CreateView):
     model = RightsShell
     template_name = "rights/manage.html"
     form_class = RightsShellForm
@@ -69,7 +69,7 @@ class RightsShellDetailView(LoginRequiredMixin, DetailView):
     template_name = "rights/detail.html"
 
 
-class RightsShellUpdateView(UpdateView):
+class RightsShellUpdateView(LoginRequiredMixin, UpdateView):
     model = RightsShell
     template_name = "rights/manage.html"
     form_class = RightsShellForm
