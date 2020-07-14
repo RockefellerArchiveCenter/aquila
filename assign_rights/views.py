@@ -77,9 +77,9 @@ class RightsShellUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
-            context['rights_granted'] = RightsGrantedFormSet(self.request.POST, instance=self.object)
+            context['rights_granted_form'] = RightsGrantedFormSet(self.request.POST, instance=self.object)
         else:
-            context['rights_granted'] = RightsGrantedFormSet(instance=self.object)
+            context['rights_granted_form'] = RightsGrantedFormSet(instance=self.object)
         return context
 
     def form_valid(self, form):
