@@ -85,9 +85,9 @@ class RightsShellUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         context = self.get_context_data(form=form)
         rights_granted = context['rights_granted']
-        if rights_granted.is_valid():
+        if rights_granted_form.is_valid():
             response = super().form_valid(form)
-            rights_granted.instance = self.object
+            rights_granted_form.instance = self.object
             rights_granted.save()
             return response
         else:
