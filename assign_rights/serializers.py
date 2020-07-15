@@ -26,7 +26,7 @@ class RightsGrantedSerializer(serializers.ModelSerializer):
 
 
 class RightsShellSerializer(serializers.ModelSerializer):
-    """Serializes changes to the RightsGranted model to fit within RAC rights schema"""
+    """Serializes instances of the RightsGranted model to fit within RAC rights schema"""
     start_date = serializers.SerializerMethodField()
     end_date = serializers.SerializerMethodField()
     status = serializers.CharField(source="copyright_status")
