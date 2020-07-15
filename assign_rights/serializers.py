@@ -3,6 +3,28 @@ from rest_framework import serializers
 from .models import RightsGranted, RightsShell
 
 
+class RightsGrantedSerializer(serializers.ModelSerializer):
+    """docstring"""
+    start_date = serializers.SerializerMethodField()
+    end_date = serializers.SerializerMethodField()
+
+    def get_start_date(self, object_start):
+        return self.context.get("start_date")
+
+    def get_end_date(self, object_end):
+        return self.context.get("end_date")
+
+    class Meta:
+        model = RightsGranted
+        fields = (
+            "act",
+            "restriction",
+            "start_date",
+            "end_date",
+            "note"
+        )
+
+
 class RightsShellSerializer(serializers.ModelSerializer):
     """Serializes changes to the RightsGranted model to fit within RAC rights schema"""
     start_date = serializers.SerializerMethodField()
@@ -29,26 +51,4 @@ class RightsShellSerializer(serializers.ModelSerializer):
             "status",
             "terms",
             "citation"
-        )
-
-
-class RightsGrantedSerializer(serializers.ModelSerializer):
-    """docstring"""
-    start_date = serializers.SerializerMethodField()
-    end_date = serializers.SerializerMethodField()
-
-    def get_start_date(self, object_start):
-        return self.context.get("start_date")
-
-    def get_end_date(self, object_end):
-        return self.context.get("end_date")
-
-    class Meta:
-        model = RightsGranted
-        fields = (
-            "act",
-            "restriction",
-            "start_date",
-            "end_date",
-            "note"
         )
