@@ -32,6 +32,7 @@ class RightsShellSerializer(serializers.ModelSerializer):
     status = serializers.CharField(source="copyright_status")
     terms = serializers.CharField(source="license_terms")
     citation = serializers.CharField(source="statute_citation")
+    rights_granted = serializers.ListField(default=[])
 
     def get_start_date(self, object_start):
         return self.context.get("start_date")
@@ -50,5 +51,6 @@ class RightsShellSerializer(serializers.ModelSerializer):
             "note",
             "status",
             "terms",
-            "citation"
+            "citation",
+            "rights_granted"
         )

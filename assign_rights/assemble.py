@@ -1,7 +1,8 @@
+import json
+
 from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
-from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
 from .models import RightsShell
@@ -61,8 +62,9 @@ class RightsAssembler(object):
             serializer = RightsShellSerializer(obj, context={"start_date": object_start, "end_date": object_end})
         else:
             serializer = RightsGrantedSerializer(obj, context={"start_date": object_start, "end_date": object_end})
-        json = JSONRenderer().render(serializer.data)
-        return json
+        bytes = JSONRenderer().render(serializer.data)
+        data = json.loads(bytes)
+        return data
 
     def return_rights(self):
         """docstring for return_rights"""
@@ -79,14 +81,19 @@ class RightsAssembler(object):
         """
         try:
             rights_shells = self.retrieve_rights(rights_ids)
+            shell_data = []
             for shell in rights_shells:
                 act_dates = []
+                grant_data = []
                 self.calculate_dates(shell, request_start_date, request_end_date)
                 serialized_shell = self.create_json(shell, object_start, object_end)
                 grants = shell.rightsgranted_set.all()
                 for grant in grants:
                     act_dates.append(self.calculate_dates(grant, request_start_date, request_end_date))
                     serialized_grant = self.create_json(shell, object_start, object_end)
+                    grant_data.append(serialized_grant)
+                serialized_shell["rights_granted"].append(grant_data)
+                shell_data.append(serialized_shell)
 
         except RightsShell.DoesNotExist as e:
             raise Exception("Error retrieving rights shell: {}".format(str(e)))

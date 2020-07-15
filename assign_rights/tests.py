@@ -5,14 +5,11 @@ from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import AnonymousUser
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
-from rest_framework.parsers import JSONParser
-from rest_framework.renderers import JSONRenderer
 from rest_framework.test import APIRequestFactory
 
 from .assemble import RightsAssembler
 from .forms import GroupingForm
 from .models import Grouping, RightsShell, User
-from .serializers import RightsShellSerializer
 from .test_helpers import (add_groupings, add_rights_acts, add_rights_shells,
                            random_date, random_string)
 from .views import (GroupingCreateView, GroupingDetailView, GroupingListView,
@@ -124,11 +121,13 @@ class TestRightsAssembler(TestCase):
 
     def test_create_json(self):
         obj = random.choice(RightsShell.objects.all())
+        granted_list = [{"id": 1}, {"id": 2}, {"id": 3}]
         object_start = random_date()
         object_end = random_date()
         serialized = self.assembler.create_json(obj, object_start, object_end)
+        serialized["rights_granted"].append(granted_list)
         print(serialized)
-        self.assertTrue(isinstance(serialized, bytes))
+        self.assertTrue(isinstance(serialized, dict))
 
 
 class TestAssignRightsViews(TestCase):
