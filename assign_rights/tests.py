@@ -120,13 +120,18 @@ class TestRightsAssembler(TestCase):
             self.check_object_dates(granted, request_start_date, request_end_date)
 
     def test_create_json(self):
-        obj = random.choice(RightsShell.objects.all())
-        granted_list = [{"id": 1}, {"id": 2}, {"id": 3}]
-        object_start = random_date()
-        object_end = random_date()
-        serialized = self.assembler.create_json(obj, object_start, object_end)
-        serialized["rights_granted"].append(granted_list)
-        print(serialized)
+        shell = random.choice(RightsShell.objects.all())
+        request_end_date = random_date().isoformat()
+        request_start_date = random_date().isoformat()
+        start_date, end_date = self.assembler.calculate_dates(shell, request_start_date, request_end_date)
+        serialized = self.assembler.create_json(shell, start_date, end_date)
+
+        granted_list = []
+        for granted in shell.rightsgranted_set.all():
+            start_date, end_date = self.assembler.calculate_dates(granted, request_start_date, request_end_date)
+            granted_list.append(self.assembler.create_json(granted, start_date, end_date))
+        for item in granted_list:
+            serialized["rights_granted"].append(item)
         self.assertTrue(isinstance(serialized, dict))
 
 

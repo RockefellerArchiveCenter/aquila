@@ -83,16 +83,15 @@ class RightsAssembler(object):
             rights_shells = self.retrieve_rights(rights_ids)
             shell_data = []
             for shell in rights_shells:
-                act_dates = []
                 grant_data = []
-                self.calculate_dates(shell, request_start_date, request_end_date)
-                serialized_shell = self.create_json(shell, object_start, object_end)
+                start_date, end_date = self.calculate_dates(shell, request_start_date, request_end_date)
+                serialized_shell = self.create_json(shell, start_date, end_date)
                 grants = shell.rightsgranted_set.all()
                 for grant in grants:
-                    act_dates.append(self.calculate_dates(grant, request_start_date, request_end_date))
-                    serialized_grant = self.create_json(shell, object_start, object_end)
-                    grant_data.append(serialized_grant)
-                serialized_shell["rights_granted"].append(grant_data)
+                    start_date, end_date = self.calculate_dates(grant, request_start_date, request_end_date)
+                    grant_data.append(self.create_json(grant, start_date, end_date))
+                for item in grant_data:
+                    serialized_shell["rights_granted"].append(item)
                 shell_data.append(serialized_shell)
 
         except RightsShell.DoesNotExist as e:
