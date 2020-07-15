@@ -9,7 +9,7 @@ from rest_framework.test import APIRequestFactory
 
 from .assemble import RightsAssembler
 from .forms import GroupingForm
-from .models import Grouping, RightsShell, RightsGranted, User
+from .models import Grouping, RightsGranted, RightsShell, User
 from .serializers import RightsGrantedSerializer, RightsShellSerializer
 from .test_helpers import (add_groupings, add_rights_acts, add_rights_shells,
                            random_date, random_string)

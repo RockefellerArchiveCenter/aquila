@@ -56,7 +56,15 @@ class RightsAssembler(object):
         return object_start, object_end
 
     def create_json(self, obj, serializer_class):
-        """docstring for create_json"""
+        """Runs specific serializer against an object and creates a JSON-structured dict.
+
+        Args:
+            object (obj): a RightsShell or RightsGranted object.
+            serializer_class (str): A serializer class (RightsShellSerializer or RightsGrantedSerializer)
+
+        Returns:
+            data (dict): a JSON structured dictionary based on the object passed.
+        """
         serializer = serializer_class(obj)
         bytes = JSONRenderer().render(serializer.data)
         data = json.loads(bytes.decode("utf-8"))
