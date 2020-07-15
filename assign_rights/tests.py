@@ -9,7 +9,8 @@ from rest_framework.test import APIRequestFactory
 
 from .assemble import RightsAssembler
 from .forms import GroupingForm
-from .models import Grouping, RightsShell, User
+from .models import Grouping, RightsShell, RightsGranted, User
+from .serializers import RightsGrantedSerializer, RightsShellSerializer
 from .test_helpers import (add_groupings, add_rights_acts, add_rights_shells,
                            random_date, random_string)
 from .views import (GroupingCreateView, GroupingDetailView, GroupingListView,
@@ -120,19 +121,13 @@ class TestRightsAssembler(TestCase):
             self.check_object_dates(granted, request_start_date, request_end_date)
 
     def test_create_json(self):
-        shell = random.choice(RightsShell.objects.all())
-        request_end_date = random_date().isoformat()
-        request_start_date = random_date().isoformat()
-        start_date, end_date = self.assembler.calculate_dates(shell, request_start_date, request_end_date)
-        serialized = self.assembler.create_json(shell, start_date, end_date)
-
-        granted_list = []
-        for granted in shell.rightsgranted_set.all():
-            start_date, end_date = self.assembler.calculate_dates(granted, request_start_date, request_end_date)
-            granted_list.append(self.assembler.create_json(granted, start_date, end_date))
-        for item in granted_list:
-            serialized["rights_granted"].append(item)
-        self.assertTrue(isinstance(serialized, dict))
+        models = [(RightsShell, RightsShellSerializer), (RightsGranted, RightsGrantedSerializer)]
+        for x, y in models:
+            obj = random.choice(x.objects.all())
+            obj.start_date = random_date().isoformat()
+            obj.end_date = random_date().isoformat()
+            serialized = self.assembler.create_json(obj, y)
+            self.assertTrue(isinstance(serialized, dict))
 
 
 class TestAssignRightsViews(TestCase):

@@ -4,15 +4,11 @@ from .models import RightsGranted, RightsShell
 
 
 class RightsGrantedSerializer(serializers.ModelSerializer):
-    """docstring"""
-    start_date = serializers.SerializerMethodField()
-    end_date = serializers.SerializerMethodField()
-
-    def get_start_date(self, object_start):
-        return self.context.get("start_date")
-
-    def get_end_date(self, object_end):
-        return self.context.get("end_date")
+    """Serializes changes to the RightsGranted model to fit within RAC rights schema.
+    The start date and end dates will be overwritten to include calculated dates.
+    """
+    start_date = serializers.CharField()
+    end_date = serializers.CharField()
 
     class Meta:
         model = RightsGranted
@@ -26,19 +22,16 @@ class RightsGrantedSerializer(serializers.ModelSerializer):
 
 
 class RightsShellSerializer(serializers.ModelSerializer):
-    """Serializes instances of the RightsGranted model to fit within RAC rights schema"""
-    start_date = serializers.SerializerMethodField()
-    end_date = serializers.SerializerMethodField()
+    """Serializes changes to the RightsShell model to fit within RAC rights schema.
+    The start date and end dates will be overwritten to include calculated dates.
+    The rights granted field will be a list of any associated RightsGranted objects.
+    """
+    start_date = serializers.CharField()
+    end_date = serializers.CharField()
     status = serializers.CharField(source="copyright_status")
     terms = serializers.CharField(source="license_terms")
     citation = serializers.CharField(source="statute_citation")
     rights_granted = serializers.ListField(default=[])
-
-    def get_start_date(self, object_start):
-        return self.context.get("start_date")
-
-    def get_end_date(self, object_end):
-        return self.context.get("end_date")
 
     class Meta:
         model = RightsShell

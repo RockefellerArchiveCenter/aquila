@@ -55,14 +55,11 @@ class RightsAssembler(object):
             object, "end_date", request_end_date, object.end_date_period)
         return object_start, object_end
 
-    def create_json(self, obj, object_start, object_end):
+    def create_json(self, obj, serializer_class):
         """docstring for create_json"""
-        if obj.__class__.__name__ == "RightsShell":
-            serializer = RightsShellSerializer(obj, context={"start_date": object_start, "end_date": object_end})
-        else:
-            serializer = RightsGrantedSerializer(obj, context={"start_date": object_start, "end_date": object_end})
+        serializer = serializer_class(obj)
         bytes = JSONRenderer().render(serializer.data)
-        data = json.loads(bytes)
+        data = json.loads(bytes.decode("utf-8"))
         return data
 
     def return_rights(self):
@@ -84,11 +81,15 @@ class RightsAssembler(object):
             for shell in rights_shells:
                 grant_data = []
                 start_date, end_date = self.calculate_dates(shell, request_start_date, request_end_date)
-                serialized_shell = self.create_json(shell, start_date, end_date)
+                shell.start_date = start_date
+                shell.end_date = end_date
+                serialized_shell = self.create_json(shell, RightsShellSerializer)
                 grants = shell.rightsgranted_set.all()
                 for grant in grants:
                     start_date, end_date = self.calculate_dates(grant, request_start_date, request_end_date)
-                    grant_data.append(self.create_json(grant, start_date, end_date))
+                    grant.start_date = start_date
+                    grant.end_date = end_date
+                    grant_data.append(self.create_json(grant, RightsGrantedSerializer))
                 for item in grant_data:
                     serialized_shell["rights_granted"].append(item)
                 shell_data.append(serialized_shell)
