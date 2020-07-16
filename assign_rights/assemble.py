@@ -7,10 +7,6 @@ from rest_framework.renderers import JSONRenderer
 from .models import RightsShell
 from .serializers import RightsGrantedSerializer, RightsShellSerializer
 
-# Receive POST request that contains multiple rights IDs and one date
-# For each rights ID, take date to calculate and return rights json (that looks like what Aurora returns)
-# Send rights json back
-
 
 class RightsAssembler(object):
     """Assembles and returns a list of rights statements."""
@@ -71,8 +67,7 @@ class RightsAssembler(object):
         obj.end_date = obj_end
         serializer = serializer_class(obj)
         bytes = JSONRenderer().render(serializer.data)
-        data = json.loads(bytes.decode("utf-8"))
-        return data
+        return json.loads(bytes.decode("utf-8"))
 
     def return_rights(self):
         """docstring for return_rights"""
@@ -94,13 +89,12 @@ class RightsAssembler(object):
                 grant_data = []
                 start_date, end_date = self.calculate_dates(shell, request_start_date, request_end_date)
                 serialized_shell = self.create_json(shell, RightsShellSerializer, start_date, end_date)
-                grants = shell.rightsgranted_set.all()
-                for grant in grants:
+                for grant in shell.rightsgranted_set.all():
                     start_date, end_date = self.calculate_dates(grant, request_start_date, request_end_date)
                     grant_data.append(self.create_json(grant, RightsGrantedSerializer, start_date, end_date))
-                for item in grant_data:
-                    serialized_shell["rights_granted"].append(item)
+                serialized_shell["rights_granted"] = grant_data
                 shell_data.append(serialized_shell)
-
         except RightsShell.DoesNotExist as e:
             raise Exception("Error retrieving rights shell: {}".format(str(e)))
+        except ValueError as e:
+            raise Exception("Unable to parse date: {}".format(e))
