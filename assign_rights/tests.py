@@ -148,12 +148,13 @@ class TestRightsAssembler(TestCase):
             self.check_object_dates(granted, request_start_date, request_end_date)
 
     def test_create_json(self):
-        models = [(RightsShell, RightsShellSerializer), (RightsGranted, RightsGrantedSerializer)]
-        for x, y in models:
-            obj = random.choice(x.objects.all())
+        for obj_cls, serializer_cls in [
+                (RightsShell, RightsShellSerializer),
+                (RightsGranted, RightsGrantedSerializer)]:
+            obj = random.choice(obj_cls.objects.all())
             start_date = random_date().isoformat()
             end_date = random_date().isoformat()
-            serialized = self.assembler.create_json(obj, y, start_date, end_date)
+            serialized = self.assembler.create_json(obj, serializer_cls, start_date, end_date)
             self.assertTrue(isinstance(serialized, dict))
             self.assertEqual(start_date, serialized["start_date"])
             self.assertEqual(end_date, serialized["end_date"])
