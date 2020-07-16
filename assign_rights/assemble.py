@@ -46,7 +46,7 @@ class RightsAssembler(object):
 
         Returns:
             object_start, object_end (tuple): a tuple with two datetime objects
-                representing the group of object's start and end dates after
+                representing the group of objects' start and end dates after
                 calculation.
         """
         object_start = self.get_date_value(
@@ -55,16 +55,20 @@ class RightsAssembler(object):
             object, "end_date", request_end_date, object.end_date_period)
         return object_start, object_end
 
-    def create_json(self, obj, serializer_class):
+    def create_json(self, obj, serializer_class, obj_start, obj_end):
         """Runs specific serializer against an object and creates a JSON-structured dict.
 
         Args:
             object (obj): a RightsShell or RightsGranted object.
             serializer_class (str): A serializer class (RightsShellSerializer or RightsGrantedSerializer)
+            obj_start (datetime); a datetime object representing the group of object's start date
+            obj_end (datetime); a datetime object representing the group of object's end date
 
         Returns:
             data (dict): a JSON structured dictionary based on the object passed.
         """
+        obj.start_date = obj_start
+        obj.end_date = obj_end
         serializer = serializer_class(obj)
         bytes = JSONRenderer().render(serializer.data)
         data = json.loads(bytes.decode("utf-8"))
@@ -89,15 +93,11 @@ class RightsAssembler(object):
             for shell in rights_shells:
                 grant_data = []
                 start_date, end_date = self.calculate_dates(shell, request_start_date, request_end_date)
-                shell.start_date = start_date
-                shell.end_date = end_date
-                serialized_shell = self.create_json(shell, RightsShellSerializer)
+                serialized_shell = self.create_json(shell, RightsShellSerializer, start_date, end_date)
                 grants = shell.rightsgranted_set.all()
                 for grant in grants:
                     start_date, end_date = self.calculate_dates(grant, request_start_date, request_end_date)
-                    grant.start_date = start_date
-                    grant.end_date = end_date
-                    grant_data.append(self.create_json(grant, RightsGrantedSerializer))
+                    grant_data.append(self.create_json(grant, RightsGrantedSerializer, start_date, end_date))
                 for item in grant_data:
                     serialized_shell["rights_granted"].append(item)
                 shell_data.append(serialized_shell)

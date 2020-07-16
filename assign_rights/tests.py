@@ -151,10 +151,12 @@ class TestRightsAssembler(TestCase):
         models = [(RightsShell, RightsShellSerializer), (RightsGranted, RightsGrantedSerializer)]
         for x, y in models:
             obj = random.choice(x.objects.all())
-            obj.start_date = random_date().isoformat()
-            obj.end_date = random_date().isoformat()
-            serialized = self.assembler.create_json(obj, y)
+            start_date = random_date().isoformat()
+            end_date = random_date().isoformat()
+            serialized = self.assembler.create_json(obj, y, start_date, end_date)
             self.assertTrue(isinstance(serialized, dict))
+            self.assertEqual(start_date, serialized["start_date"])
+            self.assertEqual(end_date, serialized["end_date"])
 
 
 class TestAssignRightsViews(TestCase):
