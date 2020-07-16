@@ -31,7 +31,7 @@ class RightsShellListView(PageTitleMixin, LoginRequiredMixin, ListView):
     """Browse and search rights shells."""
     model = RightsShell
     template_name = "rights/list.html"
-    page_title = "Rights"
+    page_title = "Rights Shells"
 
 
 class RightsShellCreateView(PageTitleMixin, LoginRequiredMixin, CreateView):
