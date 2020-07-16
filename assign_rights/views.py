@@ -31,7 +31,7 @@ class RightsShellListView(PageTitleMixin, LoginRequiredMixin, ListView):
     """Browse and search rights shells."""
     model = RightsShell
     template_name = "rights/list.html"
-    page_title = "Rights"
+    page_title = "Rights Shells"
 
 
 class RightsShellCreateView(PageTitleMixin, LoginRequiredMixin, CreateView):
@@ -141,9 +141,16 @@ class AquilaLoginView(PageTitleMixin, LoginView):
 class RightsAssemblerView(APIView):
     """Calls the RightsAssembler class from assemblers."""
 
-    def post(self, request, format=None):
+    def post(self, request):
         rights_ids = request.data.get("identifiers")
         request_start_date = request.data.get("start_date")
         request_end_date = request.data.get("end_date")
-        assembled = RightsAssembler().run(rights_ids, request_start_date, request_end_date)
-        return Response(assembled)
+        if not all([rights_ids, request_start_date, request_end_date]):
+            return Response(
+                {"detail": "Request data must contain 'identifiers', 'start_date' and 'end_date' keys."},
+                status=500)
+        try:
+            rights = RightsAssembler().run(rights_ids, request_start_date, request_end_date)
+            return Response({"rights_statements": rights}, status=200)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=500)

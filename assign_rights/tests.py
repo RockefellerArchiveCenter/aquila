@@ -1,5 +1,6 @@
 import random
 from datetime import date, datetime
+from unittest.mock import patch
 
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import AnonymousUser
@@ -14,9 +15,9 @@ from .serializers import RightsGrantedSerializer, RightsShellSerializer
 from .test_helpers import (add_groupings, add_rights_acts, add_rights_shells,
                            random_date, random_string)
 from .views import (GroupingCreateView, GroupingDetailView, GroupingListView,
-                    GroupingUpdateView, RightsShellCreateView,
-                    RightsShellDetailView, RightsShellListView,
-                    RightsShellUpdateView)
+                    GroupingUpdateView, RightsAssemblerView,
+                    RightsShellCreateView, RightsShellDetailView,
+                    RightsShellListView, RightsShellUpdateView)
 
 
 class TestViews(TestCase):
@@ -77,6 +78,58 @@ class TestViews(TestCase):
             self.assertIsNot(
                 form.errors[field], False,
                 "Field-specific error message not raised for {}".format(field))
+
+    @patch("assign_rights.assemble.RightsAssembler.run")
+    def test_rightsassembly_view(self, mock_assemble):
+        """Tests handling of expected returns as well as exceptions."""
+
+        # RightsAssembler returns expected value
+        mock_assemble.return_value = []
+        data = {"identifiers": ["1", "2", "3"], "start_date": "2010-01-01", "end_date": "2011-01-01"}
+        request = self.factory.post(reverse("rights-assemble"), data, content_type='application/json')
+        response = RightsAssemblerView.as_view()(request)
+        self.assertEqual(response.status_code, 200, "Request error: {}".format(response.data))
+        self.assertEqual(response.data["rights_statements"], [])
+
+        # RightsAssembler throws an exception
+        mock_assemble.side_effect = Exception("Exception text")
+        request = self.factory.post(reverse("rights-assemble"), data, content_type='application/json')
+        response = RightsAssemblerView.as_view()(request)
+        self.assertEqual(response.status_code, 500, "here")
+        self.assertEqual(response.data["detail"], "Exception text")
+        mock_assemble.reset_mock(side_effect=True)
+
+        # Required data is missing from request
+        data.pop(random.choice(list(data)))
+        request = self.factory.post(reverse("rights-assemble"), data, content_type='application/json')
+        response = RightsAssemblerView.as_view()(request)
+        self.assertEqual(response.status_code, 500, "Request should have returned a 500 status code")
+        self.assertEqual(response.data["detail"], "Request data must contain 'identifiers', 'start_date' and 'end_date' keys.")
+
+    def test_restricted_views(self):
+        """Asserts that restricted views are only available to logged-in users."""
+        restricted_views = [
+            ("groupings-list", GroupingListView, None),
+            ("groupings-detail", GroupingDetailView, random.choice(Grouping.objects.all()).pk),
+            ("groupings-create", GroupingCreateView, False),
+            ("groupings-update", GroupingUpdateView, random.choice(Grouping.objects.all()).pk),
+            ("rights-list", RightsShellListView, None),
+            ("rights-detail", RightsShellDetailView, random.choice(RightsShell.objects.all()).pk),
+            ("rights-create", RightsShellCreateView, False),
+            ("rights-update", RightsShellUpdateView, random.choice(RightsShell.objects.all()).pk)]
+        for view_name, view, pk in restricted_views:
+            request = self.factory.get(reverse(view_name, kwargs={"pk": pk})) if pk else self.factory.get(reverse(view_name))
+            request.user = AnonymousUser()
+            response = view.as_view()(request, pk=pk) if pk else view.as_view()(request)
+            self.assertEqual(
+                response.status_code, 302,
+                "Restricted view {} available without authentication".format(view))
+
+            request.user = self.user
+            authenticated_response = view.as_view()(request, pk=pk) if pk else view.as_view()(request)
+            self.assertEqual(
+                authenticated_response.status_code, 200,
+                "Restricted view {} not reachable by authenticated user".format(view))
 
 
 class TestRightsAssembler(TestCase):
@@ -158,37 +211,3 @@ class TestRightsAssembler(TestCase):
             self.assertTrue(isinstance(serialized, dict))
             self.assertEqual(start_date, serialized["start_date"])
             self.assertEqual(end_date, serialized["end_date"])
-
-
-class TestAssignRightsViews(TestCase):
-
-    def setUp(self):
-        self.user = User.objects.create_user("test", "test@example.com", "testpass")
-        self.factory = RequestFactory()
-        add_groupings()
-        add_rights_shells()
-
-    def test_restricted_views(self):
-        """Asserts that restricted views are only available to logged-in users."""
-        restricted_views = [
-            ("groupings-list", GroupingListView, None),
-            ("groupings-detail", GroupingDetailView, random.choice(Grouping.objects.all()).pk),
-            ("groupings-create", GroupingCreateView, False),
-            ("groupings-update", GroupingUpdateView, random.choice(Grouping.objects.all()).pk),
-            ("rights-list", RightsShellListView, None),
-            ("rights-detail", RightsShellDetailView, random.choice(RightsShell.objects.all()).pk),
-            ("rights-create", RightsShellCreateView, False),
-            ("rights-update", RightsShellUpdateView, random.choice(RightsShell.objects.all()).pk)]
-        for view_name, view, pk in restricted_views:
-            request = self.factory.get(reverse(view_name, kwargs={"pk": pk})) if pk else self.factory.get(reverse(view_name))
-            request.user = AnonymousUser()
-            response = view.as_view()(request, pk=pk) if pk else view.as_view()(request)
-            self.assertEqual(
-                response.status_code, 302,
-                "Restricted view {} available without authentication".format(view))
-
-            request.user = self.user
-            authenticated_response = view.as_view()(request, pk=pk) if pk else view.as_view()(request)
-            self.assertEqual(
-                authenticated_response.status_code, 200,
-                "Restricted view {} not reachable by authenticated user".format(view))

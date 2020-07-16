@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'assign_rights',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -121,3 +122,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "groupings-list"
+
+# django-crispy-forms template pack
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
