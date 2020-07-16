@@ -1,12 +1,11 @@
+import json
 from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
+from rest_framework.renderers import JSONRenderer
 
 from .models import RightsShell
-
-# Receive POST request that contains multiple rights IDs and one date
-# For each rights ID, take date to calculate and return rights json (that looks like what Aurora returns)
-# Send rights json back
+from .serializers import RightsGrantedSerializer, RightsShellSerializer
 
 
 class RightsAssembler(object):
@@ -43,7 +42,7 @@ class RightsAssembler(object):
 
         Returns:
             object_start, object_end (tuple): a tuple with two datetime objects
-                representing the group of object's start and end dates after
+                representing the group of objects' start and end dates after
                 calculation.
         """
         object_start = self.get_date_value(
@@ -52,9 +51,23 @@ class RightsAssembler(object):
             object, "end_date", request_end_date, object.end_date_period)
         return object_start, object_end
 
-    def create_json(self):
-        """docstring for create_json"""
-    pass
+    def create_json(self, obj, serializer_class, obj_start, obj_end):
+        """Runs specific serializer against an object and creates a JSON-structured dict.
+
+        Args:
+            object (obj): a RightsShell or RightsGranted object.
+            serializer_class (str): A serializer class (RightsShellSerializer or RightsGrantedSerializer)
+            obj_start (datetime); a datetime object representing the group of object's start date
+            obj_end (datetime); a datetime object representing the group of object's end date
+
+        Returns:
+            data (dict): a JSON structured dictionary based on the object passed.
+        """
+        obj.start_date = obj_start
+        obj.end_date = obj_end
+        serializer = serializer_class(obj)
+        bytes = JSONRenderer().render(serializer.data)
+        return json.loads(bytes.decode("utf-8"))
 
     def return_rights(self):
         """docstring for return_rights"""
@@ -71,12 +84,17 @@ class RightsAssembler(object):
         """
         try:
             rights_shells = self.retrieve_rights(rights_ids)
+            shell_data = []
             for shell in rights_shells:
-                act_dates = []
-                self.calculate_dates(shell, request_start_date, request_end_date)
-                grants = shell.rightsgranted_set.all()
-                for grant in grants:
-                    act_dates.append(self.calculate_dates(grant, request_start_date, request_end_date))
-
+                grant_data = []
+                start_date, end_date = self.calculate_dates(shell, request_start_date, request_end_date)
+                serialized_shell = self.create_json(shell, RightsShellSerializer, start_date, end_date)
+                for grant in shell.rightsgranted_set.all():
+                    start_date, end_date = self.calculate_dates(grant, request_start_date, request_end_date)
+                    grant_data.append(self.create_json(grant, RightsGrantedSerializer, start_date, end_date))
+                serialized_shell["rights_granted"] = grant_data
+                shell_data.append(serialized_shell)
         except RightsShell.DoesNotExist as e:
             raise Exception("Error retrieving rights shell: {}".format(str(e)))
+        except ValueError as e:
+            raise Exception("Unable to parse date: {}".format(e))
