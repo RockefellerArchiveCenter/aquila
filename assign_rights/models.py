@@ -2,10 +2,10 @@ from datetime import datetime
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 
 
 class RightsShell(models.Model):
-    rights_id = models.PositiveSmallIntegerField()
     RIGHTS_BASIS_CHOICES = (
         ("Copyright", "Copyright"),
         ("Statute", "Statute"),
@@ -18,22 +18,27 @@ class RightsShell(models.Model):
         ("public domain", "public domain"),
         ("unknown", "unknown"),
     )
-    copyright_status = models.CharField(choices=PREMIS_COPYRIGHT_STATUSES, max_length=64)
+    copyright_status = models.CharField(choices=PREMIS_COPYRIGHT_STATUSES, max_length=64, blank=True, null=True)
     determination_date = models.DateField(
         blank=True, null=True, default=datetime.now
     )
+    jurisdiction = models.CharField(max_length=2, blank=True, null=True)
     note = models.TextField()
-    applicable_start_date = models.DateField(blank=True, null=True)
-    applicable_end_date = models.DateField(blank=True, null=True)
-    start_date_period = models.PositiveSmallIntegerField(
-        blank=True, null=True
-    )
-    end_date_period = models.PositiveSmallIntegerField(blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    start_date_period = models.PositiveSmallIntegerField(default=0)
+    end_date_period = models.PositiveSmallIntegerField(default=0)
     end_date_open = models.BooleanField(default=False)
     license_terms = models.TextField(blank=True, null=True)
     statute_citation = models.TextField(blank=True, null=True)
     created = models.DateTimeField(auto_now=True)
     last_modified = models.DateTimeField(auto_now_add=True)
+
+    def get_absolute_url(self):
+        return reverse("rights-detail", kwargs={"pk": self.pk})
+
+    def __str__(self):
+        return "{} ({})".format(self.note, self.rights_basis)
 
 
 class RightsGranted(models.Model):
@@ -56,8 +61,8 @@ class RightsGranted(models.Model):
     restriction = models.CharField(choices=RESTRICTION_CHOICES, max_length=64)
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
-    start_date_period = models.PositiveSmallIntegerField(blank=True, null=True)
-    end_date_period = models.PositiveSmallIntegerField(blank=True, null=True)
+    start_date_period = models.PositiveSmallIntegerField(default=0)
+    end_date_period = models.PositiveSmallIntegerField(default=0)
     end_date_open = models.BooleanField(default=False)
     note = models.TextField(blank=True, null=True)
     created = models.DateTimeField(auto_now=True)
@@ -70,6 +75,9 @@ class Grouping(models.Model):
     rights_shells = models.ManyToManyField(RightsShell)
     created = models.DateTimeField(auto_now=True)
     last_modified = models.DateTimeField(auto_now_add=True)
+
+    def get_absolute_url(self):
+        return reverse("groupings-detail", kwargs={"pk": self.pk})
 
 
 class User(AbstractUser):

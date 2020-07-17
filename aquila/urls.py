@@ -13,9 +13,26 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from assign_rights.views import (AquilaLoginView, GroupingCreateView,
+                                 GroupingDetailView, GroupingListView,
+                                 GroupingUpdateView, RightsAssemblerView,
+                                 RightsShellCreateView, RightsShellDetailView,
+                                 RightsShellListView, RightsShellUpdateView)
 from django.contrib import admin
+from django.contrib.auth.views import LogoutView
 from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/rights-assemble/', RightsAssemblerView.as_view(), name='rights-assemble'),
+    path('', GroupingListView.as_view(), name="groupings-list"),
+    path('groupings/<int:pk>/', GroupingDetailView.as_view(), name="groupings-detail"),
+    path('groupings/create/', GroupingCreateView.as_view(), name="groupings-create"),
+    path('groupings/<int:pk>/update/', GroupingUpdateView.as_view(), name="groupings-update"),
+    path('login/', AquilaLoginView.as_view(template_name="users/login.html"), name="login"),
+    path('logout/', LogoutView.as_view(next_page="/login"), name="logout"),
+    path('rights/', RightsShellListView.as_view(), name='rights-list'),
+    path('rights/create/', RightsShellCreateView.as_view(), name='rights-create'),
+    path('rights/<int:pk>/update/', RightsShellUpdateView.as_view(), name='rights-update'),
+    path('rights/<int:pk>/', RightsShellDetailView.as_view(), name='rights-detail'),
 ]
