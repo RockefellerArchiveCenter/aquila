@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
-from . import config as CF
+from . import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -22,12 +22,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = CF.SECRET_KEY
+SECRET_KEY = config.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = CF.DEBUG
+DEBUG = config.DEBUG
 
-ALLOWED_HOSTS = CF.ALLOWED_HOSTS
+ALLOWED_HOSTS = config.ALLOWED_HOSTS
 
 
 # Application definition
@@ -77,7 +77,16 @@ WSGI_APPLICATION = 'aquila.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = CF.DATABASES
+DATABASES = {
+    "default": {
+        "ENGINE": config.SQL_ENGINE,
+        "NAME": config.SQL_DATABASE,
+        "USER": config.SQL_USER,
+        "PASSWORD": config.SQL_PASSWORD,
+        "HOST": config.SQL_HOST,
+        "PORT": config.SQL_PORT,
+    }
+}
 
 
 # Password validation

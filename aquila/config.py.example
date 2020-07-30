@@ -1,14 +1,9 @@
-import os
-
-SECRET_KEY = 'ny033+z#r)$cpjl9gnbi*v=p8rjl2(%3-f&*v(mhi4#^eur9u8'
-DEBUG = True
-ALLOWED_HOSTS = ['localhost', 'aquila-web']
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'HOST': 'aquila-db',
-        'PORT': 5432,
-    }
-}
+DJANGO_SECRET_KEY = 'ny033+z#r)$cpjl9gnbi*v=p8rjl2(%3-f&*v(mhi4#^eur9u8'
+DJANGO_DEBUG = True
+DJANGO_ALLOWED_HOSTS = ['localhost', 'aquila-web']
+SQL_ENGINE = 'django.db.backends.postgresql'
+SQL_DATABASE = 'postgres'
+SQL_USER = 'postgres'
+SQL_PASSWORD = 'postgres'
+SQL_HOST = 'aquila-db'
+SQL_PORT = 5432
