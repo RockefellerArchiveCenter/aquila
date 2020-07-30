@@ -108,7 +108,7 @@ AUTHENTICATION_BACKENDS = [
 
 AUTH_ADFS = {
     "SERVER": "adfs.yourcompany.com",
-    "CLIENT_ID": "your-configured-client-id",
+    "CLIENT_ID": "487d8ff7-80a8-4f62-b926-c2852ab06e94",
     "RELYING_PARTY_ID": "your-adfs-RPT-name",
     # Make sure to read the documentation about the AUDIENCE setting
     # when you configured the identifier as a URL!
