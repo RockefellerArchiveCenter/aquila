@@ -2,8 +2,8 @@
 set -e
 
 # stop all running cron jobs
-if [[ `pgrep -f pisces.*runcrons` ]]; then
-  sudo pkill -f pisces.*runcrons
+if [[ `pgrep -f aquila.*runcrons` ]]; then
+  sudo pkill -f aquila.*runcrons
   sudo rm ${DJANGO_CRON_LOCKFILE_PATH}*.lock
 fi
 
