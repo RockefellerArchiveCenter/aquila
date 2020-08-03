@@ -121,7 +121,6 @@ AUTH_ADFS = {
     "CLIENT_ID": config.SSO_CLIENT_ID,
     "RELYING_PARTY_ID": config.SSO_RELYING_PARTY_ID,
     "AUDIENCE": config.SSO_AUDIENCE,
-    # "CA_BUNDLE": "/path/to/ca-bundle.pem",
     "CLAIM_MAPPING": {"first_name": "given_name",
                       "last_name": "family_name",
                       "email": "email"},
@@ -147,7 +146,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-LOGIN_URL = "login"
+LOGIN_URL = "django_auth_adfs:login"
 LOGIN_REDIRECT_URL = "groupings-list"
 
 # django-crispy-forms template pack
