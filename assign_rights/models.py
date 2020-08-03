@@ -24,17 +24,18 @@ class RightsShell(models.Model):
     )
     jurisdiction = models.CharField(max_length=2, blank=True, null=True)
     note = models.TextField()
-    applicable_start_date = models.DateField(blank=True, null=True)
-    applicable_end_date = models.DateField(blank=True, null=True)
-    start_date_period = models.PositiveSmallIntegerField(
-        blank=True, null=True
-    )
-    end_date_period = models.PositiveSmallIntegerField(blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    start_date_period = models.PositiveSmallIntegerField(default=0)
+    end_date_period = models.PositiveSmallIntegerField(default=0)
     end_date_open = models.BooleanField(default=False)
     license_terms = models.TextField(blank=True, null=True)
     statute_citation = models.TextField(blank=True, null=True)
     created = models.DateTimeField(auto_now=True)
     last_modified = models.DateTimeField(auto_now_add=True)
+
+    def get_absolute_url(self):
+        return reverse("rights-detail", kwargs={"pk": self.pk})
 
     def __str__(self):
         return "{} ({})".format(self.note, self.rights_basis)
@@ -60,8 +61,8 @@ class RightsGranted(models.Model):
     restriction = models.CharField(choices=RESTRICTION_CHOICES, max_length=64)
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
-    start_date_period = models.PositiveSmallIntegerField(blank=True, null=True)
-    end_date_period = models.PositiveSmallIntegerField(blank=True, null=True)
+    start_date_period = models.PositiveSmallIntegerField(default=0)
+    end_date_period = models.PositiveSmallIntegerField(default=0)
     end_date_open = models.BooleanField(default=False)
     note = models.TextField(blank=True, null=True)
     created = models.DateTimeField(auto_now=True)

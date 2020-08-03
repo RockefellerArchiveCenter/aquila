@@ -1,5 +1,4 @@
 language: python
-sudo: required
 services:
   - docker
 env:
@@ -13,11 +12,38 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   - cp ${APPLICATION_NAME}/config.py.example ${APPLICATION_NAME}/config.py
+  - docker-compose build
   - docker-compose up -d
-  - sleep 20s
   - docker-compose exec ${SERVICE_NAME} pip install coverage pre-commit
   - docker-compose exec ${SERVICE_NAME} pre-commit install
 install: true
 script:
   - docker-compose exec ${SERVICE_NAME} pre-commit run --all-files --show-diff-on-failure
   - docker-compose exec ${SERVICE_NAME} coverage run manage.py test
+before_deploy:
+  - sudo deploy_scripts/substitute_env.sh
+  - sudo deploy_scripts/make_zip.sh $DEPLOY_ZIP_DIR $DEPLOY_ZIP_NAME
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    local_dir: $DEPLOY_ZIP_DIR
+    skip_cleanup: true
+    on: &development
+      repo: RockefellerArchiveCenter/${APPLICATION_NAME}
+      branch: development
+    bucket: $AWS_BUCKET_NAME
+    region: us-east-1
+  - provider: codedeploy
+    wait_until_deployed: true
+    bucket: $AWS_BUCKET_NAME
+    key: $DEPLOY_ZIP_NAME
+    bundle_type: zip
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    application: ${APPLICATION_NAME}
+    deployment_group: AquilaDevelopment
+    region: us-east-1
+    on: *development
+notifications:
+  email: false
