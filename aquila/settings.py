@@ -117,12 +117,10 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 AUTH_ADFS = {
-    "SERVER": "adfs.yourcompany.com",
-    "CLIENT_ID": "487d8ff7-80a8-4f62-b926-c2852ab06e94",
-    "RELYING_PARTY_ID": "your-adfs-RPT-name",
-    # Make sure to read the documentation about the AUDIENCE setting
-    # when you configured the identifier as a URL!
-    "AUDIENCE": "microsoft:identityserver:your-RelyingPartyTrust-identifier",
+    "SERVER": "adfs.rockarch.org",
+    "CLIENT_ID": config.SSO_CLIENT_ID,
+    "RELYING_PARTY_ID": config.SSO_RELYING_PARTY_ID,
+    "AUDIENCE": config.SSO_AUDIENCE,
     # "CA_BUNDLE": "/path/to/ca-bundle.pem",
     "CLAIM_MAPPING": {"first_name": "given_name",
                       "last_name": "family_name",
