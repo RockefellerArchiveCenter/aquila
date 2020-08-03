@@ -14,7 +14,7 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
   - cp ${APPLICATION_NAME}/config.py.example ${APPLICATION_NAME}/config.py
   - docker-compose build
-  - docker-compose up -d
+  - docker-compose up
   - docker-compose exec ${SERVICE_NAME} pip install coverage pre-commit
   - docker-compose exec ${SERVICE_NAME} pre-commit install
 install: true
