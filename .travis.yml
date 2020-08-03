@@ -1,5 +1,4 @@
 language: python
-sudo: required
 services:
   - docker
 env:
@@ -22,6 +21,7 @@ script:
   - docker-compose exec ${SERVICE_NAME} pre-commit run --all-files --show-diff-on-failure
   - docker-compose exec ${SERVICE_NAME} coverage run manage.py test
 before_deploy:
+  - ls
   - sudo deploy_scripts/substitute_env.sh
   - sudo deploy_scripts/make_zip.sh $DEPLOY_ZIP_DIR $DEPLOY_ZIP_NAME
 deploy:
