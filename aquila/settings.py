@@ -146,7 +146,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-LOGIN_URL = "django_auth_adfs:login"
+LOGIN_URL = config.LOGIN_URL
 LOGIN_REDIRECT_URL = "groupings-list"
 
 # django-crispy-forms template pack

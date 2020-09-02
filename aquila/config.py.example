@@ -10,3 +10,4 @@ SQL_PORT = 5432
 SSO_RELYING_PARTY_ID = "http://aquila-web:8009"
 SSO_CLIENT_ID = "487d8ff5-80b8-4f62-b926-c2842ab06e94"
 SSO_AUDIENCE = "microsoft:identityserver:http://aquila-web:8009"
+LOGIN_URL = "login"
