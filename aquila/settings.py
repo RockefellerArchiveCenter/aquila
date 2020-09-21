@@ -42,6 +42,16 @@ INSTALLED_APPS = [
     'assign_rights',
     'django_auth_adfs',
     'crispy_forms',
+    'django_nose',
+]
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+NOSE_ARGS = [
+    '--cover-erase',
+    '--with-coverage',
+    '--cover-package=assign_rights',
+    '--verbosity=1',
 ]
 
 MIDDLEWARE = [
