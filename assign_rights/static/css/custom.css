@@ -1,0 +1,11 @@
+/* Improve primary color contrast */
+
+.btn-primary {
+  background-color: #0069d9;
+  border-color: #0069d9;
+}
+
+.btn-primary:hover {
+    background-color: #004FA3;
+    border-color: #004FA3;
+}
