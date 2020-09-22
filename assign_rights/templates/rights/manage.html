@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<form action="." method="POST" accept-charset="utf-8">
+<form class="mb-3" action="." method="POST" accept-charset="utf-8">
 	{% csrf_token %}
 	{{ form | crispy}}
 	<h2>Rights Granted</h2>
