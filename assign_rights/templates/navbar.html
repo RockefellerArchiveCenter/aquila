@@ -21,6 +21,11 @@
       <div class="form-inline my-2 my-lg-0">
         {% if request.user.is_authenticated %}
           <span class="navbar-text">Logged in as {{request.user.username}}</span>
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+            </li>
+          </ul>
         {% endif %}
       </div>
     </div>
