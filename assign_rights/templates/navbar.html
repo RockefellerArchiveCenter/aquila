@@ -18,14 +18,12 @@
           <a class="nav-link" href="{% url 'rights-list' %}">Rights Shells</a>
         </li>
       </ul>
-      <div class="form-inline my-2 my-lg-0">
         {% if request.user.is_authenticated %}
-          <span class="navbar-text">Logged in as {{request.user.username}}</span>
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-            </li>
-          </ul>
+          <div class="navbar-nav my-lg-0">
+            <span class="nav-item">
+              <a class="nav-link" href="{% url 'logout' %}">Log out {{request.user.username}}</a>
+            </span>
+          </div>
         {% endif %}
       </div>
     </div>
