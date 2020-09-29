@@ -27,6 +27,29 @@ class RightsShellForm(ModelForm):
         ]
 
 
+class BasisForm(ModelForm):
+    class Meta:
+        model = RightsShell
+        fields = [
+            'rights_basis',
+        ]
+
+
+class CopyrightForm(ModelForm):
+    class Meta:
+        model = RightsShell
+        fields = [
+            'copyright_status',
+            'determination_date',
+            'note',
+            'start_date',
+            'end_date',
+            'start_date_period',
+            'end_date_period',
+            'end_date_open',
+        ]
+
+
 class RightsGrantedForm(ModelForm):
     class Meta:
         model = RightsGranted
