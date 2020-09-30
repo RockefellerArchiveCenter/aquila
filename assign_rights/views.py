@@ -1,4 +1,5 @@
 from assign_rights.models import RightsShell
+from assign_rights.mixins.authmixins import EditMixin, DeleteMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
@@ -33,7 +34,7 @@ class RightsShellListView(PageTitleMixin, LoginRequiredMixin, ListView):
     page_title = "Rights Shells"
 
 
-class RightsShellCreateView(PageTitleMixin, LoginRequiredMixin, CreateView):
+class RightsShellCreateView(PageTitleMixin, EditMixin, CreateView):
     """Create a rights shell."""
     model = RightsShell
     template_name = "rights/manage.html"
@@ -69,7 +70,7 @@ class RightsShellDetailView(PageTitleMixin, LoginRequiredMixin, DetailView):
         return "Rights Shell {}".format(context["object"].pk)
 
 
-class RightsShellUpdateView(PageTitleMixin, LoginRequiredMixin, UpdateView):
+class RightsShellUpdateView(PageTitleMixin, EditMixin, UpdateView):
     """Update a rights shell."""
     model = RightsShell
     template_name = "rights/manage.html"
@@ -105,7 +106,7 @@ class GroupingListView(PageTitleMixin, LoginRequiredMixin, ListView):
     page_title = "Groupings"
 
 
-class GroupingCreateView(PageTitleMixin, LoginRequiredMixin, CreateView):
+class GroupingCreateView(PageTitleMixin, EditMixin, CreateView):
     """Create a grouping."""
     model = Grouping
     template_name = "groupings/manage.html"
@@ -122,7 +123,7 @@ class GroupingDetailView(PageTitleMixin, LoginRequiredMixin, DetailView):
         return context["object"].title
 
 
-class GroupingUpdateView(PageTitleMixin, LoginRequiredMixin, UpdateView):
+class GroupingUpdateView(PageTitleMixin, EditMixin, UpdateView):
     """Update a grouping."""
     model = Grouping
     template_name = "groupings/manage.html"

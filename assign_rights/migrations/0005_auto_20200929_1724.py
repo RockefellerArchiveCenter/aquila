@@ -7,7 +7,7 @@ from django.db import migrations
 
 
 def create_groups(apps, schema_editor):
-    groups_to_add = ('view', 'edit', 'delete')
+    groups_to_add = ('edit', 'delete')
 
     for group in groups_to_add:
         if not Group.objects.filter(name=group).exists():
