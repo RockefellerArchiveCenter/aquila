@@ -5,18 +5,44 @@
 
 <form class="mb-3" action="." method="POST" accept-charset="utf-8" id="vue-form">
     {% csrf_token %}
-	{{ form.rights_basis }}
-	<div v-if="selected==copyright">
-		<p>{{ form.copyright_status }}</p>
-		<p>{{ form.determination_date }}</p>
-		<p>{{ form.note }}</p>
-		<p>{{ form.start_date }}</p>
-		<p>{{ form.end_date }}</p>
-		<p>{{ form.start_date_period }}</p>
-		<p>{{ form.rights_basis_period }}</p>
-		<p>{{ form.end_date_open }}</p>
-	</div>
-    {# {{ form | crispy}} #}
+    {{ form.rights_basis }}
+    <div v-if="selected==copyright">
+        <p>{{ form.copyright_status }}</p>
+        <p>{{ form.determination_date }}</p>
+        <p>{{ form.note }}</p>
+        <p>{{ form.start_date }}</p>
+        <p>{{ form.end_date }}</p>
+        <p>{{ form.start_date_period }}</p>
+        <p>{{ form.rights_basis_period }}</p>
+        <p>{{ form.end_date_open }}</p>
+    </div>
+    <div v-if="selected==statute">
+        <p>{{ form.statute_citation }}</p>
+        <p>{{ form.determination_date }}</p>
+        <p>{{ form.note }}</p>
+        <p>{{ form.start_date }}</p>
+        <p>{{ form.end_date }}</p>
+        <p>{{ form.start_date_period }}</p>
+        <p>{{ form.rights_basis_period }}</p>
+        <p>{{ form.end_date_open }}</p>
+    </div>
+    <div v-if="selected==license">
+        <p>{{ form.license_terms }}</p>
+        <p>{{ form.note }}</p>
+        <p>{{ form.start_date }}</p>
+        <p>{{ form.end_date }}</p>
+        <p>{{ form.start_date_period }}</p>
+        <p>{{ form.rights_basis_period }}</p>
+        <p>{{ form.end_date_open }}</p>
+    </div>
+    <div v-if="selected==other">
+        <p>{{ form.note }}</p>
+        <p>{{ form.start_date }}</p>
+        <p>{{ form.end_date }}</p>
+        <p>{{ form.start_date_period }}</p>
+        <p>{{ form.rights_basis_period }}</p>
+        <p>{{ form.end_date_open }}</p>
+    </div>
     <h2>Rights Granted</h2>
 
     {{ rights_granted_form.management_form }}
@@ -28,7 +54,10 @@
     el: "#vue-form",
     data: {
       selected: '',
-		copyright: 'Copyright',
+        copyright: 'Copyright',
+        statute: 'Statute',
+        license: 'License',
+        other: 'Other',
     },
   });
 </script>
