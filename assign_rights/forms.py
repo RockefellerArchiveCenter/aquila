@@ -1,4 +1,4 @@
-from django.forms import ModelForm, inlineformset_factory
+from django.forms import ModelForm, Select, inlineformset_factory
 
 from .models import Grouping, RightsGranted, RightsShell
 
@@ -25,6 +25,7 @@ class RightsShellForm(ModelForm):
             'license_terms',
             'statute_citation'
         ]
+        widgets = {'rights_basis': Select(attrs={'v-model': 'selected'})}
 
 
 class RightsGrantedForm(ModelForm):

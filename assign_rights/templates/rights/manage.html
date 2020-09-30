@@ -3,18 +3,33 @@
 
 {% block content %}
 
-<form class="mb-3" action="." method="POST" accept-charset="utf-8">
+<form class="mb-3" action="." method="POST" accept-charset="utf-8" id="vue-form">
     {% csrf_token %}
-    {{ form | crispy}}
+	{{ form.rights_basis }}
+	<div v-if="selected==copyright">
+		<p>{{ form.copyright_status }}</p>
+		<p>{{ form.determination_date }}</p>
+		<p>{{ form.note }}</p>
+		<p>{{ form.start_date }}</p>
+		<p>{{ form.end_date }}</p>
+		<p>{{ form.start_date_period }}</p>
+		<p>{{ form.rights_basis_period }}</p>
+		<p>{{ form.end_date_open }}</p>
+	</div>
+    {# {{ form | crispy}} #}
     <h2>Rights Granted</h2>
+
     {{ rights_granted_form.management_form }}
     {{ rights_granted_form | crispy}}
     <button type="submit" class="btn btn-primary">Save</button>
 </form>
-    <script>
-        var data = {
-            basis: "copyright"
-        }
-
-    </script>
+<script type="text/javascript">
+  let app = new Vue({
+    el: "#vue-form",
+    data: {
+      selected: '',
+		copyright: 'Copyright',
+    },
+  });
+</script>
 {% endblock %}
