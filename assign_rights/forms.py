@@ -1,4 +1,5 @@
-from django.forms import ModelForm, Select, inlineformset_factory
+from django.forms import (DateInput, ModelForm, NumberInput, Select, Textarea,
+                          inlineformset_factory)
 
 from .models import Grouping, RightsGranted, RightsShell
 
@@ -25,7 +26,18 @@ class RightsShellForm(ModelForm):
             'license_terms',
             'statute_citation'
         ]
-        widgets = {'rights_basis': Select(attrs={'v-model': 'selected'})}
+        widgets = {
+            'rights_basis': Select(attrs={'v-model': 'selected', 'class': 'form-control'}),
+            'copyright_status': Select(attrs={'class': 'form-control'}),
+            'determination_date': DateInput(attrs={'class': 'form-control'}),
+            'note': Textarea(attrs={'class': 'form-control'}),
+            'start_date': DateInput(attrs={'class': 'form-control'}),
+            'end_date': DateInput(attrs={'class': 'form-control'}),
+            'start_date_period': NumberInput(attrs={'class': 'form-control'}),
+            'end_date_period': NumberInput(attrs={'class': 'form-control'}),
+            'license_terms': Textarea(attrs={'class': 'form-control'}),
+            'statute_citation': Textarea(attrs={'class': 'form-control'})
+        }
 
 
 class RightsGrantedForm(ModelForm):
