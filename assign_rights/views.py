@@ -6,8 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .assemble import RightsAssembler
-from .forms import (BasisForm, CopyrightForm, GroupingForm,
-                    RightsGrantedFormSet, RightsShellForm)
+from .forms import GroupingForm, RightsGrantedFormSet, RightsShellForm
 from .models import Grouping
 
 
@@ -38,16 +37,14 @@ class RightsShellCreateView(PageTitleMixin, LoginRequiredMixin, CreateView):
     """Create a rights shell."""
     model = RightsShell
     template_name = "rights/manage.html"
-    form_class = BasisForm
+    form_class = RightsShellForm
     page_title = "Create New Rights Shell"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
-            context['copyright_form'] = CopyrightForm(self.request.POST)
             context['rights_granted_form'] = RightsGrantedFormSet(self.request.POST)
         else:
-            context['copyright_form'] = CopyrightForm(self.request.POST)
             context['rights_granted_form'] = RightsGrantedFormSet()
         return context
 

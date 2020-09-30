@@ -6,9 +6,6 @@
 <form class="mb-3" action="." method="POST" accept-charset="utf-8">
     {% csrf_token %}
     {{ form | crispy}}
-    <div>
-    {{ copyright_form | crispy}}
-</div>
     <h2>Rights Granted</h2>
     {{ rights_granted_form.management_form }}
     {{ rights_granted_form | crispy}}
