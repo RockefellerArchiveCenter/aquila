@@ -1,5 +1,5 @@
+from assign_rights.mixins.authmixins import EditMixin
 from assign_rights.models import RightsShell
-from assign_rights.mixins.authmixins import EditMixin, DeleteMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
