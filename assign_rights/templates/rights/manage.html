@@ -5,43 +5,46 @@
 
 <form class="mb-3" action="." method="POST" accept-charset="utf-8" id="vue-form">
     {% csrf_token %}
-    {{ form.rights_basis }}
+    <div class="form-group">
+		<label for="id_rights_basis">Rights Basis</label>
+		{{ form.rights_basis }}
+	</div>
     <div v-if="selected==copyright">
-        <p>{{ form.copyright_status }}</p>
-        <p>{{ form.determination_date }}</p>
-        <p>{{ form.note }}</p>
-        <p>{{ form.start_date }}</p>
-        <p>{{ form.end_date }}</p>
-        <p>{{ form.start_date_period }}</p>
-        <p>{{ form.rights_basis_period }}</p>
-        <p>{{ form.end_date_open }}</p>
+        <div class="form-group"><label for="id_copyright_status">Copyright Status</label>{{ form.copyright_status }}</div>
+        <div class="form-group"><label for="id_determination_date">Determination Date</label>{{ form.determination_date }}</div>
+        <div class="form-group"><label for="id_note">Note</label>{{ form.note }}</div>
+        <div class="form-group"><label for="id_start_date">Start Date</label>{{ form.start_date }}</div>
+        <div class="form-group"><label for="id_end_date">End Date</label>{{ form.end_date }}</div>
+        <div class="form-group"><label for="id_start_date_period">Start Date Period</label>{{ form.start_date_period }}</div>
+        <div class="form-group"><label for="id_rights_basis_period">Rights Basis Period</label>{{ form.rights_basis_period }}</div>
+        <div class="form-group"><label for="id_end_date_open">End Date Open</label>{{ form.end_date_open }}</div>
     </div>
     <div v-if="selected==statute">
-        <p>{{ form.statute_citation }}</p>
-        <p>{{ form.determination_date }}</p>
-        <p>{{ form.note }}</p>
-        <p>{{ form.start_date }}</p>
-        <p>{{ form.end_date }}</p>
-        <p>{{ form.start_date_period }}</p>
-        <p>{{ form.rights_basis_period }}</p>
-        <p>{{ form.end_date_open }}</p>
+        <div class="form-group"><label for="id_statute_citation">Statute Citation</label>{{ form.statute_citation }}</div>
+        <div class="form-group"><label for="id_determination_date">Determination Date</label>{{ form.determination_date }}</div>
+        <div class="form-group"><label for="id_note">Note</label>{{ form.note }}</div>
+        <div class="form-group"><label for="id_start_date">Start Date</label>{{ form.start_date }}</div>
+        <div class="form-group"><label for="id_end_date">End Date</label>{{ form.end_date }}</div>
+        <div class="form-group"><label for="id_start_date_period">start_date Period</label>{{ form.start_date_period }}</div>
+        <div class="form-group"><label for="id_rights_basis_period">rights_basis Period</label>{{ form.rights_basis_period }}</div>
+        <div class="form-group"><label for="id_end_date_open">end_date Open</label>{{ form.end_date_open }}</div>
     </div>
     <div v-if="selected==license">
-        <p>{{ form.license_terms }}</p>
-        <p>{{ form.note }}</p>
-        <p>{{ form.start_date }}</p>
-        <p>{{ form.end_date }}</p>
-        <p>{{ form.start_date_period }}</p>
-        <p>{{ form.rights_basis_period }}</p>
-        <p>{{ form.end_date_open }}</p>
+        <div class="form-group"><label for="id_license_terms">License Terms</label>{{ form.license_terms }}</div>
+        <div class="form-group"><label for="id_note">Note</label>{{ form.note }}</div>
+        <div class="form-group"><label for="id_start_date">Start Date</label>{{ form.start_date }}</div>
+        <div class="form-group"><label for="id_end_date">End Date</label>{{ form.end_date }}</div>
+        <div class="form-group"><label for="id_start_date_period">start_date Period</label>{{ form.start_date_period }}</div>
+        <div class="form-group"><label for="id_rights_basis_period">rights_basis Period</label>{{ form.rights_basis_period }}</div>
+        <div class="form-group"><label for="id_end_date_open">end_date Open</label>{{ form.end_date_open }}</div>
     </div>
     <div v-if="selected==other">
-        <p>{{ form.note }}</p>
-        <p>{{ form.start_date }}</p>
-        <p>{{ form.end_date }}</p>
-        <p>{{ form.start_date_period }}</p>
-        <p>{{ form.rights_basis_period }}</p>
-        <p>{{ form.end_date_open }}</p>
+        <div class="form-group"><label for="id_note">Note</label>{{ form.note }}</div>
+        <div class="form-group"><label for="id_start_date">Start Date</label>{{ form.start_date }}</div>
+        <div class="form-group"><label for="id_end_date">End Date</label>{{ form.end_date }}</div>
+        <div class="form-group"><label for="id_start_date_period">start_date Period</label>{{ form.start_date_period }}</div>
+        <div class="form-group"><label for="id_rights_basis_period">rights_basis Period</label>{{ form.rights_basis_period }}</div>
+        <div class="form-group"><label for="id_end_date_open">end_date Open</label>{{ form.end_date_open }}</div>
     </div>
     <h2>Rights Granted</h2>
 
