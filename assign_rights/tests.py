@@ -3,7 +3,7 @@ from datetime import date, datetime
 from unittest.mock import patch
 
 from dateutil.relativedelta import relativedelta
-from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.models import AnonymousUser, Group
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from rest_framework.test import APIRequestFactory
@@ -26,6 +26,7 @@ class TestViews(TestCase):
         self.api_factory = APIRequestFactory()
         self.factory = RequestFactory()
         self.user = User.objects.create_user("test_user", "test@example.com", "testpass")
+        self.group = Group.objects.get(name='edit').user_set.add(User.objects.get(username='test_user'))
         add_rights_shells()
         add_groupings()
 
