@@ -27,17 +27,16 @@ class RightsShellForm(ModelForm):
             'statute_citation'
         ]
         widgets = {
-            'rights_basis': Select(attrs={'v-model': 'selected', 'class': 'form-control'}),
-            'copyright_status': Select(attrs={'class': 'form-control'}),
-            'determination_date': DateInput(attrs={'class': 'form-control'}),
-            'note': Textarea(attrs={'class': 'form-control'}),
-            'start_date': DateInput(attrs={'class': 'form-control'}),
-            'end_date': DateInput(attrs={'class': 'form-control'}),
-            'start_date_period': NumberInput(attrs={'class': 'form-control'}),
-            'end_date_period': NumberInput(attrs={'class': 'form-control'}),
-            'license_terms': Textarea(attrs={'class': 'form-control'}),
-            'statute_citation': Textarea(attrs={'class': 'form-control'})
-        }
+            'rights_basis': Select(attrs={'v-model': 'selected', }),
+            'copyright_status': Select(attrs={}),
+            'determination_date': DateInput(attrs={}),
+            'note': Textarea(attrs={}),
+            'start_date': DateInput(attrs={}),
+            'end_date': DateInput(attrs={}),
+            'start_date_period': NumberInput(attrs={}),
+            'end_date_period': NumberInput(attrs={}),
+            'license_terms': Textarea(attrs={}),
+            'statute_citation': Textarea(attrs={})}
 
 
 class RightsGrantedForm(ModelForm):
