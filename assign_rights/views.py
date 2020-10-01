@@ -35,7 +35,7 @@ class RightsShellListView(PageTitleMixin, LoginRequiredMixin, ListView):
 
 
 class RightsShellCreateView(PageTitleMixin, EditMixin, CreateView):
-    """Create a rights shell."""
+    """Create a rights shell. Only available to 'edit' group."""
     model = RightsShell
     template_name = "rights/manage.html"
     form_class = RightsShellForm
@@ -71,7 +71,7 @@ class RightsShellDetailView(PageTitleMixin, LoginRequiredMixin, DetailView):
 
 
 class RightsShellUpdateView(PageTitleMixin, EditMixin, UpdateView):
-    """Update a rights shell."""
+    """Update a rights shell. Only available to 'edit' group."""
     model = RightsShell
     template_name = "rights/manage.html"
     form_class = RightsShellForm
@@ -107,7 +107,7 @@ class GroupingListView(PageTitleMixin, LoginRequiredMixin, ListView):
 
 
 class GroupingCreateView(PageTitleMixin, EditMixin, CreateView):
-    """Create a grouping."""
+    """Create a grouping. Only available to 'edit' group."""
     model = Grouping
     template_name = "groupings/manage.html"
     form_class = GroupingForm
@@ -124,7 +124,7 @@ class GroupingDetailView(PageTitleMixin, LoginRequiredMixin, DetailView):
 
 
 class GroupingUpdateView(PageTitleMixin, EditMixin, UpdateView):
-    """Update a grouping."""
+    """Update a grouping. Only available to 'edit' group."""
     model = Grouping
     template_name = "groupings/manage.html"
     form_class = GroupingForm
