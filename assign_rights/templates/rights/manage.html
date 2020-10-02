@@ -9,44 +9,18 @@
 		{{ form.rights_basis | as_crispy_field }}
 	</div>
     <div v-if="selected==copyright">
-        <div>{{ form.copyright_status | as_crispy_field }}</div>
-        <div>{{ form.determination_date | as_crispy_field }}</div>
-        <div>{{ form.note | as_crispy_field }}</div>
-        <div>{{ form.start_date | as_crispy_field }}</div>
-        <div>{{ form.end_date | as_crispy_field }}</div>
-        <div>{{ form.start_date_period | as_crispy_field }}</div>
-        <div>{{ form.end_date_period | as_crispy_field }}</div>
-        <div>{{ form.end_date_open | as_crispy_field }}</div>
+        <div>{{ copyright_form | crispy }}</div>
     </div>
     <div v-if="selected==statute">
-        <div>{{ form.statute_citation | as_crispy_field }}</div>
-        <div>{{ form.determination_date | as_crispy_field }}</div>
-        <div>{{ form.note | as_crispy_field }}</div>
-        <div>{{ form.start_date | as_crispy_field }}</div>
-        <div>{{ form.end_date | as_crispy_field }}</div>
-        <div>{{ form.start_date_period | as_crispy_field }}</div>
-        <div>{{ form.end_date_period | as_crispy_field }}</div>
-        <div>{{ form.end_date_open | as_crispy_field }}</div>
+        <div>{{ statute_form | crispy }}</div>
     </div>
     <div v-if="selected==license">
-        <div>{{ form.license_terms | as_crispy_field }}</div>
-        <div>{{ form.note | as_crispy_field }}</div>
-        <div>{{ form.start_date | as_crispy_field }}</div>
-        <div>{{ form.end_date | as_crispy_field }}</div>
-        <div>{{ form.start_date_period | as_crispy_field }}</div>
-        <div>{{ form.end_date_period | as_crispy_field }}</div>
-        <div>{{ form.end_date_open | as_crispy_field }}</div>
+        <div>{{ license_form | crispy }}</div>
     </div>
     <div v-if="selected==other">
-        <div>{{ form.note | as_crispy_field }}</div>
-        <div>{{ form.start_date | as_crispy_field }}</div>
-        <div>{{ form.end_date | as_crispy_field }}</div>
-        <div>{{ form.start_date_period | as_crispy_field }}</div>
-        <div>{{ form.end_date_period | as_crispy_field }}</div>
-        <div>{{ form.end_date_open | as_crispy_field }}</div>
+        <div>{{ other_form | crispy }}</div>
     </div>
     <h2>Rights Granted</h2>
-
     {{ rights_granted_form.management_form }}
     {{ rights_granted_form | crispy}}
     <button type="submit" class="btn btn-primary">Save</button>
