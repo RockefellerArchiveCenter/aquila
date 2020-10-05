@@ -1,5 +1,5 @@
-from django.forms import (DateInput, ModelForm, NumberInput, Select, Textarea,
-                          TextInput, inlineformset_factory)
+from django.forms import (CharField, DateInput, ModelForm, NumberInput, Select,
+                          Textarea, inlineformset_factory)
 
 from .models import Grouping, RightsGranted, RightsShell
 
@@ -30,7 +30,6 @@ class RightsShellForm(ModelForm):
         widgets = {
             'rights_basis': Select(attrs={'v-model': 'selected', }),
             'copyright_status': Select(attrs={}),
-            'jurisdiction': TextInput(attrs={'maxlength': '2'}),
             'determination_date': DateInput(attrs={}),
             'note': Textarea(attrs={}),
             'start_date': DateInput(attrs={}),
@@ -42,6 +41,8 @@ class RightsShellForm(ModelForm):
 
 
 class CopyrightForm(RightsShellForm):
+    jurisdiction = CharField(max_length=2, required=True, initial="us")
+
     class Meta(RightsShellForm.Meta):
         exclude = (
             'rights_basis',
@@ -72,11 +73,12 @@ class LicenseForm(RightsShellForm):
 
 
 class StatuteForm(RightsShellForm):
+    jurisdiction = CharField(max_length=2, required=True, initial="us")
+
     class Meta(RightsShellForm.Meta):
         exclude = (
             'rights_basis',
             'copyright_status',
-            'jurisdiction',
             'license_terms',
         )
 
