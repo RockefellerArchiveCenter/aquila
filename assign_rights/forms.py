@@ -1,5 +1,5 @@
-from django.forms import (CharField, DateInput, ModelForm, NumberInput, Select,
-                          Textarea, inlineformset_factory)
+from django.forms import (ModelForm, Select, Textarea, TextInput,
+                          inlineformset_factory)
 
 from .models import Grouping, RightsGranted, RightsShell
 
@@ -29,26 +29,19 @@ class RightsShellForm(ModelForm):
         ]
         widgets = {
             'rights_basis': Select(attrs={'v-model': 'selected', }),
-            'copyright_status': Select(attrs={}),
-            'determination_date': DateInput(attrs={}),
-            'note': Textarea(attrs={}),
-            'start_date': DateInput(attrs={}),
-            'end_date': DateInput(attrs={}),
-            'start_date_period': NumberInput(attrs={}),
-            'end_date_period': NumberInput(attrs={}),
-            'license_terms': Textarea(attrs={}),
-            'statute_citation': Textarea(attrs={})}
+        }
 
 
 class CopyrightForm(RightsShellForm):
-    jurisdiction = CharField(max_length=2, required=True, initial="us")
-
     class Meta(RightsShellForm.Meta):
         exclude = (
             'rights_basis',
             'license_terms',
             'statute_citation'
         )
+        widgets = {
+            'jurisdiction': TextInput(attrs={'maxlength': '2', 'required': True}),
+        }
 
 
 class OtherForm(RightsShellForm):
@@ -73,14 +66,16 @@ class LicenseForm(RightsShellForm):
 
 
 class StatuteForm(RightsShellForm):
-    jurisdiction = CharField(max_length=2, required=True, initial="us")
-
     class Meta(RightsShellForm.Meta):
         exclude = (
             'rights_basis',
             'copyright_status',
             'license_terms',
         )
+        widgets = {
+            'jurisdiction': TextInput(attrs={'maxlength': '2', 'required': True}),
+            'statute_citation': Textarea(attrs={'required': True})
+        }
 
 
 class RightsGrantedForm(ModelForm):
