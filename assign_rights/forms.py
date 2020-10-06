@@ -40,6 +40,7 @@ class CopyrightForm(RightsShellForm):
             'statute_citation'
         )
         widgets = {
+            'copyright_status': Select(attrs={'required': True}),
             'jurisdiction': TextInput(attrs={'maxlength': '2', 'required': True}),
         }
 
