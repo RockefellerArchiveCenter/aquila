@@ -71,7 +71,7 @@ class TestViews(TestCase):
         form_data = {"rights_basis": random.choice(["Copyright", "Statute", "License", "Other"]), "note": random_string(), "start_date_period": random.randint(0, 10), "end_date_period": random.randint(0, 10)}
         form = RightsShellForm(data=form_data)
         self.assertTrue(form.is_valid(), form.errors)
-        for field in ["rights_basis", "note", "start_date_period", "end_date_period"]:
+        for field in ["rights_basis"]:
             del form_data[field]
             form = RightsShellForm(data=form_data)
             self.assertFalse(form.is_valid(), "Form unexpectedly valid")
