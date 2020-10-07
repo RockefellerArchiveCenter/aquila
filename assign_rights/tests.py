@@ -26,7 +26,8 @@ class TestViews(TestCase):
         self.api_factory = APIRequestFactory()
         self.factory = RequestFactory()
         self.user = User.objects.create_user("test_user", "test@example.com", "testpass")
-        self.group = Group.objects.get(name='edit').user_set.add(User.objects.get(username='test_user'))
+        self.group = Group.objects.get(name='edit')
+        self.user.groups.add(self.group)
         add_rights_shells()
         add_groupings()
 
