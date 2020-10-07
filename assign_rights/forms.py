@@ -1,4 +1,5 @@
-from django.forms import ModelForm, inlineformset_factory
+from django.forms import (DateInput, ModelForm, NumberInput, Select, Textarea,
+                          TextInput, inlineformset_factory)
 
 from .models import Grouping, RightsGranted, RightsShell
 
@@ -15,6 +16,7 @@ class RightsShellForm(ModelForm):
         fields = [
             'rights_basis',
             'copyright_status',
+            'jurisdiction',
             'determination_date',
             'note',
             'start_date',
@@ -25,6 +27,58 @@ class RightsShellForm(ModelForm):
             'license_terms',
             'statute_citation'
         ]
+        widgets = {
+            'rights_basis': Select(attrs={'v-model': 'selected', }),
+            'copyright_status': Select(attrs={}),
+            'jurisdiction': TextInput(attrs={'maxlength': '2'}),
+            'determination_date': DateInput(attrs={}),
+            'note': Textarea(attrs={}),
+            'start_date': DateInput(attrs={}),
+            'end_date': DateInput(attrs={}),
+            'start_date_period': NumberInput(attrs={}),
+            'end_date_period': NumberInput(attrs={}),
+            'license_terms': Textarea(attrs={}),
+            'statute_citation': Textarea(attrs={})}
+
+
+class CopyrightForm(RightsShellForm):
+    class Meta(RightsShellForm.Meta):
+        exclude = (
+            'rights_basis',
+            'license_terms',
+            'statute_citation'
+        )
+
+
+class OtherForm(RightsShellForm):
+    class Meta(RightsShellForm.Meta):
+        exclude = (
+            'rights_basis',
+            'copyright_status',
+            'jurisdiction',
+            'license_terms',
+            'statute_citation'
+        )
+
+
+class LicenseForm(RightsShellForm):
+    class Meta(RightsShellForm.Meta):
+        exclude = (
+            'rights_basis',
+            'copyright_status',
+            'jurisdiction',
+            'statute_citation'
+        )
+
+
+class StatuteForm(RightsShellForm):
+    class Meta(RightsShellForm.Meta):
+        exclude = (
+            'rights_basis',
+            'copyright_status',
+            'jurisdiction',
+            'license_terms',
+        )
 
 
 class RightsGrantedForm(ModelForm):
