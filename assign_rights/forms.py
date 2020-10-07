@@ -84,8 +84,8 @@ class RightsGrantedForm(ModelForm):
         model = RightsGranted
         fields = [
             'basis',
-            'restriction',
             'act',
+            'restriction',
             'note',
             'start_date',
             'end_date',
