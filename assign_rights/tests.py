@@ -139,6 +139,13 @@ class TestRightsAssembler(TestCase):
         self.assembler = RightsAssembler()
         self.rights_ids = [obj.pk for obj in RightsShell.objects.all()]
 
+    def test_run_method(self):
+        """Tests the run method"""
+        request_end_date = random_date().isoformat()
+        request_start_date = random_date().isoformat()
+        run = RightsAssembler().run(self.rights_ids, request_start_date, request_end_date)
+        self.assertIsNot(False, run)
+
     def test_retrieve_rights(self):
         """Tests the retrieve_rights method.
 
