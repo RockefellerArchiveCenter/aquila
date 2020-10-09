@@ -1,5 +1,5 @@
-from django.forms import (DateInput, ModelForm, NumberInput, Select, Textarea,
-                          TextInput, inlineformset_factory)
+from django.forms import (ModelForm, Select, Textarea, TextInput,
+                          inlineformset_factory)
 
 from .models import Grouping, RightsGranted, RightsShell
 
@@ -29,16 +29,7 @@ class RightsShellForm(ModelForm):
         ]
         widgets = {
             'rights_basis': Select(attrs={'v-model': 'selected', }),
-            'copyright_status': Select(attrs={}),
-            'jurisdiction': TextInput(attrs={'maxlength': '2'}),
-            'determination_date': DateInput(attrs={}),
-            'note': Textarea(attrs={}),
-            'start_date': DateInput(attrs={}),
-            'end_date': DateInput(attrs={}),
-            'start_date_period': NumberInput(attrs={}),
-            'end_date_period': NumberInput(attrs={}),
-            'license_terms': Textarea(attrs={}),
-            'statute_citation': Textarea(attrs={})}
+        }
 
 
 class CopyrightForm(RightsShellForm):
@@ -48,6 +39,10 @@ class CopyrightForm(RightsShellForm):
             'license_terms',
             'statute_citation'
         )
+        widgets = {
+            'copyright_status': Select(attrs={'required': True}),
+            'jurisdiction': TextInput(attrs={'maxlength': '2', 'required': True}),
+        }
 
 
 class OtherForm(RightsShellForm):
@@ -76,9 +71,12 @@ class StatuteForm(RightsShellForm):
         exclude = (
             'rights_basis',
             'copyright_status',
-            'jurisdiction',
             'license_terms',
         )
+        widgets = {
+            'jurisdiction': TextInput(attrs={'maxlength': '2', 'required': True}),
+            'statute_citation': Textarea(attrs={'required': True})
+        }
 
 
 class RightsGrantedForm(ModelForm):
@@ -86,8 +84,8 @@ class RightsGrantedForm(ModelForm):
         model = RightsGranted
         fields = [
             'basis',
-            'restriction',
             'act',
+            'restriction',
             'note',
             'start_date',
             'end_date',
