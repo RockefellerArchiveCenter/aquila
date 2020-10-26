@@ -69,15 +69,6 @@ class RightsShellCreateView(PageTitleMixin, LoginRequiredMixin, CreateView):
             return super().form_invalid(form)
 
 
-class RightsShellDetailView(PageTitleMixin, LoginRequiredMixin, DetailView):
-    """View a rights shell."""
-    model = RightsShell
-    template_name = "rights/detail.html"
-
-    def get_page_title(self, context):
-        return "Rights Shell {}".format(context["object"].pk)
-
-
 class RightsShellUpdateView(PageTitleMixin, LoginRequiredMixin, UpdateView):
     """Update a rights shell."""
     model = RightsShell
@@ -105,6 +96,15 @@ class RightsShellUpdateView(PageTitleMixin, LoginRequiredMixin, UpdateView):
 
     def get_page_title(self, context):
         return "Update Rights Shell {}".format(context["object"].pk)
+
+
+class RightsShellDetailView(PageTitleMixin, LoginRequiredMixin, DetailView):
+    """View a rights shell."""
+    model = RightsShell
+    template_name = "rights/detail.html"
+
+    def get_page_title(self, context):
+        return "Rights Shell {}".format(context["object"].pk)
 
 
 class GroupingListView(PageTitleMixin, LoginRequiredMixin, ListView):
