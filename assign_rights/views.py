@@ -37,7 +37,7 @@ class RightsShellListView(PageTitleMixin, LoginRequiredMixin, ListView):
 class RightsShellCreateView(PageTitleMixin, LoginRequiredMixin, CreateView):
     """Create a rights shell."""
     model = RightsShell
-    template_name = "rights/manage.html"
+    template_name = "rights/create.html"
     form_class = RightsShellForm
     page_title = "Create New Rights Shell"
 
@@ -81,7 +81,7 @@ class RightsShellDetailView(PageTitleMixin, LoginRequiredMixin, DetailView):
 class RightsShellUpdateView(PageTitleMixin, LoginRequiredMixin, UpdateView):
     """Update a rights shell."""
     model = RightsShell
-    template_name = "rights/manage.html"
+    template_name = "rights/edit.html"
     form_class = RightsShellForm
 
     def get_context_data(self, **kwargs):
