@@ -28,7 +28,7 @@ def add_groupings(count=5):
                 grouping.rights_shells.add(random.choice(RightsShell.objects.all()))
 
 
-def add_rights_shells(count=5):
+def add_rights_shells(count=15):
     for x in range(count):
         RightsShell.objects.create(
             rights_basis=random.choice(["Copyright", "Statute", "License", "Other"]),

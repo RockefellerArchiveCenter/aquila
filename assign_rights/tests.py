@@ -1,10 +1,13 @@
+import json
 import random
 from datetime import date, datetime
-from unittest.mock import patch
+from os import listdir
+from os.path import join
 
+from aquila import settings
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import AnonymousUser
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory, TestCase, TransactionTestCase
 from django.urls import reverse
 from rest_framework.test import APIRequestFactory
 
@@ -18,6 +21,47 @@ from .views import (GroupingCreateView, GroupingDetailView, GroupingListView,
                     GroupingUpdateView, RightsAssemblerView,
                     RightsShellCreateView, RightsShellDetailView,
                     RightsShellListView, RightsShellUpdateView)
+
+valid_data_fixture_dir = join(settings.BASE_DIR, 'fixtures', 'valid_requests')
+invalid_data_fixture_dir = join(settings.BASE_DIR, 'fixtures', 'invalid_requests')
+
+
+class TestRightsAssemblyView(TransactionTestCase):
+    """ Tests that require stable pks """
+
+    reset_sequences = True
+
+    def setUp(self):
+        self.api_factory = APIRequestFactory()
+        self.factory = RequestFactory()
+        add_rights_shells()
+
+    def test_rightsassembly_view(self):
+        """Tests handling of expected returns as well as exceptions."""
+
+        # RightsAssembler returns expected value
+        for f in listdir(valid_data_fixture_dir):
+            with open(join(valid_data_fixture_dir, f), 'r') as json_file:
+                valid_data = json.load(json_file)
+                request = self.factory.post(reverse("rights-assemble"), valid_data, content_type='application/json')
+                response = RightsAssemblerView.as_view()(request)
+                self.assertEqual(response.status_code, 200, "Request error: {}".format(response.data))
+
+        # RightsAssembler throws an exception
+        with open(join(invalid_data_fixture_dir, "invalid_rights_id.json"), 'r') as json_file:
+            invalid_data = json.load(json_file)
+            request = self.factory.post(reverse("rights-assemble"), invalid_data, content_type='application/json')
+            response = RightsAssemblerView.as_view()(request)
+            self.assertEqual(response.status_code, 500, response.data)
+            self.assertEqual(response.data["detail"], "Error retrieving rights shell: RightsShell matching query does not exist.")
+
+        # RightsAssembler throws an exception
+        with open(join(invalid_data_fixture_dir, "no_start_date.json"), 'r') as json_file:
+            invalid_data = json.load(json_file)
+            request = self.factory.post(reverse("rights-assemble"), invalid_data, content_type='application/json')
+            response = RightsAssemblerView.as_view()(request)
+            self.assertEqual(response.status_code, 500, "Request should have returned a 500 status code")
+            self.assertEqual(response.data["detail"], "Request data must contain 'identifiers', 'start_date' and 'end_date' keys.")
 
 
 class TestViews(TestCase):
@@ -78,33 +122,6 @@ class TestViews(TestCase):
             self.assertIsNot(
                 form.errors[field], False,
                 "Field-specific error message not raised for {}".format(field))
-
-    @patch("assign_rights.assemble.RightsAssembler.run")
-    def test_rightsassembly_view(self, mock_assemble):
-        """Tests handling of expected returns as well as exceptions."""
-
-        # RightsAssembler returns expected value
-        mock_assemble.return_value = []
-        data = {"identifiers": ["1", "2", "3"], "start_date": "2010-01-01", "end_date": "2011-01-01"}
-        request = self.factory.post(reverse("rights-assemble"), data, content_type='application/json')
-        response = RightsAssemblerView.as_view()(request)
-        self.assertEqual(response.status_code, 200, "Request error: {}".format(response.data))
-        self.assertEqual(response.data["rights_statements"], [])
-
-        # RightsAssembler throws an exception
-        mock_assemble.side_effect = Exception("Exception text")
-        request = self.factory.post(reverse("rights-assemble"), data, content_type='application/json')
-        response = RightsAssemblerView.as_view()(request)
-        self.assertEqual(response.status_code, 500, "here")
-        self.assertEqual(response.data["detail"], "Exception text")
-        mock_assemble.reset_mock(side_effect=True)
-
-        # Required data is missing from request
-        data.pop(random.choice(list(data)))
-        request = self.factory.post(reverse("rights-assemble"), data, content_type='application/json')
-        response = RightsAssemblerView.as_view()(request)
-        self.assertEqual(response.status_code, 500, "Request should have returned a 500 status code")
-        self.assertEqual(response.data["detail"], "Request data must contain 'identifiers', 'start_date' and 'end_date' keys.")
 
     def test_restricted_views(self):
         """Asserts that restricted views are only available to logged-in users."""
