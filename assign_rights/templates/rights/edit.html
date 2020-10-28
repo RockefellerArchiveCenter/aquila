@@ -8,33 +8,12 @@
     <div>
 		{{ form.rights_basis | as_crispy_field }}
 	</div>
-    <div v-if="selected==copyright">
-        <div>{{ copyright_form | crispy }}</div>
-    </div>
-    <div v-if="selected==statute">
-        <div>{{ statute_form | crispy }}</div>
-    </div>
-    <div v-if="selected==license">
-        <div>{{ license_form | crispy }}</div>
-    </div>
-    <div v-if="selected==other">
-        <div>{{ other_form | crispy }}</div>
+    <div>
+        <div>{{ basis_form | crispy }}</div>
     </div>
     <h2>Rights Granted</h2>
     {{ rights_granted_form.management_form }}
     {{ rights_granted_form | crispy}}
     <button type="submit" class="btn btn-primary">Save</button>
 </form>
-<script type="text/javascript">
-  let app = new Vue({
-    el: "#vue-form",
-    data: {
-      selected: '',
-        copyright: 'Copyright',
-        statute: 'Statute',
-        license: 'License',
-        other: 'Other',
-    },
-  });
-</script>
 {% endblock %}
