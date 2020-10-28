@@ -79,8 +79,24 @@ class RightsShellUpdateView(PageTitleMixin, LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
             context['rights_granted_form'] = RightsGrantedFormSet(self.request.POST, instance=self.object)
+            if context["object"].rights_basis == "Copyright":
+                context['basis_form'] == CopyrightForm(self.request.POST, instance=self.object)
+            elif context["object"].rights_basis == "Other":
+                context['basis_form'] == OtherForm(self.request.POST, instance=self.object)
+            elif context["object"].rights_basis == "Statute":
+                context['basis_form'] == StatuteForm(self.request.POST, instance=self.object)
+            elif context["object"].rights_basis == "License":
+                context['basis_form'] == LicenseForm(self.request.POST, instance=self.object)
         else:
             context['rights_granted_form'] = RightsGrantedFormSet(instance=self.object)
+            if context["object"].rights_basis == "Copyright":
+                context['basis_form'] = CopyrightForm(instance=self.object)
+            elif context["object"].rights_basis == "Other":
+                context['basis_form'] = OtherForm(instance=self.object)
+            elif context["object"].rights_basis == "Statute":
+                context['basis_form'] = StatuteForm(instance=self.object)
+            elif context["object"].rights_basis == "License":
+                context['basis_form'] = LicenseForm(instance=self.object)
         return context
 
     def form_valid(self, form):
