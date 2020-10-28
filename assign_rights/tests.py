@@ -48,20 +48,13 @@ class TestRightsAssemblyView(TransactionTestCase):
                 self.assertEqual(response.status_code, 200, "Request error: {}".format(response.data))
 
         # RightsAssembler throws an exception
-        with open(join(invalid_data_fixture_dir, "invalid_rights_id.json"), 'r') as json_file:
-            invalid_data = json.load(json_file)
-            request = self.factory.post(reverse("rights-assemble"), invalid_data, content_type='application/json')
-            response = RightsAssemblerView.as_view()(request)
-            self.assertEqual(response.status_code, 500, response.data)
-            self.assertEqual(response.data["detail"], "Error retrieving rights shell: RightsShell matching query does not exist.")
-
-        # RightsAssembler throws an exception
-        with open(join(invalid_data_fixture_dir, "no_start_date.json"), 'r') as json_file:
-            invalid_data = json.load(json_file)
-            request = self.factory.post(reverse("rights-assemble"), invalid_data, content_type='application/json')
-            response = RightsAssemblerView.as_view()(request)
-            self.assertEqual(response.status_code, 500, "Request should have returned a 500 status code")
-            self.assertEqual(response.data["detail"], "Request data must contain 'identifiers', 'start_date' and 'end_date' keys.")
+        for fixture_name, message in [("invalid_rights_id.json", "Error retrieving rights shell: RightsShell matching query does not exist."), ("no_start_date.json", "Request data must contain 'identifiers', 'start_date' and 'end_date' keys.")]:
+            with open(join(invalid_data_fixture_dir, fixture_name), 'r') as json_file:
+                invalid_data = json.load(json_file)
+                request = self.factory.post(reverse("rights-assemble"), invalid_data, content_type='application/json')
+                response = RightsAssemblerView.as_view()(request)
+                self.assertEqual(response.status_code, 500, "Request should have returned a 500 status code")
+                self.assertEqual(response.data["detail"], message)
 
 
 class TestViews(TestCase):
