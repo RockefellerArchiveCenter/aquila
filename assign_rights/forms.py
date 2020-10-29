@@ -32,6 +32,13 @@ class RightsShellForm(ModelForm):
         }
 
 
+class RightsShellUpdateForm(RightsShellForm):
+    class Meta(RightsShellForm.Meta):
+        widgets = {
+            'rights_basis': Select(attrs={'disabled': 'disabled'})
+        }
+
+
 class CopyrightForm(RightsShellForm):
     class Meta(RightsShellForm.Meta):
         exclude = (
