@@ -7,7 +7,8 @@ from rest_framework.views import APIView
 
 from .assemble import RightsAssembler
 from .forms import (CopyrightForm, GroupingForm, LicenseForm, OtherForm,
-                    RightsGrantedFormSet, RightsShellForm, StatuteForm)
+                    RightsGrantedFormSet, RightsShellForm,
+                    RightsShellUpdateForm, StatuteForm)
 from .models import Grouping
 
 
@@ -73,7 +74,7 @@ class RightsShellUpdateView(PageTitleMixin, LoginRequiredMixin, UpdateView):
     """Update a rights shell."""
     model = RightsShell
     template_name = "rights/edit.html"
-    form_class = RightsShellForm
+    form_class = RightsShellUpdateForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
