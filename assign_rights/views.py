@@ -7,7 +7,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .assemble import RightsAssembler
-from .forms import GroupingForm, RightsGrantedFormSet, RightsShellForm
+from .forms import (CopyrightForm, GroupingForm, LicenseForm, OtherForm,
+                    RightsGrantedFormSet, RightsShellForm, StatuteForm)
 from .models import Grouping
 
 
@@ -45,8 +46,16 @@ class RightsShellCreateView(PageTitleMixin, EditMixin, CreateView):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
             context['rights_granted_form'] = RightsGrantedFormSet(self.request.POST)
+            context['copyright_form'] = CopyrightForm(self.request.POST)
+            context['other_form'] = OtherForm(self.request.POST)
+            context['statute_form'] = StatuteForm(self.request.POST)
+            context['license_form'] = LicenseForm(self.request.POST)
         else:
             context['rights_granted_form'] = RightsGrantedFormSet()
+            context['copyright_form'] = CopyrightForm()
+            context['other_form'] = OtherForm()
+            context['statute_form'] = StatuteForm()
+            context['license_form'] = LicenseForm()
         return context
 
     def form_valid(self, form):

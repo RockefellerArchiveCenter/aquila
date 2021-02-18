@@ -11,6 +11,32 @@ from .serializers import RightsGrantedSerializer, RightsShellSerializer
 class RightsAssembler(object):
     """Assembles and returns a list of rights statements."""
 
+    def run(self, rights_ids, request_start_date, request_end_date):
+        """Assembles and returns rights statements given rights shell IDs and
+        start and end dates.
+
+        Args:
+            rights_ids (list): a list of identifiers for rights shells.
+            request_start_date (string): a string representation of the earliest date of a group of records
+            request_end_date (string): a string representation of the latest date of a group of records
+        """
+        try:
+            rights_shells = self.retrieve_rights(rights_ids)
+            shell_data = []
+            for shell in rights_shells:
+                grant_data = []
+                start_date, end_date = self.calculate_dates(shell, request_start_date, request_end_date)
+                serialized_shell = self.create_json(shell, RightsShellSerializer, start_date, end_date)
+                for grant in shell.rightsgranted_set.all():
+                    start_date, end_date = self.calculate_dates(grant, request_start_date, request_end_date)
+                    grant_data.append(self.create_json(grant, RightsGrantedSerializer, start_date, end_date))
+                serialized_shell["rights_granted"] = grant_data
+                shell_data.append(serialized_shell)
+        except RightsShell.DoesNotExist as e:
+            raise Exception("Error retrieving rights shell: {}".format(str(e)))
+        except ValueError as e:
+            raise Exception("Unable to parse date: {}".format(e))
+
     def retrieve_rights(self, rights_ids):
         """Retrieves rights shells matching identifiers."""
         return [RightsShell.objects.get(pk=ident) for ident in rights_ids]
@@ -72,29 +98,3 @@ class RightsAssembler(object):
     def return_rights(self):
         """docstring for return_rights"""
     pass
-
-    def run(self, rights_ids, request_start_date, request_end_date):
-        """Assembles and returns rights statements given rights shell IDs and
-        start and end dates.
-
-        Args:
-            rights_ids (list): a list of identifiers for rights shells.
-            request_start_date (string): a string representation of the earliest date of a group of records
-            request_end_date (string): a string representation of the latest date of a group of records
-        """
-        try:
-            rights_shells = self.retrieve_rights(rights_ids)
-            shell_data = []
-            for shell in rights_shells:
-                grant_data = []
-                start_date, end_date = self.calculate_dates(shell, request_start_date, request_end_date)
-                serialized_shell = self.create_json(shell, RightsShellSerializer, start_date, end_date)
-                for grant in shell.rightsgranted_set.all():
-                    start_date, end_date = self.calculate_dates(grant, request_start_date, request_end_date)
-                    grant_data.append(self.create_json(grant, RightsGrantedSerializer, start_date, end_date))
-                serialized_shell["rights_granted"] = grant_data
-                shell_data.append(serialized_shell)
-        except RightsShell.DoesNotExist as e:
-            raise Exception("Error retrieving rights shell: {}".format(str(e)))
-        except ValueError as e:
-            raise Exception("Unable to parse date: {}".format(e))
