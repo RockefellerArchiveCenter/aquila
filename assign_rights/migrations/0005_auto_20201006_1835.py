@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('assign_rights', '0004_auto_20200710_0029'),
+        ('assign_rights', '0005_auto_20200929_1724'),
     ]
 
     operations = [
