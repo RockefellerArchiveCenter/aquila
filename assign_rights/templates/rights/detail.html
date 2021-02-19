@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load has_group %}
 
 {% block content %}
 
@@ -89,6 +90,8 @@
 </dl>
 {% endfor %}
 
+{% if request.user|has_group:"edit" %}
 <a class="btn btn-warning" href="{% url 'rights-update' pk=object.pk %}">Edit</a>
+{% endif %}
 
 {% endblock %}

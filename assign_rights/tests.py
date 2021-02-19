@@ -6,7 +6,7 @@ from os.path import join
 
 from aquila import settings
 from dateutil.relativedelta import relativedelta
-from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.models import AnonymousUser, Group
 from django.test import RequestFactory, TestCase, TransactionTestCase
 from django.urls import reverse
 from rest_framework.test import APIRequestFactory
@@ -63,6 +63,8 @@ class TestViews(TestCase):
         self.api_factory = APIRequestFactory()
         self.factory = RequestFactory()
         self.user = User.objects.create_user("test_user", "test@example.com", "testpass")
+        self.group = Group.objects.get(name='edit')
+        self.user.groups.add(self.group)
         add_rights_shells()
         add_groupings()
 
