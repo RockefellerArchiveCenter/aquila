@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
+{% load has_group %}
 
 {% block content %}
+{% if request.user|has_group:"edit" %}
 <a class="btn btn-primary mb-2" href="{% url 'groupings-create' %}">Create new grouping</a>
+{% endif %}
 
 <table class="table">
   <thead>

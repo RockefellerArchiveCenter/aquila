@@ -1,3 +1,4 @@
+from assign_rights.mixins.authmixins import EditMixin
 from assign_rights.models import RightsShell
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
@@ -35,8 +36,8 @@ class RightsShellListView(PageTitleMixin, LoginRequiredMixin, ListView):
     page_title = "Rights Shells"
 
 
-class RightsShellCreateView(PageTitleMixin, LoginRequiredMixin, CreateView):
-    """Create a rights shell."""
+class RightsShellCreateView(PageTitleMixin, EditMixin, CreateView):
+    """Create a rights shell. Only available to 'edit' group."""
     model = RightsShell
     template_name = "rights/create.html"
     form_class = RightsShellForm
@@ -70,8 +71,8 @@ class RightsShellCreateView(PageTitleMixin, LoginRequiredMixin, CreateView):
             return super().form_invalid(form)
 
 
-class RightsShellUpdateView(PageTitleMixin, LoginRequiredMixin, UpdateView):
-    """Update a rights shell."""
+class RightsShellUpdateView(PageTitleMixin, EditMixin, UpdateView):
+    """Update a rights shell. Only available to 'edit' group."""
     model = RightsShell
     template_name = "rights/edit.html"
     form_class = RightsShellUpdateForm
@@ -131,8 +132,8 @@ class GroupingListView(PageTitleMixin, LoginRequiredMixin, ListView):
     page_title = "Groupings"
 
 
-class GroupingCreateView(PageTitleMixin, LoginRequiredMixin, CreateView):
-    """Create a grouping."""
+class GroupingCreateView(PageTitleMixin, EditMixin, CreateView):
+    """Create a grouping. Only available to 'edit' group."""
     model = Grouping
     template_name = "groupings/manage.html"
     form_class = GroupingForm
@@ -148,8 +149,8 @@ class GroupingDetailView(PageTitleMixin, LoginRequiredMixin, DetailView):
         return context["object"].title
 
 
-class GroupingUpdateView(PageTitleMixin, LoginRequiredMixin, UpdateView):
-    """Update a grouping."""
+class GroupingUpdateView(PageTitleMixin, EditMixin, UpdateView):
+    """Update a grouping. Only available to 'edit' group."""
     model = Grouping
     template_name = "groupings/manage.html"
     form_class = GroupingForm
