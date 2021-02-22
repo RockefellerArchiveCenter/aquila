@@ -79,27 +79,25 @@ class RightsShellUpdateView(PageTitleMixin, EditMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        form_cls = self.get_form_cls(context["object"].rights_basis)
         if self.request.POST:
-            context['rights_granted_form'] = RightsGrantedFormSet(self.request.POST, instance=self.object)
-            if context["object"].rights_basis == "Copyright":
-                context['basis_form'] = CopyrightForm(self.request.POST, instance=self.object)
-            elif context["object"].rights_basis == "Other":
-                context['basis_form'] = OtherForm(self.request.POST, instance=self.object)
-            elif context["object"].rights_basis == "Statute":
-                context['basis_form'] = StatuteForm(self.request.POST, instance=self.object)
-            elif context["object"].rights_basis == "License":
-                context['basis_form'] = LicenseForm(self.request.POST, instance=self.object)
+            context["rights_granted_form"] = RightsGrantedFormSet(self.request.POST, instance=self.object)
+            context["basis_form"] = form_cls(self.request.POST, instance=self.object)
         else:
-            context['rights_granted_form'] = RightsGrantedFormSet(instance=self.object)
-            if context["object"].rights_basis == "Copyright":
-                context['basis_form'] = CopyrightForm(instance=self.object)
-            elif context["object"].rights_basis == "Other":
-                context['basis_form'] = OtherForm(instance=self.object)
-            elif context["object"].rights_basis == "Statute":
-                context['basis_form'] = StatuteForm(instance=self.object)
-            elif context["object"].rights_basis == "License":
-                context['basis_form'] = LicenseForm(instance=self.object)
+            context["rights_granted_form"] = RightsGrantedFormSet(instance=self.object)
+            context["basis_form"] = form_cls(instance=self.object)
         return context
+
+    def get_form_cls(self, rights_basis):
+        if rights_basis == "Copyright":
+            form_cls = CopyrightForm
+        elif rights_basis == "Statute":
+            form_cls = StatuteForm
+        elif rights_basis == "License":
+            form_cls = LicenseForm
+        else:
+            form_cls = OtherForm
+        return form_cls
 
     def form_valid(self, form):
         context = self.get_context_data(form=form)
