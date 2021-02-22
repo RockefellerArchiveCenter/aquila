@@ -44,6 +44,7 @@ class RightsShellCreateView(PageTitleMixin, EditMixin, CreateView):
     page_title = "Create New Rights Shell"
 
     def get_context_data(self, **kwargs):
+        """Load specific rights basis form based on logic in rights create template. Returns subclass of RightsShellForm"""
         context = super().get_context_data(**kwargs)
         if self.request.POST:
             context['rights_granted_form'] = RightsGrantedFormSet(self.request.POST)
@@ -60,6 +61,11 @@ class RightsShellCreateView(PageTitleMixin, EditMixin, CreateView):
         return context
 
     def form_valid(self, form):
+        """Validates form based on specific type of rights basis (e.g., copyright).
+
+        Args:
+            form: subclass of RightsShellForm
+        """
         context = self.get_context_data(form=form)
         rights_granted = context['rights_granted_form']
         if rights_granted.is_valid():
@@ -78,6 +84,7 @@ class RightsShellUpdateView(PageTitleMixin, EditMixin, UpdateView):
     form_class = RightsShellUpdateForm
 
     def get_context_data(self, **kwargs):
+        """Loads main rights basis form as well as inline formsets for rights granted or restricted."""
         context = super().get_context_data(**kwargs)
         form_cls = self.get_form_cls(context["object"].rights_basis)
         if self.request.POST:
