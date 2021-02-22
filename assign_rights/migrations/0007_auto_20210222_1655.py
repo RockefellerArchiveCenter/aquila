@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='rightsshell',
             name='rights_basis',
-            field=models.CharField(choices=[('Copyright', 'Copyright'), ('Statute', 'Statute'), ('License', 'License'), ('Policy', 'Policy'), ('Donor', 'Donor'), ('Other', 'Other')], max_length=64),
+            field=models.CharField(choices=[('Copyright', 'Copyright'), ('Statute', 'Statute'), ('License', 'License'), ('Policy', 'Policy'), ('Donor', 'Donor')], max_length=64),
         ),
     ]

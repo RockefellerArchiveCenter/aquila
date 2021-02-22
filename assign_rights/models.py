@@ -12,7 +12,6 @@ class RightsShell(models.Model):
         ("License", "License"),
         ("Policy", "Policy"),
         ("Donor", "Donor"),
-        ("Other", "Other"),
     )
     rights_basis = models.CharField(choices=RIGHTS_BASIS_CHOICES, max_length=64)
     PREMIS_COPYRIGHT_STATUSES = (
