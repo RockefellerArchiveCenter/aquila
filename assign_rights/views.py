@@ -96,6 +96,10 @@ class RightsShellUpdateView(PageTitleMixin, EditMixin, UpdateView):
             form_cls = StatuteForm
         elif rights_basis == "License":
             form_cls = LicenseForm
+        elif rights_basis == "Policy":
+            form_cls = OtherForm
+        elif rights_basis == "Donor":
+            form_cls = OtherForm
         else:
             form_cls = OtherForm
         return form_cls
