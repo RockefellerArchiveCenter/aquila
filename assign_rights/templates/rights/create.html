@@ -17,6 +17,12 @@
     <div v-if="selected==license">
         <div>{{ license_form | crispy }}</div>
     </div>
+    <div v-if="selected==policy">
+        <div>{{ other_form | crispy }}</div>
+    </div>
+    <div v-if="selected==donor">
+        <div>{{ other_form | crispy }}</div>
+    </div>
     <div v-if="selected==other">
         <div>{{ other_form | crispy }}</div>
     </div>
@@ -33,6 +39,8 @@
         copyright: 'Copyright',
         statute: 'Statute',
         license: 'License',
+        policy: 'Policy',
+        donor: 'Donor',
         other: 'Other',
     },
   });
