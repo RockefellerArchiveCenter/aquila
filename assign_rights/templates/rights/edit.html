@@ -5,6 +5,7 @@
 
 <form class="mb-3" action="." method="POST" accept-charset="utf-8" id="vue-form">
     {% csrf_token %}
+    <input type="hidden" name="rights_basis" value="{{form.rights_basis.value}}" />
     <div>
         {{ form.rights_basis | as_crispy_field }}
     </div>
