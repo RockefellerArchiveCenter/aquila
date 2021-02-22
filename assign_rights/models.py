@@ -10,6 +10,8 @@ class RightsShell(models.Model):
         ("Copyright", "Copyright"),
         ("Statute", "Statute"),
         ("License", "License"),
+        ("Policy", "Policy"),
+        ("Donor", "Donor"),
         ("Other", "Other"),
     )
     rights_basis = models.CharField(choices=RIGHTS_BASIS_CHOICES, max_length=64)
