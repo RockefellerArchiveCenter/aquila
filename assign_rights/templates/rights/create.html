@@ -23,9 +23,6 @@
     <div v-if="selected==donor">
         <div>{{ other_form | crispy }}</div>
     </div>
-    <div v-if="selected==other">
-        <div>{{ other_form | crispy }}</div>
-    </div>
     <h2>Rights Granted</h2>
     {{ rights_granted_form.management_form }}
     {{ rights_granted_form | crispy }}
@@ -41,7 +38,6 @@
         license: 'License',
         policy: 'Policy',
         donor: 'Donor',
-        other: 'Other',
     },
   });
 </script>
