@@ -8,7 +8,8 @@ from rest_framework.views import APIView
 
 from .assemble import RightsAssembler
 from .forms import (CopyrightForm, GroupingForm, LicenseForm, OtherForm,
-                    RightsGrantedFormSet, RightsShellForm, StatuteForm)
+                    RightsGrantedFormSet, RightsShellForm,
+                    RightsShellUpdateForm, StatuteForm)
 from .models import Grouping
 
 
@@ -38,7 +39,7 @@ class RightsShellListView(PageTitleMixin, LoginRequiredMixin, ListView):
 class RightsShellCreateView(PageTitleMixin, EditMixin, CreateView):
     """Create a rights shell. Only available to 'edit' group."""
     model = RightsShell
-    template_name = "rights/manage.html"
+    template_name = "rights/create.html"
     form_class = RightsShellForm
     page_title = "Create New Rights Shell"
 
@@ -70,28 +71,34 @@ class RightsShellCreateView(PageTitleMixin, EditMixin, CreateView):
             return super().form_invalid(form)
 
 
-class RightsShellDetailView(PageTitleMixin, LoginRequiredMixin, DetailView):
-    """View a rights shell."""
-    model = RightsShell
-    template_name = "rights/detail.html"
-
-    def get_page_title(self, context):
-        return "Rights Shell {}".format(context["object"].pk)
-
-
 class RightsShellUpdateView(PageTitleMixin, EditMixin, UpdateView):
     """Update a rights shell. Only available to 'edit' group."""
     model = RightsShell
-    template_name = "rights/manage.html"
-    form_class = RightsShellForm
+    template_name = "rights/edit.html"
+    form_class = RightsShellUpdateForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        form_cls = self.get_form_cls(context["object"].rights_basis)
         if self.request.POST:
-            context['rights_granted_form'] = RightsGrantedFormSet(self.request.POST, instance=self.object)
+            context["rights_granted_form"] = RightsGrantedFormSet(self.request.POST, instance=self.object)
+            context["basis_form"] = form_cls(self.request.POST, instance=self.object)
         else:
-            context['rights_granted_form'] = RightsGrantedFormSet(instance=self.object)
+            context["rights_granted_form"] = RightsGrantedFormSet(instance=self.object)
+            context["basis_form"] = form_cls(instance=self.object)
         return context
+
+    def get_form_cls(self, rights_basis):
+        """Returns the form class for a given rights basis."""
+        if rights_basis == "Copyright":
+            form_cls = CopyrightForm
+        elif rights_basis == "Statute":
+            form_cls = StatuteForm
+        elif rights_basis == "License":
+            form_cls = LicenseForm
+        else:
+            form_cls = OtherForm
+        return form_cls
 
     def form_valid(self, form):
         context = self.get_context_data(form=form)
@@ -106,6 +113,15 @@ class RightsShellUpdateView(PageTitleMixin, EditMixin, UpdateView):
 
     def get_page_title(self, context):
         return "Update Rights Shell {}".format(context["object"].pk)
+
+
+class RightsShellDetailView(PageTitleMixin, LoginRequiredMixin, DetailView):
+    """View a rights shell."""
+    model = RightsShell
+    template_name = "rights/detail.html"
+
+    def get_page_title(self, context):
+        return "Rights Shell {}".format(context["object"].pk)
 
 
 class GroupingListView(PageTitleMixin, LoginRequiredMixin, ListView):
