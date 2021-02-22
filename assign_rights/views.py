@@ -89,6 +89,7 @@ class RightsShellUpdateView(PageTitleMixin, EditMixin, UpdateView):
         return context
 
     def get_form_cls(self, rights_basis):
+        """Returns the form class for a given rights basis."""
         if rights_basis == "Copyright":
             form_cls = CopyrightForm
         elif rights_basis == "Statute":
