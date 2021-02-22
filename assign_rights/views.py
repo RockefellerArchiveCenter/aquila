@@ -83,6 +83,10 @@ class RightsShellUpdateView(PageTitleMixin, EditMixin, UpdateView):
             context['rights_granted_form'] = RightsGrantedFormSet(self.request.POST, instance=self.object)
             if context["object"].rights_basis == "Copyright":
                 context['basis_form'] = CopyrightForm(self.request.POST, instance=self.object)
+            elif context["object"].rights_basis == "Donor":
+                context['basis_form'] = OtherForm(self.request.POST, instance=self.object)
+            elif context["object"].rights_basis == "Policy":
+                context['basis_form'] = OtherForm(self.request.POST, instance=self.object)
             elif context["object"].rights_basis == "Other":
                 context['basis_form'] = OtherForm(self.request.POST, instance=self.object)
             elif context["object"].rights_basis == "Statute":
@@ -93,6 +97,10 @@ class RightsShellUpdateView(PageTitleMixin, EditMixin, UpdateView):
             context['rights_granted_form'] = RightsGrantedFormSet(instance=self.object)
             if context["object"].rights_basis == "Copyright":
                 context['basis_form'] = CopyrightForm(instance=self.object)
+            elif context["object"].rights_basis == "Donor":
+                context['basis_form'] = OtherForm(instance=self.object)
+            elif context["object"].rights_basis == "Policy":
+                context['basis_form'] = OtherForm(instance=self.object)
             elif context["object"].rights_basis == "Other":
                 context['basis_form'] = OtherForm(instance=self.object)
             elif context["object"].rights_basis == "Statute":
