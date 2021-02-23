@@ -48,7 +48,7 @@
       <div class="card mb-4">
         <div class="card-header">
           <h3 class="float-left">Rights Granted [[getIndexAmongVisibleRightsGranted(book_index) + 1]]</h3>
-          <button href="" v-on:click="removeRightsGranted($event, rights_granted_index)"
+          <button v-on:click="removeRightsGranted($event, rights_granted_index)"
             role="button" class="btn btn-danger btn-sm float-right">
             Remove
           </button>
@@ -134,8 +134,8 @@
     </div>
 
     <div class="mb-4">
-      <a href="" v-on:click="addNewRightsGranted($event)" role="button"
-         class="btn btn-outline-primary">Add New Rights Granted</a>
+      <button v-on:click="addNewRightsGranted($event)"
+              class="btn btn-outline-primary">Add New Rights Granted</button>
     </div>
 
     <button type="submit" class="btn btn-primary">Save</button>
