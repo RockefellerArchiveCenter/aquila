@@ -16,7 +16,8 @@
         <main class="content">
           <div class="row">
             <div class="col-sm">
-              <h1 class="text-center">{% block h1_title %}{{page_title}}{% endblock %}</h1>
+              <h1 class="float-left">{% block h1_title %}{{page_title}}{% endblock %}</h1>
+              {% block header_button %}{% endblock %}
             </div>
           </div>
           <div class="row">
