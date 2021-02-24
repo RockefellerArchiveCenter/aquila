@@ -105,7 +105,7 @@ class RightsGrantedForm(ModelForm):
 RightsGrantedFormSet = inlineformset_factory(
     RightsShell,
     RightsGranted,
-    extra=1,
+    extra=0,
     form=RightsGrantedForm,
     can_delete=False
 )
