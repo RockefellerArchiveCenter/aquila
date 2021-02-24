@@ -1,5 +1,3 @@
-from assign_rights.mixins.authmixins import EditMixin
-from assign_rights.models import RightsShell
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
@@ -10,7 +8,8 @@ from .assemble import RightsAssembler
 from .forms import (CopyrightForm, GroupingForm, LicenseForm, OtherForm,
                     RightsGrantedFormSet, RightsShellForm,
                     RightsShellUpdateForm, StatuteForm)
-from .models import Grouping
+from .mixins.authmixins import EditMixin
+from .models import Grouping, RightsGranted, RightsShell
 
 
 class PageTitleMixin(object):
@@ -46,6 +45,8 @@ class RightsShellCreateView(PageTitleMixin, EditMixin, CreateView):
     def get_context_data(self, **kwargs):
         """Load specific rights basis form based on logic in rights create template. Returns subclass of RightsShellForm"""
         context = super().get_context_data(**kwargs)
+        context["act_choices"] = RightsGranted.ACT_CHOICES
+        context["restriction_choices"] = RightsGranted.RESTRICTION_CHOICES
         if self.request.POST:
             context['rights_granted_form'] = RightsGrantedFormSet(self.request.POST)
             context['copyright_form'] = CopyrightForm(self.request.POST)
@@ -87,6 +88,8 @@ class RightsShellUpdateView(PageTitleMixin, EditMixin, UpdateView):
         """Loads main rights basis form as well as inline formsets for rights granted or restricted."""
         context = super().get_context_data(**kwargs)
         form_cls = self.get_form_cls(context["object"].rights_basis)
+        context["act_choices"] = RightsGranted.ACT_CHOICES
+        context["restriction_choices"] = RightsGranted.RESTRICTION_CHOICES
         if self.request.POST:
             context["rights_granted_form"] = RightsGrantedFormSet(self.request.POST, instance=self.object)
             context["basis_form"] = form_cls(self.request.POST, instance=self.object)
