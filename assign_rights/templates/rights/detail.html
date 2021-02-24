@@ -14,13 +14,13 @@
 <dl class="row">
   <dt class="col-sm-2">Basis</dt>
   <dd class="col-sm-10">{{ rightsshell.rights_basis }}</dd>
-  {% if rightshell.rights_basis == Copyright %}
+  {% if rightsshell.get_rights_basis_display == "Copyright" %}
   <dt class="col-sm-2">Copyright Status</dt>
   <dd class="col-sm-10">{{ rightsshell.copyright_status }}</dd>
-  {% elif rightshell.rights_basis == License %}
+  {% elif rightsshell.get_rights_basis_display == "License" %}
   <dt class="col-sm-2">License Terms</dt>
   <dd class="col-sm-10">{{ rightsshell.license_terms }}</dd>
-  {% elif rightshell.rights_basis == Statute %}
+  {% elif rightsshell.get_rights_basis_display == "Statute" %}
   <dt class="col-sm-2">Statute Citation</dt>
   <dd class="col-sm-10">{{ rightsshell.statute_citation }}</dd>
   {% endif %}
