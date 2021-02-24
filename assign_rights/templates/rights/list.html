@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% load has_group %}
 
-{% block content %}
-{% if request.user|has_group:"edit" %}
-<a class="btn btn-primary mb-2" href="{% url 'rights-create' %}">Create new rights shell</a>
-{% endif %}
+{% block header_button %}
+  {% if request.user|has_group:"edit" %}
+  <a class="btn btn-primary mt-2 float-right" href="{% url 'rights-create' %}">Create new rights shell</a>
+  {% endif %}
+{% endblock %}
 
+{% block content %}
 <table class="table">
   <thead>
     <tr>
@@ -21,7 +23,7 @@
       <td><a href=' {{ rightsshell.get_absolute_url }}'>{{ rightsshell.pk }}</a></td>
       <td>{{ rightsshell.rights_basis }}</td>
       <td>{{ rightsshell.note }}</td>
-      <td>{% for acts in rightsshell.rightsgranted_set.all %} {{acts.act}} - {{acts.restriction}} {% if not forloop.last %}<br/>{% endif %}{% endfor %}</td>
+      <td>{% for rights_granted in rightsshell.rightsgranted_set.all %}{{rights_granted}}{% if not forloop.last %}<br/>{% endif %}{% endfor %}</td>
     </tr>
     {% endfor %}
   </tbody>

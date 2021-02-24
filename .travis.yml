@@ -12,6 +12,7 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   - cp ${APPLICATION_NAME}/config.py.example ${APPLICATION_NAME}/config.py
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker-compose build
   - docker-compose up -d
   - docker-compose exec ${SERVICE_NAME} pip install pre-commit

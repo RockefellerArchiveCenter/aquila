@@ -2,7 +2,7 @@
 
 <header class="main-header">
 
-  <nav class="navbar navbar-expand-sm navbar-dark bg-dark mb-2" role="navigation">
+  <nav class="navbar navbar-expand-sm navbar-dark bg-dark mb-5" role="navigation">
     <a class="navbar-brand" href="/">Aquila</a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,14 +18,13 @@
           <a class="nav-link text-light" href="{% url 'rights-list' %}">Rights Shells</a>
         </li>
       </ul>
-        {% if request.user.is_authenticated %}
-          <div class="navbar-nav my-lg-0">
-            <span class="nav-item">
-              <a class="nav-link text-light" href="{% url 'logout' %}">Log out {{request.user.username}}</a>
-            </span>
-          </div>
-        {% endif %}
-      </div>
+      {% if request.user.is_authenticated %}
+        <div class="navbar-nav my-lg-0">
+          <span class="nav-item">
+            <a class="nav-link text-light" href="{% url 'logout' %}">Log out {{request.user.username}}</a>
+          </span>
+        </div>
+      {% endif %}
     </div>
   </nav>
 
