@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<form class="mb-3" action="." method="POST" accept-charset="utf-8" id="vue-form">
+    {% csrf_token %}
+    {% if object.id %}
+    <input type="hidden" name="rights_basis" value="{{form.rights_basis.value}}" />
+    {% endif %}
+    <div>
+      {{ form.rights_basis | as_crispy_field }}
+    </div>
+    {% if basis_form %}
+      <div>{{ basis_form | crispy }}</div>
+    {% else %}
+      <div v-if="selected==copyright">{{ copyright_form | crispy }}</div>
+      <div v-if="selected==statute">{{ statute_form | crispy }}</div>
+      <div v-if="selected==license">{{ license_form | crispy }}</div>
+      <div v-if="selected==policy">{{ other_form | crispy }}</div>
+      <div v-if="selected==donor">{{ other_form | crispy }}</div>
+    {% endif %}
+    <h2>Rights Granted</h2>
+    <input type="hidden"
+           v-bind:name="'rightsgranted_set-TOTAL_FORMS'"
+           v-bind:id="'id_rightsgranted_set-TOTAL_FORMS'"
+           v-model="getTotalRightsGrantedForms()">
+    <input type="hidden"
+           v-bind:name="'rightsgranted_set-INITIAL_FORMS'"
+           v-bind:id="'id_rightsgranted_set-INITIAL_FORMS'"
+           v-model="getInitialRightsGrantedForms()">
+
+    <div v-for="(rights_granted, rights_granted_index) in rights_basis.rights_granted"
+          v-show="rights_granted.marked_for_delete !== true">
+
+      <span v-if="rights_granted.id">
+        <input type="hidden"
+               v-model="rights_granted.marked_for_delete"
+               v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-DELETE'"
+               v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-DELETE'">
+
+        <input type="hidden"
+               v-model="rights_granted.id"
+               v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-id'"
+               v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-id'">
+      </span>
+
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3 class="float-left">Rights Granted [[getIndexAmongVisibleRightsGranted(rights_granted_index) + 1]]</h3>
+          <button v-on:click="removeRightsGranted($event, rights_granted_index)"
+            role="button" class="btn btn-danger btn-sm float-right">
+            Remove
+          </button>
+          </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="form-group col-5">
+              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-act'">Act *</label>
+              <select v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-act'"
+                      v-model="rights_granted.act"
+                      v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-act'"
+                      class="form-control">
+                {% for value, text in rights_granted_form.forms.0.act.field.choices %}
+                <option value={{value}}>{{text}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group col-5">
+              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction'">Restriction *</label>
+              <select v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction'"
+                      v-model="rights_granted.restriction"
+                      v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction'"
+                      class="form-control">
+                      {% for value, text in rights_granted_form.forms.0.restriction.field.choices %}
+                      <option value={{value}}>{{text}}</option>
+                      {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-5">
+              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'">Start Date</label>
+              <input type="date"
+                      v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'"
+                      v-model="rights_granted.start_date"
+                      v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'"
+                      class="form-control">
+            </div>
+            <div class="form-group col-5">
+              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'">Start Date Period</label>
+              <input type="number"
+                     v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'"
+                     v-model="rights_granted.start_date_period"
+                     v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'"
+                     class="form-control">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-5">
+              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'">End Date</label>
+              <input type="date"
+                      v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'"
+                      v-model="rights_granted.restriction"
+                      v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'"
+                      class="form-control">
+            </div>
+            <div class="form-group col-5">
+              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'">End Date Period</label>
+              <input type="number"
+                     v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'"
+                     v-model="rights_granted.end_date_period"
+                     v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'"
+                     class="form-control">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col">
+              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-note'">Note</label>
+              <textarea v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-note'"
+                        v-model="rights_granted.note"
+                        v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-note'"
+                        class="form-control"
+                        rows="5">
+              </textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="mb-4">
+      <button v-on:click="addNewRightsGranted($event)"
+              class="btn btn-outline-primary">Add New Rights Granted</button>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+<script type="text/javascript">
+  var rights_basis = {
+    id:  {% if not form.rights_basis.id.value %}
+        null
+    {% else %}
+        {{ form.rights_basis.id.value }}
+    {% endif %},
+    marked_for_delete: false,
+    rights_granted: [
+      {% if rights_granted_form %}
+        {% for nested_form in rights_granted_form %}
+          {
+            id:  {% if not nested_form.id.value %}
+                null
+            {% else %}
+                {{ nested_form.id.value }}
+            {% endif %},
+            rights_granted_formset_index: {{ forloop.counter0 }},
+            marked_for_delete: false,
+            act: '{{ nested_form.act.value|default_if_none:"" }}',
+            restriction: '{{ nested_form.restriction.value|default_if_none:"" }}',
+            start_date: '{{ nested_form.start_date.value|default_if_none:"" }}',
+            end_date: '{{ nested_form.end_date.value|default_if_none:"" }}',
+            start_date_period: '{{ nested_form.start_date_period.value|default_if_none:"" }}',
+            end_date_period: '{{ nested_form.end_date_period.value|default_if_none:"" }}',
+            end_date_open: '{{ nested_form.end_date_open.value|default_if_none:"" }}',
+            note: '{{ nested_form.note.value|default_if_none:"" }}',
+        },
+        {% endfor %}
+      {% endif %}
+    ]
+  };
+  let app = new Vue({
+    delimiters: ['[[', ']]'],
+    el: "#vue-form",
+    data: {
+      selected: '',
+      copyright: 'Copyright',
+      statute: 'Statute',
+      license: 'License',
+      policy: 'Policy',
+      donor: 'Donor',
+      rights_basis: rights_basis,
+    },
+    methods: {
+      getIndexAmongVisibleRightsGranted: function (rights_granted_index) {
+        return this.$data.rights_basis.rights_granted.filter((r, i) => i < rights_granted_index && !r.marked_for_delete).length
+      },
+      getTotalVisibleRightsGranted: function () {
+        return this.$data.rights_basis.rights_granted.filter(r => !r.marked_for_delete).length;
+      },
+      getInitialRightsGrantedForms: function () {
+        return this.$data.rights_basis.rights_granted.filter(r => !!r.id).length;
+      },
+      getTotalRightsGrantedForms: function () {
+        var rights_granted = this.$data.rights_basis.rights_granted;
+        return rights_granted && rights_granted.length || 0;
+      },
+      addNewRightsGranted: function (event) {
+        event.preventDefault();
+        const default_new_rights_granted = {
+            book_formset_index: this.getTotalRightsGrantedForms(),
+        };
+        this.$data.rights_basis.rights_granted.push(default_new_rights_granted);
+      },
+      removeRightsGranted: function (event, rights_granted_index) {
+        event.preventDefault();
+        if (this.$data.rights_basis.rights_granted[rights_granted_index].id) {
+            Vue.set(this.rights_basis.rights_granted[rights_granted_index], 'marked_for_delete', true);
+        } else {
+            this.$data.rights_basis.rights_granted.splice(rights_granted_index, 1)
+        }
+      },
+    }
+  });
+</script>
+{% endblock %}

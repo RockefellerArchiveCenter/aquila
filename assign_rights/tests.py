@@ -82,7 +82,10 @@ class TestViews(TestCase):
             self.assertEqual(response.status_code, 200)
 
     def test_grouping_form(self):
-        form_data = {"title": random_string(10), "description": random_string(25), "rights_shells": [random.choice(RightsShell.objects.all())]}
+        form_data = {
+            "title": random_string(10),
+            "description": random_string(25),
+            "rights_shells": [random.choice(RightsShell.objects.all())]}
         form = GroupingForm(data=form_data)
         self.assertTrue(form.is_valid(), form.errors)
         for field in ["title", "description", "rights_shells"]:
@@ -107,7 +110,11 @@ class TestViews(TestCase):
             self.assertEqual(response.status_code, 200)
 
     def test_rightsshell_form(self):
-        form_data = {"rights_basis": random.choice(["Copyright", "Statute", "License", "Other"]), "note": random_string(), "start_date_period": random.randint(0, 10), "end_date_period": random.randint(0, 10)}
+        form_data = {
+            "rights_basis": random.choice([b[1] for b in RightsShell.RIGHTS_BASIS_CHOICES]),
+            "note": random_string(),
+            "start_date_period": random.randint(0, 10),
+            "end_date_period": random.randint(0, 10)}
         form = RightsShellForm(data=form_data)
         self.assertTrue(form.is_valid(), form.errors)
         for field in ["rights_basis"]:
