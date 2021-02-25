@@ -14,10 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from assign_rights.views import (AquilaLoginView, GroupingCreateView,
-                                 GroupingDetailView, GroupingListView,
-                                 GroupingUpdateView, RightsAssemblerView,
-                                 RightsShellCreateView, RightsShellDetailView,
-                                 RightsShellListView, RightsShellUpdateView)
+                                 GroupingDeleteView, GroupingDetailView,
+                                 GroupingListView, GroupingUpdateView,
+                                 RightsAssemblerView, RightsShellCreateView,
+                                 RightsShellDetailView, RightsShellListView,
+                                 RightsShellUpdateView)
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.urls import include, path
@@ -29,6 +30,7 @@ urlpatterns = [
     path('groupings/<int:pk>/', GroupingDetailView.as_view(), name="groupings-detail"),
     path('groupings/create/', GroupingCreateView.as_view(), name="groupings-create"),
     path('groupings/<int:pk>/update/', GroupingUpdateView.as_view(), name="groupings-update"),
+    path('groupings/<int:pk>/delete/', GroupingDeleteView.as_view(), name="groupings-delete"),
     path('oauth2/', include('django_auth_adfs.urls')),
     path('login/', AquilaLoginView.as_view(template_name="users/login.html"), name="login"),
     path('logout/', LogoutView.as_view(next_page="/login"), name="logout"),

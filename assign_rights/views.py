@@ -1,8 +1,8 @@
-from assign_rights.mixins.authmixins import EditMixin
-from assign_rights.models import RightsShell
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
-from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.urls import reverse_lazy
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  UpdateView)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -10,7 +10,8 @@ from .assemble import RightsAssembler
 from .forms import (CopyrightForm, GroupingForm, LicenseForm, OtherForm,
                     RightsGrantedFormSet, RightsShellForm,
                     RightsShellUpdateForm, StatuteForm)
-from .models import Grouping
+from .mixins.authmixins import DeleteMixin, EditMixin
+from .models import Grouping, RightsShell
 
 
 class PageTitleMixin(object):
@@ -163,6 +164,13 @@ class GroupingUpdateView(PageTitleMixin, EditMixin, UpdateView):
 
     def get_page_title(self, context):
         return "Update {}".format(context["object"].title)
+
+
+class GroupingDeleteView(PageTitleMixin, DeleteMixin, DeleteView):
+    model = Grouping
+    success_url = reverse_lazy("groupings-list")
+    template_name = "groupings/confirm_delete.html"
+    page_title = "Confirm Delete"
 
 
 class AquilaLoginView(PageTitleMixin, LoginView):
