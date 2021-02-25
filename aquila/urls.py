@@ -17,8 +17,8 @@ from assign_rights.views import (AquilaLoginView, GroupingCreateView,
                                  GroupingDeleteView, GroupingDetailView,
                                  GroupingListView, GroupingUpdateView,
                                  RightsAssemblerView, RightsShellCreateView,
-                                 RightsShellDetailView, RightsShellListView,
-                                 RightsShellUpdateView)
+                                 RightsShellDeleteView, RightsShellDetailView,
+                                 RightsShellListView, RightsShellUpdateView)
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.urls import include, path
@@ -37,5 +37,6 @@ urlpatterns = [
     path('rights/', RightsShellListView.as_view(), name='rights-list'),
     path('rights/create/', RightsShellCreateView.as_view(), name='rights-create'),
     path('rights/<int:pk>/update/', RightsShellUpdateView.as_view(), name='rights-update'),
+    path('rights/<int:pk>/delete/', RightsShellDeleteView.as_view(), name='rights-delete'),
     path('rights/<int:pk>/', RightsShellDetailView.as_view(), name='rights-detail'),
 ]

@@ -123,6 +123,14 @@ class RightsShellUpdateView(PageTitleMixin, EditMixin, UpdateView):
         return "Update Rights Shell {}".format(context["object"].pk)
 
 
+class RightsShellDeleteView(PageTitleMixin, DeleteMixin, DeleteView):
+    """Delete a rights shell."""
+    model = RightsShell
+    template_name = "rights/confirm_delete.html"
+    page_title = "Confirm Delete"
+    success_url = reverse_lazy("rights-list")
+
+
 class RightsShellDetailView(PageTitleMixin, LoginRequiredMixin, DetailView):
     """View a rights shell."""
     model = RightsShell
@@ -147,6 +155,14 @@ class GroupingCreateView(PageTitleMixin, EditMixin, CreateView):
     page_title = "Create New Grouping"
 
 
+class GroupingDeleteView(PageTitleMixin, DeleteMixin, DeleteView):
+    """Delete a grouping"""
+    model = Grouping
+    success_url = reverse_lazy("groupings-list")
+    template_name = "groupings/confirm_delete.html"
+    page_title = "Confirm Delete"
+
+
 class GroupingDetailView(PageTitleMixin, LoginRequiredMixin, DetailView):
     """View a grouping."""
     model = Grouping
@@ -164,13 +180,6 @@ class GroupingUpdateView(PageTitleMixin, EditMixin, UpdateView):
 
     def get_page_title(self, context):
         return "Update {}".format(context["object"].title)
-
-
-class GroupingDeleteView(PageTitleMixin, DeleteMixin, DeleteView):
-    model = Grouping
-    success_url = reverse_lazy("groupings-list")
-    template_name = "groupings/confirm_delete.html"
-    page_title = "Confirm Delete"
 
 
 class AquilaLoginView(PageTitleMixin, LoginView):
