@@ -9,3 +9,11 @@
     background-color: #004FA3;
     border-color: #004FA3;
 }
+
+.content a {
+  text-decoration: underline;
+}
+
+a.btn {
+  text-decoration: none;
+}

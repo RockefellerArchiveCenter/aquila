@@ -87,6 +87,9 @@ class RightsGranted(models.Model):
     created = models.DateTimeField(auto_now=True)
     last_modified = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return "{} - {}".format(self.get_act_display(), self.get_restriction_display())
+
 
 class Grouping(models.Model):
     title = models.CharField(max_length=255)

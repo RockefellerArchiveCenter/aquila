@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% load has_group %}
 
-{% block content %}
-{% if request.user|has_group:"edit" %}
-<a class="btn btn-primary mb-2" href="{% url 'groupings-create' %}">Create new grouping</a>
-{% endif %}
+{% block header_button %}
+  {% if request.user|has_group:"edit" %}
+  <a class="btn btn-primary mt-2 float-right" href="{% url 'groupings-create' %}">Create new grouping</a>
+  {% endif %}
+{% endblock %}
 
+{% block content %}
 <table class="table">
   <thead>
     <tr>
