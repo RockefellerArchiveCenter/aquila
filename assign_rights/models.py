@@ -25,7 +25,7 @@ class RightsShell(models.Model):
         blank=True, null=True, default=datetime.now
     )
     jurisdiction = models.CharField(max_length=2, blank=True, null=True)
-    note = models.TextField()
+    note = models.TextField(blank=True, null=True)
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     start_date_period = models.PositiveSmallIntegerField(blank=True, null=True)
@@ -42,6 +42,13 @@ class RightsShell(models.Model):
     def __str__(self):
         start = "0 years after creation"
         end = "open"
+        prefixes = [self.rights_basis]
+        if self.rights_basis == "Copyright":
+            prefixes += [self.copyright_status, self.jurisdiction]
+        elif self.rights_basis == "License":
+            prefixes.append(self.license_terms)
+        elif self.rights_basis == "Statute":
+            prefixes += [self.statute_citation, self.jurisdiction]
         if self.start_date:
             start = self.start_date
         elif self.start_date_period:
@@ -50,7 +57,7 @@ class RightsShell(models.Model):
             end = self.end_date
         elif self.end_date_period:
             end = "{} years after creation".format(self.end_date_period)
-        return "{}: {} ({} until {})".format(self.rights_basis, self.note, start, end)
+        return "{} ({} until {})".format(" / ".join(prefixes), start, end)
 
 
 class RightsGranted(models.Model):
