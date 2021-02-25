@@ -128,7 +128,7 @@ class RightsShellDetailView(PageTitleMixin, LoginRequiredMixin, DetailView):
     template_name = "rights/detail.html"
 
     def get_page_title(self, context):
-        return "Rights Shell {}".format(context["object"].pk)
+        return str(context["object"])
 
 
 class GroupingListView(PageTitleMixin, LoginRequiredMixin, ListView):
