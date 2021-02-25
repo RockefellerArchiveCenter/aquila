@@ -1,7 +1,29 @@
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Div, Layout
 from django.forms import (ModelForm, Select, Textarea, TextInput,
                           inlineformset_factory)
 
 from .models import Grouping, RightsGranted, RightsShell
+
+
+class RightsShellCommonLayout(Layout):
+    """Form layout for fields used across all RightsShellForms."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(
+            Div(
+                Div("determination_date", css_class="col"), css_class="row"),
+            Div(
+                Div("start_date", css_class="col-5"),
+                Div("start_date_period", css_class="col-2"), css_class="row"),
+            Div(
+                Div("end_date", css_class="col-5"),
+                Div("end_date_period", css_class="col-2"),
+                Div("end_date_open", css_class="form-check rights-basis__checkbox"), css_class="row"),
+            Div(
+                Div("note", css_class="form-group col"),
+                css_class="row")
+        )
 
 
 class GroupingForm(ModelForm):
@@ -11,6 +33,12 @@ class GroupingForm(ModelForm):
 
 
 class RightsShellForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_tag = False
+        self.helper.disable_csrf = True
+
     class Meta:
         model = RightsShell
         fields = [
@@ -40,6 +68,15 @@ class RightsShellUpdateForm(RightsShellForm):
 
 
 class CopyrightForm(RightsShellForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper.layout = Layout(
+            Div(
+                Div('copyright_status', css_class="col-6"),
+                Div('jurisdiction', css_class="col-6"), css_class="row"),
+            RightsShellCommonLayout(),
+        )
+
     class Meta(RightsShellForm.Meta):
         exclude = (
             'rights_basis',
@@ -53,6 +90,12 @@ class CopyrightForm(RightsShellForm):
 
 
 class OtherForm(RightsShellForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper.layout = Layout(
+            RightsShellCommonLayout(),
+        )
+
     class Meta(RightsShellForm.Meta):
         exclude = (
             'rights_basis',
@@ -64,6 +107,14 @@ class OtherForm(RightsShellForm):
 
 
 class LicenseForm(RightsShellForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper.layout = Layout(
+            Div(
+                Div('license_terms', css_class="col"), css_class="row"),
+            RightsShellCommonLayout()
+        )
+
     class Meta(RightsShellForm.Meta):
         exclude = (
             'rights_basis',
@@ -74,6 +125,16 @@ class LicenseForm(RightsShellForm):
 
 
 class StatuteForm(RightsShellForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper.layout = Layout(
+            Div(
+                Div('jurisdiction', css_class="col"), css_class="row"),
+            Div(
+                Div('statute_citation', css_class="col"), css_class="row"),
+            RightsShellCommonLayout(),
+        )
+
     class Meta(RightsShellForm.Meta):
         exclude = (
             'rights_basis',

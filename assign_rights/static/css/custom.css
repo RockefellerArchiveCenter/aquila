@@ -19,6 +19,6 @@ a.btn {
 }
 
 
-.rights-granted__checkbox {
+.rights-granted__checkbox, .rights-basis__checkbox {
   margin-top: 2.5rem;
 }

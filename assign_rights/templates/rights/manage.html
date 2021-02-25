@@ -14,11 +14,11 @@
     {% if basis_form %}
       <div>{{ basis_form | crispy }}</div>
     {% else %}
-      <div v-if="selected==copyright">{{ copyright_form | crispy }}</div>
-      <div v-if="selected==statute">{{ statute_form | crispy }}</div>
-      <div v-if="selected==license">{{ license_form | crispy }}</div>
-      <div v-if="selected==policy">{{ other_form | crispy }}</div>
-      <div v-if="selected==donor">{{ other_form | crispy }}</div>
+      <div v-if="selected==copyright">{% crispy copyright_form copyright_form.helper %}</div>
+      <div v-if="selected==statute">{% crispy statute_form statute_form.helper %}</div>
+      <div v-if="selected==license">{% crispy license_form license_form.helper %}</div>
+      <div v-if="selected==policy">{% crispy other_form other_form.helper %}</div>
+      <div v-if="selected==donor">{% crispy other_form other_form.helper %}</div>
     {% endif %}
     <h2>Rights Granted</h2>
     <input type="hidden"
