@@ -36,6 +36,7 @@ class RightsShellForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
+        self.helper.field_template = "forms/custom_field.html"
         self.helper.form_tag = False
         self.helper.disable_csrf = True
 
