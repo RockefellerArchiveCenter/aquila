@@ -90,7 +90,7 @@
                       v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'"
                       class="form-control">
             </div>
-            <div class="form-group col-5">
+            <div class="form-group col-2">
               <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'">Start Date Period</label>
               <input type="number"
                      v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'"
@@ -109,13 +109,22 @@
                       v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'"
                       class="form-control">
             </div>
-            <div class="form-group col-5">
+            <div class="form-group col-2">
               <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'">End Date Period</label>
               <input type="number"
                      v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'"
                      v-model="rights_granted.end_date_period"
                      v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'"
                      class="form-control">
+            </div>
+            <div class="form-check rights-granted__checkbox">
+              <input type="checkbox"
+                     v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_open'"
+                     v-model="rights_granted.end_date_period"
+                     v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_open'"
+                     class="form-check-input">
+             <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_open'"
+                    class="form-check-label">End Date Open?</label>
             </div>
           </div>
 
