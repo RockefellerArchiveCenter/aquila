@@ -57,7 +57,7 @@ class RightsShell(models.Model):
             end = self.end_date
         elif self.end_date_period:
             end = "{} years after creation".format(self.end_date_period)
-        return "{} ({} until {})".format(" / ".join(prefixes), start, end)
+        return "{} ({} until {})".format(" / ".join([p for p in prefixes if p]), start, end)
 
 
 class RightsGranted(models.Model):
