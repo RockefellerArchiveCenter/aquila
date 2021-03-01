@@ -114,7 +114,10 @@ class TestViews(TestCase):
             "rights_basis": random.choice([b[1] for b in RightsShell.RIGHTS_BASIS_CHOICES]),
             "note": random_string(),
             "start_date_period": random.randint(0, 10),
-            "end_date_period": random.randint(0, 10)}
+            "end_date_period": random.randint(0, 10),
+            "rights_begin": "start_date_period",
+            "rights_end": "end_date_period",
+        }
         form = RightsShellForm(data=form_data)
         self.assertTrue(form.is_valid(), form.errors)
         for field in ["rights_basis"]:
