@@ -57,7 +57,7 @@ class RightsShellForm(ModelForm):
             'statute_citation'
         ]
         widgets = {
-            'rights_basis': Select(attrs={'v-model': 'selected', }),
+            'rights_basis': Select(attrs={'v-model': 'rightsBasisSelected', }),
         }
 
 

@@ -14,11 +14,11 @@
     {% if basis_form %}
       <div>{{ basis_form | crispy }}</div>
     {% else %}
-      <div v-if="selected==copyright">{% crispy copyright_form copyright_form.helper %}</div>
-      <div v-if="selected==statute">{% crispy statute_form statute_form.helper %}</div>
-      <div v-if="selected==license">{% crispy license_form license_form.helper %}</div>
-      <div v-if="selected==policy">{% crispy other_form other_form.helper %}</div>
-      <div v-if="selected==donor">{% crispy other_form other_form.helper %}</div>
+      <div v-if="rightsBasisSelected=='Copyright'">{% crispy copyright_form copyright_form.helper %}</div>
+      <div v-if="rightsBasisSelected=='Statute'">{% crispy statute_form statute_form.helper %}</div>
+      <div v-if="rightsBasisSelected=='License'">{% crispy license_form license_form.helper %}</div>
+      <div v-if="rightsBasisSelected=='Policy'">{% crispy other_form other_form.helper %}</div>
+      <div v-if="rightsBasisSelected=='Donor'">{% crispy other_form other_form.helper %}</div>
     {% endif %}
     <h2>Rights Granted</h2>
     <input type="hidden"
@@ -183,12 +183,7 @@
     delimiters: ['[[', ']]'],
     el: "#vue-form",
     data: {
-      selected: '',
-      copyright: 'Copyright',
-      statute: 'Statute',
-      license: 'License',
-      policy: 'Policy',
-      donor: 'Donor',
+      rightsBasisSelected: '',
       rights_basis: rights_basis,
     },
     methods: {
