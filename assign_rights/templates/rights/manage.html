@@ -12,7 +12,7 @@
       {{ form.rights_basis | as_crispy_field }}
     </div>
     {% if basis_form %}
-      <div>{{ basis_form | crispy }}</div>
+      <div>{% crispy basis_form basis_form.helper %}</div>
     {% else %}
       <div v-if="rightsBasisSelected=='Copyright'">{% crispy copyright_form copyright_form.helper %}</div>
       <div v-if="rightsBasisSelected=='Statute'">{% crispy statute_form statute_form.helper %}</div>
@@ -207,6 +207,8 @@
     data: {
       rightsBasisSelected: '',
       rights_basis: rights_basis,
+      rightsBegin: {% if basis_form.start_date.value %}'start_date'{% elif basis_form.start_date_period.value %}'start_date_period'{% else %}''{% endif %},
+      rightsEnd: {% if basis_form.end_date.value %}'end_date'{% elif basis_form.end_date_period.value %}'end_date_period'{% elif basis_form.end_date_open.value %}'end_date_open'{% else %}''{% endif %},
     },
     methods: {
       getIndexAmongVisibleRightsGranted: function (rights_granted_index) {
