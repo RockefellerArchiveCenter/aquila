@@ -31,7 +31,7 @@
            v-model="getInitialRightsGrantedForms()">
 
     <div v-for="(rights_granted, rights_granted_index) in rights_basis.rights_granted"
-          v-show="rights_granted.marked_for_delete !== true">
+         v-show="rights_granted.marked_for_delete !== true">
 
       <span v-if="rights_granted.id">
         <input type="hidden"
@@ -61,7 +61,8 @@
                       v-model="rights_granted.act"
                       v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-act'"
                       class="form-control">
-                {% for value, text in rights_granted_form.forms.0.act.field.choices %}
+                <option value="">-------</option>
+                {% for value, text in act_choices %}
                 <option value={{value}}>{{text}}</option>
                 {% endfor %}
               </select>
@@ -72,9 +73,10 @@
                       v-model="rights_granted.restriction"
                       v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction'"
                       class="form-control">
-                      {% for value, text in rights_granted_form.forms.0.restriction.field.choices %}
-                      <option value={{value}}>{{text}}</option>
-                      {% endfor %}
+                <option value="">-------</option>
+                {% for value, text in restriction_choices %}
+                <option value={{value}}>{{text}}</option>
+                {% endfor %}
               </select>
             </div>
           </div>
@@ -152,11 +154,7 @@
       {% if rights_granted_form %}
         {% for nested_form in rights_granted_form %}
           {
-            id:  {% if not nested_form.id.value %}
-                null
-            {% else %}
-                {{ nested_form.id.value }}
-            {% endif %},
+            id:  {% if not nested_form.id.value %}null{% else %}{{ nested_form.id.value }}{% endif %},
             rights_granted_formset_index: {{ forloop.counter0 }},
             marked_for_delete: false,
             act: '{{ nested_form.act.value|default_if_none:"" }}',
@@ -201,16 +199,16 @@
       addNewRightsGranted: function (event) {
         event.preventDefault();
         const default_new_rights_granted = {
-            book_formset_index: this.getTotalRightsGrantedForms(),
+          rights_granted_formset_index: this.getTotalRightsGrantedForms(),
         };
         this.$data.rights_basis.rights_granted.push(default_new_rights_granted);
       },
       removeRightsGranted: function (event, rights_granted_index) {
         event.preventDefault();
         if (this.$data.rights_basis.rights_granted[rights_granted_index].id) {
-            Vue.set(this.rights_basis.rights_granted[rights_granted_index], 'marked_for_delete', true);
+          Vue.set(this.$data.rights_basis.rights_granted[rights_granted_index], 'marked_for_delete', true);
         } else {
-            this.$data.rights_basis.rights_granted.splice(rights_granted_index, 1)
+          this.$data.rights_basis.rights_granted.splice(rights_granted_index, 1)
         }
       },
     }

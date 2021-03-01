@@ -107,5 +107,5 @@ RightsGrantedFormSet = inlineformset_factory(
     RightsGranted,
     extra=0,
     form=RightsGrantedForm,
-    can_delete=False
+    can_delete=True
 )
