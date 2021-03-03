@@ -44,11 +44,11 @@ class RightsShell(models.Model):
         end = "open"
         prefixes = [self.rights_basis]
         if self.rights_basis == "Copyright":
-            prefixes += [self.copyright_status, self.jurisdiction]
+            prefixes.append(self.copyright_status)
         elif self.rights_basis == "License":
             prefixes.append(self.license_terms)
         elif self.rights_basis == "Statute":
-            prefixes += [self.statute_citation, self.jurisdiction]
+            prefixes.append(self.statute_citation)
         if self.start_date:
             start = self.start_date
         elif self.start_date_period:
