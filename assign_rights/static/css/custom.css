@@ -17,3 +17,8 @@
 a.btn {
   text-decoration: none;
 }
+
+
+.rights-granted__checkbox, .rights-basis__checkbox {
+  margin-top: 2.5rem;
+}
