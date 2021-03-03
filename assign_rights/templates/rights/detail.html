@@ -10,7 +10,7 @@
 <p class="lead">{{ rightsshell.note }}</p>
 {% endif %}
 
-<h3>Details</h3>
+<h2>Details</h2>
 <dl class="row">
   <dt class="col-sm-2">Basis</dt>
   <dd class="col-sm-10">{{ rightsshell.rights_basis }}</dd>
@@ -51,13 +51,13 @@
 </dl>
 
 {% if rightsshell.rightsgranted_set.all %}
-<h3>Rights Granted</h3>
+<h2>Rights Granted</h2>
 <div class="row">
 {% for rights_granted in rightsshell.rightsgranted_set.all %}
   <div class="col-6">
     <div class="card mb-4">
       <div class="card-body">
-        <h4>{{rights_granted}}</h4>
+        <h3>{{rights_granted}}</h3>
         {% if rights_granted.note %}
         <p class="lead">{{rights_granted.note}}</p>
         {% endif %}
