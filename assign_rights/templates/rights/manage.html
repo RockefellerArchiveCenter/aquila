@@ -188,8 +188,8 @@
             marked_for_delete: false,
             act: '{{ nested_form.act.value|default_if_none:"" }}',
             restriction: '{{ nested_form.restriction.value|default_if_none:"" }}',
-            restriction_begin: {% if nested_form.start_date.value %}'start_date'{% elif nested_form.start_date_period.value %}'start_date_period'{% else %}''{% endif %},
-            restriction_end: {% if nested_form.end_date.value %}'end_date'{% elif nested_form.end_date_period.value %}'end_date_period'{% elif nested_form.end_date_open.value %}'end_date_open'{% else %}''{% endif %},
+            restriction_begin: {% if nested_form.start_date.value %}'start_date'{% elif nested_form.start_date_period.value or nested_form.start_date_period.value == 0 %}'start_date_period'{% else %}''{% endif %},
+            restriction_end: {% if nested_form.end_date.value %}'end_date'{% elif nested_form.end_date_period.value or nested_form.end_date_period.value == 0 %}'end_date_period'{% elif nested_form.end_date_open.value %}'end_date_open'{% else %}''{% endif %},
             start_date: '{{ nested_form.start_date.value|date:"Y-m-d"|default_if_none:"" }}',
             end_date: '{{ nested_form.end_date.value|date:"Y-m-d"|default_if_none:"" }}',
             start_date_period: '{{ nested_form.start_date_period.value|default_if_none:"" }}',
@@ -207,8 +207,8 @@
     data: {
       rightsBasisSelected: '',
       rights_basis: rights_basis,
-      rightsBegin: {% if basis_form.start_date.value %}'start_date'{% elif basis_form.start_date_period.value %}'start_date_period'{% else %}''{% endif %},
-      rightsEnd: {% if basis_form.end_date.value %}'end_date'{% elif basis_form.end_date_period.value %}'end_date_period'{% elif basis_form.end_date_open.value %}'end_date_open'{% else %}''{% endif %},
+      rightsBegin: {% if basis_form.start_date.value %}'start_date'{% elif basis_form.start_date_period.value or basis_form.start_date_period.value == 0 %}'start_date_period'{% else %}''{% endif %},
+      rightsEnd: {% if basis_form.end_date.value %}'end_date'{% elif basis_form.end_date_period.value or basis_form.end_date_period.value == 0 %}'end_date_period'{% elif basis_form.end_date_open.value %}'end_date_open'{% else %}''{% endif %},
     },
     methods: {
       getIndexAmongVisibleRightsGranted: function (rights_granted_index) {
