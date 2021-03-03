@@ -84,6 +84,9 @@ class Grouping(models.Model):
     def get_absolute_url(self):
         return reverse("groupings-detail", kwargs={"pk": self.pk})
 
+    def __str__(self):
+        return self.title
+
 
 class User(AbstractUser):
     pass
