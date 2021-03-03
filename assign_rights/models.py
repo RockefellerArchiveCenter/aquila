@@ -8,11 +8,11 @@ from django.urls import reverse
 class RightsShell(models.Model):
     """Since 'policy' and 'donor' are the only locally-used other rights bases, other is not a rights basis choice"""
     RIGHTS_BASIS_CHOICES = (
-        ("Copyright", "Copyright"),
-        ("Statute", "Statute"),
-        ("License", "License"),
-        ("Policy", "Policy"),
-        ("Donor", "Donor"),
+        ("copyright", "Copyright"),
+        ("statute", "Statute"),
+        ("license", "License"),
+        ("policy", "Policy"),
+        ("donor", "Donor"),
     )
     rights_basis = models.CharField(choices=RIGHTS_BASIS_CHOICES, max_length=64)
     PREMIS_COPYRIGHT_STATUSES = (
