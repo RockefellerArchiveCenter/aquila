@@ -40,7 +40,24 @@ class RightsShell(models.Model):
         return reverse("rights-detail", kwargs={"pk": self.pk})
 
     def __str__(self):
-        return "{} ({})".format(self.note, self.rights_basis)
+        start = "0 years after creation"
+        end = "open"
+        prefixes = [self.rights_basis]
+        if self.rights_basis == "Copyright":
+            prefixes.append(self.copyright_status)
+        elif self.rights_basis == "License":
+            prefixes.append(self.license_terms)
+        elif self.rights_basis == "Statute":
+            prefixes.append(self.statute_citation)
+        if self.start_date:
+            start = self.start_date
+        elif self.start_date_period:
+            start = "{} years after creation".format(self.start_date_period)
+        if self.end_date:
+            end = self.end_date
+        elif self.end_date_period:
+            end = "{} years after creation".format(self.end_date_period)
+        return "{} ({} until {})".format(" / ".join([p for p in prefixes if p]), start, end)
 
 
 class RightsGranted(models.Model):
