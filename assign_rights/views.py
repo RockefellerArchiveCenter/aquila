@@ -1,6 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
-from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.urls import reverse_lazy
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  UpdateView)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -8,7 +10,7 @@ from .assemble import RightsAssembler
 from .forms import (CopyrightForm, GroupingForm, LicenseForm, OtherForm,
                     RightsGrantedFormSet, RightsShellForm,
                     RightsShellUpdateForm, StatuteForm)
-from .mixins.authmixins import EditMixin
+from .mixins.authmixins import DeleteMixin, EditMixin
 from .models import Grouping, RightsGranted, RightsShell
 
 
@@ -125,13 +127,21 @@ class RightsShellUpdateView(PageTitleMixin, EditMixin, UpdateView):
         return "Update Rights Shell {}".format(context["object"].pk)
 
 
+class RightsShellDeleteView(PageTitleMixin, DeleteMixin, DeleteView):
+    """Delete a rights shell."""
+    model = RightsShell
+    template_name = "rights/confirm_delete.html"
+    page_title = "Confirm Delete"
+    success_url = reverse_lazy("rights-list")
+
+
 class RightsShellDetailView(PageTitleMixin, LoginRequiredMixin, DetailView):
     """View a rights shell."""
     model = RightsShell
     template_name = "rights/detail.html"
 
     def get_page_title(self, context):
-        return "Rights Shell {}".format(context["object"].pk)
+        return str(context["object"])
 
 
 class GroupingListView(PageTitleMixin, LoginRequiredMixin, ListView):
@@ -147,6 +157,14 @@ class GroupingCreateView(PageTitleMixin, EditMixin, CreateView):
     template_name = "groupings/manage.html"
     form_class = GroupingForm
     page_title = "Create New Grouping"
+
+
+class GroupingDeleteView(PageTitleMixin, DeleteMixin, DeleteView):
+    """Delete a grouping"""
+    model = Grouping
+    success_url = reverse_lazy("groupings-list")
+    template_name = "groupings/confirm_delete.html"
+    page_title = "Confirm Delete"
 
 
 class GroupingDetailView(PageTitleMixin, LoginRequiredMixin, DetailView):

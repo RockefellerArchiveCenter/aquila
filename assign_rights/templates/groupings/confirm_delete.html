@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form method="post">
+  {% csrf_token %}
+  <p >Are you sure you want to delete {{ object }}?</p>
+  <input class="btn btn-danger" type="submit" value="Confirm">
+  <a class="btn btn-secondary" href={% url 'groupings-detail' pk=object.pk %}>Cancel</a>
+</form>
+
+{% endblock %}
