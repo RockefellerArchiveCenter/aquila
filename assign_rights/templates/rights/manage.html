@@ -14,11 +14,11 @@
     {% if basis_form %}
       <div>{% crispy basis_form basis_form.helper %}</div>
     {% else %}
-      <div v-if="rightsBasisSelected=='Copyright'">{% crispy copyright_form copyright_form.helper %}</div>
-      <div v-if="rightsBasisSelected=='Statute'">{% crispy statute_form statute_form.helper %}</div>
-      <div v-if="rightsBasisSelected=='License'">{% crispy license_form license_form.helper %}</div>
-      <div v-if="rightsBasisSelected=='Policy'">{% crispy other_form other_form.helper %}</div>
-      <div v-if="rightsBasisSelected=='Donor'">{% crispy other_form other_form.helper %}</div>
+      <div v-if="rightsBasisSelected=='copyright'">{% crispy copyright_form copyright_form.helper %}</div>
+      <div v-if="rightsBasisSelected=='statute'">{% crispy statute_form statute_form.helper %}</div>
+      <div v-if="rightsBasisSelected=='license'">{% crispy license_form license_form.helper %}</div>
+      <div v-if="rightsBasisSelected=='policy'">{% crispy other_form other_form.helper %}</div>
+      <div v-if="rightsBasisSelected=='donor'">{% crispy other_form other_form.helper %}</div>
     {% endif %}
     <h2>Rights Granted</h2>
     <input type="hidden"
