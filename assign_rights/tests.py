@@ -111,7 +111,7 @@ class TestViews(TestCase):
 
     def test_rightsshell_form(self):
         form_data = {
-            "rights_basis": random.choice([b[1] for b in RightsShell.RIGHTS_BASIS_CHOICES]),
+            "rights_basis": random.choice([b[0] for b in RightsShell.RIGHTS_BASIS_CHOICES]),
             "note": random_string(),
             "start_date_period": random.randint(0, 10),
             "end_date_period": random.randint(0, 10)}
