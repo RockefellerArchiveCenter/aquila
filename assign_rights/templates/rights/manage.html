@@ -206,11 +206,6 @@
     el: "#vue-form",
     data: {
       rightsBasisSelected: '',
-      copyright: 'copyright',
-      statute: 'statute',
-      license: 'license',
-      policy: 'policy',
-      donor: 'donor',
       rights_basis: rights_basis,
       rightsBegin: {% if basis_form.start_date.value %}'start_date'{% elif basis_form.start_date_period.value or basis_form.start_date_period.value == 0 %}'start_date_period'{% else %}''{% endif %},
       rightsEnd: {% if basis_form.end_date.value %}'end_date'{% elif basis_form.end_date_period.value or basis_form.end_date_period.value == 0 %}'end_date_period'{% elif basis_form.end_date_open.value %}'end_date_open'{% else %}''{% endif %},
