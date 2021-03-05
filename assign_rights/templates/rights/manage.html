@@ -12,13 +12,13 @@
       {{ form.rights_basis | as_crispy_field }}
     </div>
     {% if basis_form %}
-      <div>{{ basis_form | crispy }}</div>
+      <div>{% crispy basis_form basis_form.helper %}</div>
     {% else %}
-      <div v-if="selected==copyright">{% crispy copyright_form copyright_form.helper %}</div>
-      <div v-if="selected==statute">{% crispy statute_form statute_form.helper %}</div>
-      <div v-if="selected==license">{% crispy license_form license_form.helper %}</div>
-      <div v-if="selected==policy">{% crispy other_form other_form.helper %}</div>
-      <div v-if="selected==donor">{% crispy other_form other_form.helper %}</div>
+      <div v-if="rightsBasisSelected=='copyright'">{% crispy copyright_form copyright_form.helper %}</div>
+      <div v-if="rightsBasisSelected=='statute'">{% crispy statute_form statute_form.helper %}</div>
+      <div v-if="rightsBasisSelected=='license'">{% crispy license_form license_form.helper %}</div>
+      <div v-if="rightsBasisSelected=='policy'">{% crispy other_form other_form.helper %}</div>
+      <div v-if="rightsBasisSelected=='donor'">{% crispy other_form other_form.helper %}</div>
     {% endif %}
     <h2>Rights Granted</h2>
     <input type="hidden"
@@ -83,6 +83,17 @@
 
           <div class="row">
             <div class="form-group col-5">
+              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction_begin'">Start of Restriction*</label>
+              <select v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction_begin'"
+                      v-model="rights_granted.restriction_begin"
+                      v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction_begin'"
+                      class="form-control">
+                <option value="">-------</option>
+                <option value="start_date">This restriction starts on a specific date</option>
+                <option value="start_date_period">This restriction starts after an embargo period</option>
+              </select>
+            </div>
+            <div v-if="rights_granted.restriction_begin == 'start_date'" class="form-group col-3">
               <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'">Start Date</label>
               <input type="date"
                       v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'"
@@ -90,8 +101,8 @@
                       v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'"
                       class="form-control">
             </div>
-            <div class="form-group col-2">
-              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'">Start Date Period</label>
+            <div v-if="rights_granted.restriction_begin == 'start_date_period'" class="form-group col-3">
+              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'">Start Date Embargo Period (in years)</label>
               <input type="number"
                      v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'"
                      v-model="rights_granted.start_date_period"
@@ -102,29 +113,38 @@
 
           <div class="row">
             <div class="form-group col-5">
+              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction_end'">End of Restriction*</label>
+              <select v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction_end'"
+                      v-model="rights_granted.restriction_end"
+                      v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction_end'"
+                      class="form-control">
+                <option value="">-------</option>
+                <option value="end_date">This restriction ends on a specific date</option>
+                <option value="end_date_period">This restriction ends after an embargo period</option>
+                <option value="end_date_open">There is no end date for this restriction</option>
+              </select>
+            </div>
+            <div v-if="rights_granted.restriction_end=='end_date'" class="form-group col-3">
               <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'">End Date</label>
               <input type="date"
                       v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'"
-                      v-model="rights_granted.restriction"
+                      v-model="rights_granted.end_date"
                       v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'"
                       class="form-control">
             </div>
-            <div class="form-group col-2">
-              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'">End Date Period</label>
+            <div v-if="rights_granted.restriction_end=='end_date_period'" class="form-group col-3">
+              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'">End Date Embargo Period (in years)</label>
               <input type="number"
                      v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'"
                      v-model="rights_granted.end_date_period"
                      v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'"
                      class="form-control">
             </div>
-            <div class="form-check rights-granted__checkbox">
-              <input type="checkbox"
+            <div v-if="rights_granted.restriction_end=='end_date_open'">
+              <input type="hidden"
                      v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_open'"
-                     v-model="rights_granted.end_date_period"
                      v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_open'"
-                     class="form-check-input">
-             <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_open'"
-                    class="form-check-label">End Date Open?</label>
+                     value="true">
             </div>
           </div>
 
@@ -168,8 +188,10 @@
             marked_for_delete: false,
             act: '{{ nested_form.act.value|default_if_none:"" }}',
             restriction: '{{ nested_form.restriction.value|default_if_none:"" }}',
-            start_date: '{{ nested_form.start_date.value|default_if_none:"" }}',
-            end_date: '{{ nested_form.end_date.value|default_if_none:"" }}',
+            restriction_begin: {% if nested_form.start_date.value %}'start_date'{% elif nested_form.start_date_period.value or nested_form.start_date_period.value == 0 %}'start_date_period'{% else %}''{% endif %},
+            restriction_end: {% if nested_form.end_date.value %}'end_date'{% elif nested_form.end_date_period.value or nested_form.end_date_period.value == 0 %}'end_date_period'{% elif nested_form.end_date_open.value %}'end_date_open'{% else %}''{% endif %},
+            start_date: '{{ nested_form.start_date.value|date:"Y-m-d"|default_if_none:"" }}',
+            end_date: '{{ nested_form.end_date.value|date:"Y-m-d"|default_if_none:"" }}',
             start_date_period: '{{ nested_form.start_date_period.value|default_if_none:"" }}',
             end_date_period: '{{ nested_form.end_date_period.value|default_if_none:"" }}',
             end_date_open: '{{ nested_form.end_date_open.value|default_if_none:"" }}',
@@ -183,13 +205,10 @@
     delimiters: ['[[', ']]'],
     el: "#vue-form",
     data: {
-      selected: '',
-      copyright: 'copyright',
-      statute: 'statute',
-      license: 'license',
-      policy: 'policy',
-      donor: 'donor',
+      rightsBasisSelected: '',
       rights_basis: rights_basis,
+      rightsBegin: {% if basis_form.start_date.value %}'start_date'{% elif basis_form.start_date_period.value or basis_form.start_date_period.value == 0 %}'start_date_period'{% else %}''{% endif %},
+      rightsEnd: {% if basis_form.end_date.value %}'end_date'{% elif basis_form.end_date_period.value or basis_form.end_date_period.value == 0 %}'end_date_period'{% elif basis_form.end_date_open.value %}'end_date_open'{% else %}''{% endif %},
     },
     methods: {
       getIndexAmongVisibleRightsGranted: function (rights_granted_index) {
@@ -209,6 +228,10 @@
         event.preventDefault();
         const default_new_rights_granted = {
           rights_granted_formset_index: this.getTotalRightsGrantedForms(),
+          act: '',
+          restriction: '',
+          restriction_begin: '',
+          restriction_end: ''
         };
         this.$data.rights_basis.rights_granted.push(default_new_rights_granted);
       },

@@ -1,6 +1,6 @@
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Div, Layout
-from django.forms import (ModelForm, Select, Textarea, TextInput,
+from crispy_forms.layout import Div, Field, Hidden, Layout
+from django.forms import (ChoiceField, ModelForm, Select, Textarea, TextInput,
                           inlineformset_factory)
 
 from .models import Grouping, RightsGranted, RightsShell
@@ -14,12 +14,14 @@ class RightsShellCommonLayout(Layout):
             Div(
                 Div("determination_date", css_class="col"), css_class="row"),
             Div(
-                Div("start_date", css_class="col-5"),
-                Div("start_date_period", css_class="col-2"), css_class="row"),
+                Div(Field("rights_begin", v_model="rightsBegin"), css_class="col-5"),
+                Div("start_date", css_class="col-3", v_if="rightsBegin=='start_date'"),
+                Div("start_date_period", css_class="col-3", v_if="rightsBegin=='start_date_period'"), css_class="row"),
             Div(
-                Div("end_date", css_class="col-5"),
-                Div("end_date_period", css_class="col-2"),
-                Div("end_date_open", css_class="form-check rights-basis__checkbox"), css_class="row"),
+                Div(Field("rights_end", v_model="rightsEnd"), css_class="col-5"),
+                Div("end_date", css_class="col-3", v_if="rightsEnd=='end_date'"),
+                Div("end_date_period", css_class="col-3", v_if="rightsEnd=='end_date_period'"),
+                Div(Hidden(name="end_date_open", value="true",), v_if="rightsEnd=='end_date_open'"), css_class="row"),
             Div(
                 Div("note", css_class="form-group col"),
                 css_class="row")
@@ -33,6 +35,18 @@ class GroupingForm(ModelForm):
 
 
 class RightsShellForm(ModelForm):
+    rights_begin = ChoiceField(
+        label="Start of Rights",
+        choices=(("", "---------"),
+                 ("start_date", "These rights start on a specific date"),
+                 ("start_date_period", "These rights start after an embargo period")))
+    rights_end = ChoiceField(
+        label="End of Rights",
+        choices=(("", "---------"),
+                 ("end_date", "These rights end on a specific date"),
+                 ("end_date_period", "These rights end after an embargo period"),
+                 ("end_date_open", "There is no end date for these rights")))
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
@@ -56,15 +70,19 @@ class RightsShellForm(ModelForm):
             'license_terms',
             'statute_citation'
         ]
+        labels = {
+            'start_date_period': "Start Date Embargo Period (in years)",
+            'end_date_period': "End Date Embargo Period (in years)",
+        }
         widgets = {
-            'rights_basis': Select(attrs={'v-model': 'selected', }),
+            'rights_basis': Select(attrs={'v-model': 'rightsBasisSelected', }),
         }
 
 
 class RightsShellUpdateForm(RightsShellForm):
     class Meta(RightsShellForm.Meta):
         widgets = {
-            'rights_basis': Select(attrs={'disabled': 'disabled'})
+            'rights_basis': Select(attrs={'disabled': 'disabled'}),
         }
 
 
