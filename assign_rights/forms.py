@@ -71,8 +71,8 @@ class RightsShellForm(ModelForm):
             'statute_citation'
         ]
         labels = {
-            'start_date_period': "Start Date Embargo Period",
-            'end_date_period': "End Date Embargo Period",
+            'start_date_period': "Start Date Embargo Period (in years)",
+            'end_date_period': "End Date Embargo Period (in years)",
         }
         widgets = {
             'rights_basis': Select(attrs={'v-model': 'rightsBasisSelected', }),
