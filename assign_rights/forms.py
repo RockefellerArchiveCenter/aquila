@@ -15,12 +15,12 @@ class RightsShellCommonLayout(Layout):
                 Div("determination_date", css_class="col"), css_class="row"),
             Div(
                 Div(Field("rights_begin", v_model="rightsBegin"), css_class="col-5"),
-                Div("start_date", css_class="col-3", v_if="rightsBegin=='start_date'"),
-                Div("start_date_period", css_class="col-3", v_if="rightsBegin=='start_date_period'"), css_class="row"),
+                Div(Field("start_date", pattern=r"\d{4}-\d{2}-\d{2}"), css_class="col-4", v_if="rightsBegin=='start_date'"),
+                Div("start_date_period", css_class="col-4", v_if="rightsBegin=='start_date_period'"), css_class="row"),
             Div(
                 Div(Field("rights_end", v_model="rightsEnd"), css_class="col-5"),
-                Div("end_date", css_class="col-3", v_if="rightsEnd=='end_date'"),
-                Div("end_date_period", css_class="col-3", v_if="rightsEnd=='end_date_period'"),
+                Div(Field("end_date", pattern=r"\d{4}-\d{2}-\d{2}"), css_class="col-4", v_if="rightsEnd=='end_date'"),
+                Div("end_date_period", css_class="col-4", v_if="rightsEnd=='end_date_period'"),
                 Div(Hidden(name="end_date_open", value="true",), v_if="rightsEnd=='end_date_open'"), css_class="row"),
             Div(
                 Div("note", css_class="form-group col"),
@@ -73,6 +73,8 @@ class RightsShellForm(ModelForm):
         labels = {
             'start_date_period': "Start Date Embargo Period (in years)",
             'end_date_period': "End Date Embargo Period (in years)",
+            'start_date': "Start Date (yyyy-mm-dd)",
+            'end_date': "End Date (yyyy-mm-dd)",
         }
         widgets = {
             'rights_basis': Select(attrs={'v-model': 'rightsBasisSelected', }),
