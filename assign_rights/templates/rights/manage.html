@@ -95,15 +95,16 @@
                 <option value="start_date_period">This restriction starts after an embargo period</option>
               </select>
             </div>
-            <div v-if="rights_granted.restriction_begin == 'start_date'" class="form-group col-3">
-              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'">Start Date</label>
-              <input type="date"
-                      v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'"
-                      v-model="rights_granted.start_date"
-                      v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'"
-                      class="form-control">
+            <div v-if="rights_granted.restriction_begin == 'start_date'" class="form-group col-4">
+              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'">Start Date (yyyy-mm-dd)</label>
+              <input type="text"
+                     pattern="\d{4}-\d{2}-\d{2}"
+                     v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'"
+                     v-model="rights_granted.start_date"
+                     v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'"
+                     class="form-control datepicker">
             </div>
-            <div v-if="rights_granted.restriction_begin == 'start_date_period'" class="form-group col-3">
+            <div v-if="rights_granted.restriction_begin == 'start_date_period'" class="form-group col-4">
               <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'">Start Date Embargo Period (in years)</label>
               <input type="number"
                      v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'"
@@ -126,15 +127,16 @@
                 <option value="end_date_open">There is no end date for this restriction</option>
               </select>
             </div>
-            <div v-if="rights_granted.restriction_end=='end_date'" class="form-group col-3">
-              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'">End Date</label>
-              <input type="date"
-                      v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'"
-                      v-model="rights_granted.end_date"
-                      v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'"
-                      class="form-control">
+            <div v-if="rights_granted.restriction_end=='end_date'" class="form-group col-4">
+              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'">End Date (yyyy-mm-dd)</label>
+              <input type="text"
+                     pattern="\d{4}-\d{2}-\d{2}"
+                     v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'"
+                     v-model="rights_granted.end_date"
+                     v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'"
+                     class="form-control datepicker">
             </div>
-            <div v-if="rights_granted.restriction_end=='end_date_period'" class="form-group col-3">
+            <div v-if="rights_granted.restriction_end=='end_date_period'" class="form-group col-4">
               <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'">End Date Embargo Period (in years)</label>
               <input type="number"
                      v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'"
