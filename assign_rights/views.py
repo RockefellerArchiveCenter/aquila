@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from .assemble import RightsAssembler
 from .forms import (CopyrightForm, GroupingForm, LicenseForm, OtherForm,
                     RightsGrantedFormSet, RightsShellForm,
-                    RightsShellUpdateForm, StatuteForm)
+                    RightsShellUpdateForm, StatuteForm, StrErrorList)
 from .mixins.authmixins import DeleteMixin, EditMixin
 from .models import Grouping, RightsGranted, RightsShell
 
@@ -93,7 +93,9 @@ class RightsShellUpdateView(PageTitleMixin, EditMixin, UpdateView):
         context["act_choices"] = RightsGranted.ACT_CHOICES
         context["restriction_choices"] = RightsGranted.RESTRICTION_CHOICES
         if self.request.POST:
-            context["rights_granted_form"] = RightsGrantedFormSet(self.request.POST, instance=self.object)
+            print("here")
+            context["rights_granted_form"] = RightsGrantedFormSet(
+                self.request.POST, instance=self.object, error_class=StrErrorList)
             context["basis_form"] = form_cls(self.request.POST, instance=self.object)
         else:
             context["rights_granted_form"] = RightsGrantedFormSet(instance=self.object)
