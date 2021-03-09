@@ -82,6 +82,7 @@ class TestViews(TestCase):
             self.assertEqual(response.status_code, 200)
 
     def test_grouping_form(self):
+        """Tests form handles data correctly."""
         form_data = {
             "title": random_string(10),
             "description": random_string(25),
@@ -110,6 +111,7 @@ class TestViews(TestCase):
             self.assertEqual(response.status_code, 200)
 
     def test_rightsshell_form(self):
+        """Test form handles data correctly"""
         form_data = {
             "rights_basis": random.choice([b[0] for b in RightsShell.RIGHTS_BASIS_CHOICES]),
             "note": random_string(),
@@ -230,6 +232,7 @@ class TestRightsAssembler(TestCase):
             self.check_object_dates(granted, request_start_date, request_end_date)
 
     def test_create_json(self):
+        """Tests that Serialzers are working as expected."""
         for obj_cls, serializer_cls in [
                 (RightsShell, RightsShellSerializer),
                 (RightsGranted, RightsGrantedSerializer)]:
