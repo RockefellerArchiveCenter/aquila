@@ -47,7 +47,9 @@
 
       <div class="card mb-4">
         <div class="card-header">
-          <h3 class="float-left">Rights Granted [[getIndexAmongVisibleRightsGranted(rights_granted_index) + 1]]</h3>
+          <h3 tabindex=-2 class="float-left" :ref="'rights_granted_title-'+rights_granted_index">
+            Rights Granted [[getIndexAmongVisibleRightsGranted(rights_granted_index) + 1]]
+          </h3>
           <button v-on:click="removeRightsGranted($event, rights_granted_index)"
             role="button" class="btn btn-danger btn-sm float-right">
             Remove
@@ -234,6 +236,9 @@
           restriction_end: ''
         };
         this.$data.rights_basis.rights_granted.push(default_new_rights_granted);
+        Vue.nextTick(() => {
+          this.$refs["rights_granted_title-"+(this.getTotalRightsGrantedForms()-1)][0].focus()
+        })
       },
       removeRightsGranted: function (event, rights_granted_index) {
         event.preventDefault();
