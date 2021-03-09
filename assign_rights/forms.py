@@ -2,8 +2,19 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Field, Hidden, Layout
 from django.forms import (ChoiceField, ModelForm, Select, Textarea, TextInput,
                           inlineformset_factory)
+from django.forms.utils import ErrorList
 
 from .models import Grouping, RightsGranted, RightsShell
+
+
+class StrErrorList(ErrorList):
+    def __str__(self):
+        return self.as_str()
+
+    def as_str(self):
+        if not self:
+            return ''
+        return ', '.join([e for e in self])
 
 
 class RightsShellCommonLayout(Layout):
@@ -79,6 +90,16 @@ class RightsShellForm(ModelForm):
         widgets = {
             'rights_basis': Select(attrs={'v-model': 'rightsBasisSelected', }),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        end_date = cleaned_data.get("end_date")
+        start_date = cleaned_data.get("start_date")
+
+        if end_date and start_date:
+            if start_date > end_date:
+                self.add_error('start_date', "The start date must be before the end date.")
+                self.add_error('end_date', "The end date must be after the start date.")
 
 
 class RightsShellUpdateForm(RightsShellForm):
@@ -182,6 +203,16 @@ class RightsGrantedForm(ModelForm):
             'end_date_period',
             'end_date_open',
         ]
+
+    def clean(self):
+        cleaned_data = super().clean()
+        end_date = cleaned_data.get("end_date")
+        start_date = cleaned_data.get("start_date")
+
+        if end_date and start_date:
+            if start_date > end_date:
+                self.add_error('start_date', "The start date must be before the end date.")
+                self.add_error('end_date', "The end date must be after the start date.")
 
 
 RightsGrantedFormSet = inlineformset_factory(
