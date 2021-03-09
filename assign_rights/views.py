@@ -124,7 +124,7 @@ class RightsShellUpdateView(PageTitleMixin, EditMixin, UpdateView):
             return super().form_invalid(form)
 
     def get_page_title(self, context):
-        return "Update Rights Shell {}".format(context["object"].pk)
+        return "Update {}".format(str(context["object"]))
 
 
 class RightsShellDeleteView(PageTitleMixin, DeleteMixin, DeleteView):
