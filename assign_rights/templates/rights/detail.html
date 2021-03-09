@@ -32,6 +32,10 @@
   <dt class="col-sm-2">Start Date</dt>
   <dd class="col-sm-10">{{ rightsshell.start_date }}</dd>
   {% endif %}
+  {% if rightsshell.start_date_period %}
+  <dt class="col-sm-2">Start Date Embargo Period (in years)</dt>
+  <dd class="col-sm-10">{{ rightsshell.start_date_period }}</dd>
+  {% endif %}
   {% if rightsshell.end_date %}
   <dt class="col-sm-2">End Date</dt>
   <dd class="col-sm-10">{{ rightsshell.end_date }}</dd>
@@ -40,12 +44,8 @@
   <dt class="col-sm-2">End Date Open?</dt>
   <dd class="col-sm-10">{{ rightsshell.end_date_open }}</dd>
   {% endif %}
-  {% if rightsshell.start_date_period %}
-  <dt class="col-sm-2">Start Date Period</dt>
-  <dd class="col-sm-10">{{ rightsshell.start_date_period }}</dd>
-  {% endif %}
   {% if rightsshell.end_date_period %}
-  <dt class="col-sm-2">End Date Period</dt>
+  <dt class="col-sm-2">End Date Embargo Period (in years)</dt>
   <dd class="col-sm-10">{{ rightsshell.end_date_period }}</dd>
   {% endif %}
 </dl>
@@ -63,23 +63,23 @@
         {% endif %}
         <dl>
         {% if rights_granted.start_date %}
-        <dt>Act Start Date</dt>
+        <dt>Start Date</dt>
         <dd>{{rights_granted.start_date}}</dd>
         {% endif %}
+        {% if rights_granted.start_date_period %}
+        <dt>Start Date Embargo Period (in years)</dt>
+        <dd>{{rights_granted.start_date_period}}</dd>
+        {% endif %}
         {% if rights_granted.end_date %}
-        <dt>Act End Date</dt>
+        <dt>End Date</dt>
         <dd>{{rights_granted.end_date}}</dd>
         {% endif %}
         {% if rights_granted.end_date_open %}
         <dt>End Date Open?</dt>
         <dd>{{rights_granted.end_date_open}}</dd>
         {% endif %}
-        {% if rights_granted.start_date_period %}
-        <dt>Start Date Period</dt>
-        <dd>{{rights_granted.start_date_period}}</dd>
-        {% endif %}
         {% if rights_granted.end_date_period %}
-        <dt>End Date Period</dt>
+        <dt>End Date Embargo Period (in years)</dt>
         <dd>{{rights_granted.end_date_period}}</dd>
         {% endif %}
         </dl>
