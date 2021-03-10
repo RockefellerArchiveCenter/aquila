@@ -50,11 +50,11 @@ class RightsShellCreateView(PageTitleMixin, EditMixin, CreateView):
         context["act_choices"] = RightsGranted.ACT_CHOICES
         context["restriction_choices"] = RightsGranted.RESTRICTION_CHOICES
         if self.request.POST:
-            context['rights_granted_form'] = RightsGrantedFormSet(self.request.POST)
-            context['copyright_form'] = CopyrightForm(self.request.POST)
-            context['other_form'] = OtherForm(self.request.POST)
-            context['statute_form'] = StatuteForm(self.request.POST)
-            context['license_form'] = LicenseForm(self.request.POST)
+            context['rights_granted_form'] = RightsGrantedFormSet(self.request.POST, error_class=StrErrorList)
+            context['copyright_form'] = CopyrightForm(self.request.POST, error_class=StrErrorList)
+            context['other_form'] = OtherForm(self.request.POST, error_class=StrErrorList)
+            context['statute_form'] = StatuteForm(self.request.POST, error_class=StrErrorList)
+            context['license_form'] = LicenseForm(self.request.POST, error_class=StrErrorList)
         else:
             context['rights_granted_form'] = RightsGrantedFormSet()
             context['copyright_form'] = CopyrightForm()
