@@ -6,6 +6,7 @@
     {% block extra_css %}{% endblock %}
   </head>
   <body>
+    <a href="#main" class="skip-link visually-hidden">Jump directly to main content</a>
     <div class="wrapper">
 
       {% include 'navbar.html' %}
@@ -13,7 +14,7 @@
       <div class="content-wrapper container">
 
         <!-- Main content -->
-        <main class="content">
+        <main id="main" class="content">
           <div class="row">
             <div class="col-sm">
               <h1 class="float-left">{% block h1_title %}{{page_title}}{% endblock %}</h1>
