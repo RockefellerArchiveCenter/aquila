@@ -42,7 +42,7 @@ class RightsShell(models.Model):
     def __str__(self):
         start = "0 years after creation"
         end = "open"
-        prefixes = [self.rights_basis]
+        prefixes = [self.get_rights_basis_display()]
         if self.rights_basis == "Copyright":
             prefixes.append(self.copyright_status)
         elif self.rights_basis == "License":

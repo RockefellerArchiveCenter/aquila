@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from .assemble import RightsAssembler
 from .forms import (CopyrightForm, GroupingForm, LicenseForm, OtherForm,
                     RightsGrantedFormSet, RightsShellForm,
-                    RightsShellUpdateForm, StatuteForm)
+                    RightsShellUpdateForm, StatuteForm, StrErrorList)
 from .mixins.authmixins import DeleteMixin, EditMixin
 from .models import Grouping, RightsGranted, RightsShell
 
@@ -50,11 +50,11 @@ class RightsShellCreateView(PageTitleMixin, EditMixin, CreateView):
         context["act_choices"] = RightsGranted.ACT_CHOICES
         context["restriction_choices"] = RightsGranted.RESTRICTION_CHOICES
         if self.request.POST:
-            context['rights_granted_form'] = RightsGrantedFormSet(self.request.POST)
-            context['copyright_form'] = CopyrightForm(self.request.POST)
-            context['other_form'] = OtherForm(self.request.POST)
-            context['statute_form'] = StatuteForm(self.request.POST)
-            context['license_form'] = LicenseForm(self.request.POST)
+            context['rights_granted_form'] = RightsGrantedFormSet(self.request.POST, error_class=StrErrorList)
+            context['copyright_form'] = CopyrightForm(self.request.POST, error_class=StrErrorList)
+            context['other_form'] = OtherForm(self.request.POST, error_class=StrErrorList)
+            context['statute_form'] = StatuteForm(self.request.POST, error_class=StrErrorList)
+            context['license_form'] = LicenseForm(self.request.POST, error_class=StrErrorList)
         else:
             context['rights_granted_form'] = RightsGrantedFormSet()
             context['copyright_form'] = CopyrightForm()
@@ -93,7 +93,9 @@ class RightsShellUpdateView(PageTitleMixin, EditMixin, UpdateView):
         context["act_choices"] = RightsGranted.ACT_CHOICES
         context["restriction_choices"] = RightsGranted.RESTRICTION_CHOICES
         if self.request.POST:
-            context["rights_granted_form"] = RightsGrantedFormSet(self.request.POST, instance=self.object)
+            print("here")
+            context["rights_granted_form"] = RightsGrantedFormSet(
+                self.request.POST, instance=self.object, error_class=StrErrorList)
             context["basis_form"] = form_cls(self.request.POST, instance=self.object)
         else:
             context["rights_granted_form"] = RightsGrantedFormSet(instance=self.object)
@@ -124,7 +126,7 @@ class RightsShellUpdateView(PageTitleMixin, EditMixin, UpdateView):
             return super().form_invalid(form)
 
     def get_page_title(self, context):
-        return "Update Rights Shell {}".format(context["object"].pk)
+        return "Update {}".format(str(context["object"]))
 
 
 class RightsShellDeleteView(PageTitleMixin, DeleteMixin, DeleteView):

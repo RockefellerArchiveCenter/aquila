@@ -2,8 +2,19 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Field, Hidden, Layout
 from django.forms import (ChoiceField, ModelForm, Select, Textarea, TextInput,
                           inlineformset_factory)
+from django.forms.utils import ErrorList
 
 from .models import Grouping, RightsGranted, RightsShell
+
+
+class StrErrorList(ErrorList):
+    def __str__(self):
+        return self.as_str()
+
+    def as_str(self):
+        if not self:
+            return ''
+        return ', '.join([e for e in self])
 
 
 class RightsShellCommonLayout(Layout):
@@ -15,12 +26,12 @@ class RightsShellCommonLayout(Layout):
                 Div("determination_date", css_class="col"), css_class="row"),
             Div(
                 Div(Field("rights_begin", v_model="rightsBegin"), css_class="col-5"),
-                Div(Field("start_date", pattern=r"\d{4}-\d{2}-\d{2}"), css_class="col-4", v_if="rightsBegin=='start_date'"),
-                Div("start_date_period", css_class="col-4", v_if="rightsBegin=='start_date_period'"), css_class="row"),
+                Div(Field("start_date", pattern=r"\d{4}-\d{2}-\d{2}", required="required"), css_class="col-4", v_if="rightsBegin=='start_date'"),
+                Div(Field("start_date_period", required="required"), css_class="col-4", v_if="rightsBegin=='start_date_period'"), css_class="row"),
             Div(
                 Div(Field("rights_end", v_model="rightsEnd"), css_class="col-5"),
-                Div(Field("end_date", pattern=r"\d{4}-\d{2}-\d{2}"), css_class="col-4", v_if="rightsEnd=='end_date'"),
-                Div("end_date_period", css_class="col-4", v_if="rightsEnd=='end_date_period'"),
+                Div(Field("end_date", pattern=r"\d{4}-\d{2}-\d{2}", required="required"), css_class="col-4", v_if="rightsEnd=='end_date'"),
+                Div(Field("end_date_period", required="required"), css_class="col-4", v_if="rightsEnd=='end_date_period'"),
                 Div(Hidden(name="end_date_open", value="true",), v_if="rightsEnd=='end_date_open'"), css_class="row"),
             Div(
                 Div("note", css_class="form-group col"),
@@ -79,6 +90,16 @@ class RightsShellForm(ModelForm):
         widgets = {
             'rights_basis': Select(attrs={'v-model': 'rightsBasisSelected', }),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        end_date = cleaned_data.get("end_date")
+        start_date = cleaned_data.get("start_date")
+
+        if end_date and start_date:
+            if start_date > end_date:
+                self.add_error('start_date', "The start date must be before the end date.")
+                self.add_error('end_date', "The end date must be after the start date.")
 
 
 class RightsShellUpdateForm(RightsShellForm):
@@ -182,6 +203,16 @@ class RightsGrantedForm(ModelForm):
             'end_date_period',
             'end_date_open',
         ]
+
+    def clean(self):
+        cleaned_data = super().clean()
+        end_date = cleaned_data.get("end_date")
+        start_date = cleaned_data.get("start_date")
+
+        if end_date and start_date:
+            if start_date > end_date:
+                self.add_error('start_date', "The start date must be before the end date.")
+                self.add_error('end_date', "The end date must be after the start date.")
 
 
 RightsGrantedFormSet = inlineformset_factory(

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load utils %}
 
 {% block content %}
 
@@ -62,7 +63,8 @@
               <select v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-act'"
                       v-model="rights_granted.act"
                       v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-act'"
-                      class="form-control">
+                      class="form-control"
+                      required="required">
                 <option value="">-------</option>
                 {% for value, text in act_choices %}
                 <option value={{value}}>{{text}}</option>
@@ -74,7 +76,8 @@
               <select v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction'"
                       v-model="rights_granted.restriction"
                       v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction'"
-                      class="form-control">
+                      class="form-control"
+                      required="required">
                 <option value="">-------</option>
                 {% for value, text in restriction_choices %}
                 <option value={{value}}>{{text}}</option>
@@ -89,28 +92,36 @@
               <select v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction_begin'"
                       v-model="rights_granted.restriction_begin"
                       v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction_begin'"
-                      class="form-control">
+                      class="form-control"
+                      required="required">
                 <option value="">-------</option>
                 <option value="start_date">This restriction starts on a specific date</option>
                 <option value="start_date_period">This restriction starts after an embargo period</option>
               </select>
             </div>
             <div v-if="rights_granted.restriction_begin == 'start_date'" class="form-group col-4">
-              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'">Start Date (yyyy-mm-dd)</label>
+              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'">Start Date (yyyy-mm-dd)*</label>
               <input type="text"
                      pattern="\d{4}-\d{2}-\d{2}"
                      v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'"
                      v-model="rights_granted.start_date"
                      v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'"
-                     class="form-control datepicker">
+                     v-bind:class="'form-control '+[[rights_granted.start_date_error && 'is-invalid']]"
+                     required="required">
+              <span v-if="rights_granted.start_date_error"
+                    v-bind:id="'error_id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'"
+                    class="invalid-feedback">
+                <strong>[[ rights_granted.start_date_error ]]</strong>
+              </span>
             </div>
             <div v-if="rights_granted.restriction_begin == 'start_date_period'" class="form-group col-4">
-              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'">Start Date Embargo Period (in years)</label>
+              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'">Start Date Embargo Period (in years)*</label>
               <input type="number"
                      v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'"
                      v-model="rights_granted.start_date_period"
                      v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'"
-                     class="form-control">
+                     class="form-control"
+                     required="required">
             </div>
           </div>
 
@@ -120,7 +131,8 @@
               <select v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction_end'"
                       v-model="rights_granted.restriction_end"
                       v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction_end'"
-                      class="form-control">
+                      class="form-control"
+                      required="required">
                 <option value="">-------</option>
                 <option value="end_date">This restriction ends on a specific date</option>
                 <option value="end_date_period">This restriction ends after an embargo period</option>
@@ -128,21 +140,28 @@
               </select>
             </div>
             <div v-if="rights_granted.restriction_end=='end_date'" class="form-group col-4">
-              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'">End Date (yyyy-mm-dd)</label>
+              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'">End Date (yyyy-mm-dd)*</label>
               <input type="text"
                      pattern="\d{4}-\d{2}-\d{2}"
                      v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'"
                      v-model="rights_granted.end_date"
                      v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'"
-                     class="form-control datepicker">
+                     v-bind:class="'form-control '+[[rights_granted.start_date_error && 'is-invalid']]"
+                     required="required">
+               <span v-if="rights_granted.end_date_error"
+                     v-bind:id="'error_id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'"
+                     class="invalid-feedback">
+                 <strong>[[ rights_granted.end_date_error ]]</strong>
+              </span>
             </div>
             <div v-if="rights_granted.restriction_end=='end_date_period'" class="form-group col-4">
-              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'">End Date Embargo Period (in years)</label>
+              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'">End Date Embargo Period (in years)*</label>
               <input type="number"
                      v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'"
                      v-model="rights_granted.end_date_period"
                      v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'"
-                     class="form-control">
+                     class="form-control"
+                     required="required">
             </div>
             <div v-if="rights_granted.restriction_end=='end_date_open'">
               <input type="hidden"
@@ -194,9 +213,11 @@
             restriction: '{{ nested_form.restriction.value|default_if_none:"" }}',
             restriction_begin: {% if nested_form.start_date.value %}'start_date'{% elif nested_form.start_date_period.value or nested_form.start_date_period.value == 0 %}'start_date_period'{% else %}''{% endif %},
             restriction_end: {% if nested_form.end_date.value %}'end_date'{% elif nested_form.end_date_period.value or nested_form.end_date_period.value == 0 %}'end_date_period'{% elif nested_form.end_date_open.value %}'end_date_open'{% else %}''{% endif %},
-            start_date: '{{ nested_form.start_date.value|date:"Y-m-d"|default_if_none:"" }}',
-            end_date: '{{ nested_form.end_date.value|date:"Y-m-d"|default_if_none:"" }}',
+            start_date: '{{ nested_form.start_date.value|isoformat_date_or_string|default_if_none:"" }}',
+            start_date_error: '{{ nested_form.errors.start_date|default_if_none:"" }}',
             start_date_period: '{{ nested_form.start_date_period.value|default_if_none:"" }}',
+            end_date: '{{ nested_form.end_date.value|isoformat_date_or_string|default_if_none:"" }}',
+            end_date_error: '{{ nested_form.errors.end_date|default_if_none:"" }}',
             end_date_period: '{{ nested_form.end_date_period.value|default_if_none:"" }}',
             end_date_open: '{{ nested_form.end_date_open.value|default_if_none:"" }}',
             note: '{{ nested_form.note.value|default_if_none:"" }}',
@@ -209,10 +230,21 @@
     delimiters: ['[[', ']]'],
     el: "#vue-form",
     data: {
-      rightsBasisSelected: '',
+      rightsBasisSelected: '{{ form.rights_basis.value|default_if_none:""}}',
       rights_basis: rights_basis,
-      rightsBegin: {% if basis_form.start_date.value %}'start_date'{% elif basis_form.start_date_period.value or basis_form.start_date_period.value == 0 %}'start_date_period'{% else %}''{% endif %},
-      rightsEnd: {% if basis_form.end_date.value %}'end_date'{% elif basis_form.end_date_period.value or basis_form.end_date_period.value == 0 %}'end_date_period'{% elif basis_form.end_date_open.value %}'end_date_open'{% else %}''{% endif %},
+      rightsBegin: {% if basis_form.start_date.value %}'start_date'
+                   {% elif basis_form.start_date_period.value or basis_form.start_date_period.value == 0 %}'start_date_period'
+                   {% elif form.start_date.value %}'start_date'
+                   {% elif form.start_date_period.value or basis_form.start_date_period.value == 0 %}'start_date_period'
+                   {% else %}''
+                   {% endif %},
+      rightsEnd: {% if basis_form.end_date.value %}'end_date'
+                 {% elif basis_form.end_date_period.value or basis_form.end_date_period.value == 0 %}'end_date_period'
+                 {% elif basis_form.end_date_open.value %}'end_date_open'
+                 {% elif form.end_date.value %}'end_date'
+                 {% elif form.end_date_period.value or basis_form.end_date_period.value == 0 %}'end_date_period'
+                 {% elif form.end_date_open.value %}'end_date_open'
+                 {% else %}''{% endif %},
     },
     methods: {
       getIndexAmongVisibleRightsGranted: function (rights_granted_index) {
