@@ -7,9 +7,15 @@ from dateutil.relativedelta import relativedelta
 from .models import Grouping, RightsGranted, RightsShell
 
 
-def random_date():
+def random_date(earliest, latest):
+    """Takes a range of years from today's date and returns a random date.
+
+    Args:
+    earliest (integer): start of range to pick a random integer from
+    latest (integer): end of range to pick a random integer from
+    """
     now = date.today()
-    r = now - relativedelta(years=random.randint(2, 50))
+    r = now - relativedelta(years=random.randint(latest, earliest))
     return r
 
 
@@ -33,10 +39,10 @@ def add_rights_shells(count=15):
         RightsShell.objects.create(
             rights_basis=random.choice([b[0] for b in RightsShell.RIGHTS_BASIS_CHOICES]),
             copyright_status="copyrighted",
-            determination_date=random_date(),
+            determination_date=random_date(10, 0),
             note=random_string(),
-            start_date=random.choice([None, random_date()]),
-            end_date=random.choice([None, random_date()]),
+            start_date=random.choice([None, random_date(100, 25)]),
+            end_date=random.choice([None, random_date(24, -50)]),
             start_date_period=random.randint(0, 10),
             end_date_period=random.randint(0, 10),
             end_date_open=random.choice([True, False]),
@@ -50,8 +56,8 @@ def add_rights_acts(count=5):
             basis=random.choice(RightsShell.objects.all()),
             act=random.choice(["publish", "disseminate", "replicate", "migrate", "modify", "use", "delete"]),
             restriction=random.choice(["allow", "disallow", "conditional"]),
-            start_date=random.choice([None, random_date()]),
-            end_date=random.choice([None, random_date()]),
+            start_date=random.choice([None, random_date(50, 5)]),
+            end_date=random.choice([None, random_date(4, -50)]),
             start_date_period=random.randint(0, 10),
             end_date_period=random.randint(0, 10),
             end_date_open=random.choice([True, False]),

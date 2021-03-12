@@ -166,8 +166,8 @@ class TestRightsAssembler(TestCase):
 
     def test_run_method(self):
         """Tests the run method"""
-        request_end_date = random_date().isoformat()
-        request_start_date = random_date().isoformat()
+        request_end_date = random_date(49, 0).isoformat()
+        request_start_date = random_date(100, 50).isoformat()
         run = RightsAssembler().run(self.rights_ids, request_start_date, request_end_date)
         self.assertIsNot(False, run)
 
@@ -194,8 +194,8 @@ class TestRightsAssembler(TestCase):
         is equal to the end date period of the object.
         """
         object.end_date_open = False
-        object.start_date = random_date()
-        object.end_date = random_date()
+        object.start_date = random_date(125, 50)
+        object.end_date = random_date(50, 10)
         start_date, end_date = self.assembler.calculate_dates(object, request_start_date, request_end_date)
         self.assertEqual(relativedelta(start_date, object.start_date).years, object.start_date_period)
         self.assertTrue(isinstance(start_date, date))
@@ -225,8 +225,8 @@ class TestRightsAssembler(TestCase):
     def test_calculate_dates(self):
         """Tests the calculate_dates method."""
         shell = random.choice(RightsShell.objects.all())
-        request_end_date = random_date().isoformat()
-        request_start_date = random_date().isoformat()
+        request_end_date = random_date(49, 0).isoformat()
+        request_start_date = random_date(100, 50).isoformat()
         self.check_object_dates(shell, request_start_date, request_end_date)
 
         for granted in shell.rightsgranted_set.all():
@@ -238,8 +238,8 @@ class TestRightsAssembler(TestCase):
                 (RightsShell, RightsShellSerializer),
                 (RightsGranted, RightsGrantedSerializer)]:
             obj = random.choice(obj_cls.objects.all())
-            start_date = random_date().isoformat()
-            end_date = random_date().isoformat()
+            start_date = random_date(75, 50).isoformat()
+            end_date = random_date(49, 5).isoformat()
             serialized = self.assembler.create_json(obj, serializer_cls, start_date, end_date)
             self.assertTrue(isinstance(serialized, dict))
             self.assertEqual(start_date, serialized["start_date"])
