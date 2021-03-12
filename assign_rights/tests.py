@@ -35,6 +35,7 @@ class TestRightsAssemblyView(TransactionTestCase):
         self.api_factory = APIRequestFactory()
         self.factory = RequestFactory()
         add_rights_shells()
+        add_rights_acts()
 
     def test_rightsassembly_view(self):
         """Tests handling of expected returns as well as exceptions."""
