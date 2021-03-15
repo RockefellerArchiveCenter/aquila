@@ -32,6 +32,7 @@ class RightsAssembler(object):
                     grant_data.append(self.create_json(grant, RightsGrantedSerializer, start_date, end_date))
                 serialized_shell["rights_granted"] = grant_data
                 shell_data.append(serialized_shell)
+            return shell_data
         except RightsShell.DoesNotExist as e:
             raise Exception("Error retrieving rights shell: {}".format(str(e)))
         except ValueError as e:
@@ -94,7 +95,3 @@ class RightsAssembler(object):
         serializer = serializer_class(obj)
         bytes = JSONRenderer().render(serializer.data)
         return json.loads(bytes.decode("utf-8"))
-
-    def return_rights(self):
-        """docstring for return_rights"""
-    pass
