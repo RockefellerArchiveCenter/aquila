@@ -34,31 +34,103 @@ def add_groupings(count=5):
                 grouping.rights_shells.add(random.choice(RightsShell.objects.all()))
 
 
+def set_dates():
+    """Returns start and end dates in a way consistent with what is allowed in forms"""
+    start_date = None
+    end_date = None
+    start_date_period = None
+    end_date_period = None
+    end_date_open = False
+    choice = random.randrange(1, 5)
+    if choice == 1:
+        start_date = random_date(100, 25)
+        end_date = random_date(24, -50)
+    if choice == 2:
+        start_date = random_date(100, 25)
+        end_date_period = random.randint(20, 75)
+    if choice == 3:
+        start_date_period = random.randint(0, 10)
+        end_date_period = random.randint(20, 75)
+    else:
+        start_date_period = random.randint(0, 10)
+        end_date_open = True
+    return start_date, end_date, start_date_period, end_date_period, end_date_open
+
+
 def add_rights_shells(count=15):
-    for x in range(count):
+    def copyright_shell():
+        date_info = set_dates()
         RightsShell.objects.create(
-            rights_basis=random.choice([b[0] for b in RightsShell.RIGHTS_BASIS_CHOICES]),
-            copyright_status="copyrighted",
+            rights_basis="copyright",
+            copyright_status=random.choice(["copyrighted", "public domain", "unknown"]),
+            jurisdiction="us",
             determination_date=random_date(10, 0),
             note=random_string(),
-            start_date=random.choice([None, random_date(100, 25)]),
-            end_date=random.choice([None, random_date(24, -50)]),
-            start_date_period=random.randint(0, 10),
-            end_date_period=random.randint(0, 10),
-            end_date_open=random.choice([True, False]),
-            license_terms=None,
-            statute_citation=None)
+            start_date=date_info[0],
+            end_date=date_info[1],
+            start_date_period=date_info[2],
+            end_date_period=date_info[3],
+            end_date_open=date_info[4],
+        )
+
+    def other_shell():
+        date_info = set_dates()
+        RightsShell.objects.create(
+            rights_basis=random.choice(["policy", "donor"]),
+            determination_date=random_date(10, 0),
+            note=random_string(),
+            start_date=date_info[0],
+            end_date=date_info[1],
+            start_date_period=date_info[2],
+            end_date_period=date_info[3],
+            end_date_open=date_info[4],
+        )
+
+    def statute_shell():
+        date_info = set_dates()
+        RightsShell.objects.create(
+            rights_basis="statute",
+            jurisdiction="us",
+            determination_date=random_date(10, 0),
+            note=random_string(),
+            start_date=date_info[0],
+            end_date=date_info[1],
+            start_date_period=date_info[2],
+            end_date_period=date_info[3],
+            end_date_open=date_info[4],
+            statute_citation=random_string(),
+        )
+
+    def license_shell():
+        date_info = set_dates()
+        RightsShell.objects.create(
+            rights_basis="license",
+            jurisdiction="us",
+            determination_date=random_date(10, 0),
+            note=random_string(),
+            start_date=date_info[0],
+            end_date=date_info[1],
+            start_date_period=date_info[2],
+            end_date_period=date_info[3],
+            end_date_open=date_info[4],
+            license_terms=random_string(),
+        )
+
+    shell_types = [copyright_shell, other_shell, statute_shell, license_shell]
+    for x in range(count):
+        random.choice(shell_types)()
 
 
 def add_rights_acts(count=5):
     for x in range(count):
+        date_info = set_dates()
         RightsGranted.objects.create(
             basis=random.choice(RightsShell.objects.all()),
             act=random.choice(["publish", "disseminate", "replicate", "migrate", "modify", "use", "delete"]),
             restriction=random.choice(["allow", "disallow", "conditional"]),
-            start_date=random.choice([None, random_date(50, 5)]),
-            end_date=random.choice([None, random_date(4, -50)]),
-            start_date_period=random.randint(0, 10),
-            end_date_period=random.randint(0, 10),
-            end_date_open=random.choice([True, False]),
+            start_date=date_info[0],
+            end_date=date_info[1],
+            start_date_period=date_info[2],
+            end_date_period=date_info[3],
+            end_date_open=date_info[4],
         )
