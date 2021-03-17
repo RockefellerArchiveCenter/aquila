@@ -58,79 +58,31 @@ def set_dates():
 
 
 def add_rights_shells(count=15):
-    def copyright_shell():
-        date_info = set_dates()
-        RightsShell.objects.create(
-            rights_basis="copyright",
-            copyright_status=random.choice(["copyrighted", "public domain", "unknown"]),
-            jurisdiction="us",
-            determination_date=random_date(10, 0),
-            note=random_string(),
-            start_date=date_info[0],
-            end_date=date_info[1],
-            start_date_period=date_info[2],
-            end_date_period=date_info[3],
-            end_date_open=date_info[4],
-        )
-
-    def other_shell():
-        date_info = set_dates()
-        RightsShell.objects.create(
-            rights_basis=random.choice(["policy", "donor"]),
-            determination_date=random_date(10, 0),
-            note=random_string(),
-            start_date=date_info[0],
-            end_date=date_info[1],
-            start_date_period=date_info[2],
-            end_date_period=date_info[3],
-            end_date_open=date_info[4],
-        )
-
-    def statute_shell():
-        date_info = set_dates()
-        RightsShell.objects.create(
-            rights_basis="statute",
-            jurisdiction="us",
-            determination_date=random_date(10, 0),
-            note=random_string(),
-            start_date=date_info[0],
-            end_date=date_info[1],
-            start_date_period=date_info[2],
-            end_date_period=date_info[3],
-            end_date_open=date_info[4],
-            statute_citation=random_string(),
-        )
-
-    def license_shell():
-        date_info = set_dates()
-        RightsShell.objects.create(
-            rights_basis="license",
-            jurisdiction="us",
-            determination_date=random_date(10, 0),
-            note=random_string(),
-            start_date=date_info[0],
-            end_date=date_info[1],
-            start_date_period=date_info[2],
-            end_date_period=date_info[3],
-            end_date_open=date_info[4],
-            license_terms=random_string(),
-        )
-
-    shell_types = [copyright_shell, other_shell, statute_shell, license_shell]
     for x in range(count):
-        random.choice(shell_types)()
+        start_date, end_date, start_date_period, end_date_period, end_date_open = set_dates()
+        new_shell = RightsShell.objects.create(determination_date=random_date(10, 0), note=random_string(), start_date=start_date, end_date=end_date, start_date_period=start_date_period, end_date_period=end_date_period, end_date_open=end_date_open)
+        basis = random.choice(["copyright", "policy", "donor", "statute", "license"])
+        setattr(new_shell, "rights_basis", basis)
+        if basis in ["copyright", "statute"]:
+            setattr(new_shell, "jurisdiction", "us")
+        if basis == "copyright":
+            setattr(new_shell, "copyright_status", random.choice(["copyrighted", "public domain", "unknown"]))
+        if basis == "statute":
+            setattr(new_shell, "statute_citation", random_string())
+        if basis == "license":
+            setattr(new_shell, "license_terms", random_string())
 
 
 def add_rights_acts(count=5):
     for x in range(count):
-        date_info = set_dates()
+        start_date, end_date, start_date_period, end_date_period, end_date_open = set_dates()
         RightsGranted.objects.create(
             basis=random.choice(RightsShell.objects.all()),
             act=random.choice(["publish", "disseminate", "replicate", "migrate", "modify", "use", "delete"]),
             restriction=random.choice(["allow", "disallow", "conditional"]),
-            start_date=date_info[0],
-            end_date=date_info[1],
-            start_date_period=date_info[2],
-            end_date_period=date_info[3],
-            end_date_open=date_info[4],
+            start_date=start_date,
+            end_date=end_date,
+            start_date_period=start_date_period,
+            end_date_period=end_date_period,
+            end_date_open=end_date_open,
         )
