@@ -203,9 +203,13 @@ class RightsAssemblerView(APIView):
         if not all([rights_ids, request_start_date, request_end_date]):
             return Response(
                 {"detail": "Request data must contain 'identifiers', 'start_date' and 'end_date' keys."},
-                status=500)
+                status=400)
         try:
             rights = RightsAssembler().run(rights_ids, request_start_date, request_end_date)
             return Response({"rights_statements": rights}, status=200)
+        except RightsShell.DoesNotExist as e:
+            return Response({"detail": "Error retrieving rights shell: {}".format(str(e))}, status=404)
+        except ValueError as e:
+            return Response({"detail": "Unable to parse date: {}".format(e)}, status=500)
         except Exception as e:
             return Response({"detail": str(e)}, status=500)
