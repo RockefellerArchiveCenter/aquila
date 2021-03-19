@@ -57,10 +57,10 @@ class RightsAssembler(object):
         """
         object_start = None
         object_end = None
-        if getattr(object, "start_date_period"):
-            object_start = datetime.strptime(request_start_date, "%Y-%m-%d").date() + relativedelta(years=object.start_date_period)
-        else:
+        if getattr(object, "start_date"):
             object_start = getattr(object, "start_date")
+        else:
+            object_start = datetime.strptime(request_start_date, "%Y-%m-%d").date() + relativedelta(years=object.start_date_period)
         if getattr(object, "end_date_period"):
             object_end = datetime.strptime(request_end_date, "%Y-%m-%d").date() + relativedelta(years=object.end_date_period)
         elif getattr(object, "end_date"):
