@@ -35,6 +35,7 @@ class TestRightsAssemblyView(TransactionTestCase):
         self.api_factory = APIRequestFactory()
         self.factory = RequestFactory()
         add_rights_shells()
+        add_rights_acts()
 
     def test_rightsassembly_view(self):
         """Tests handling of expected returns as well as exceptions."""
@@ -167,8 +168,8 @@ class TestRightsAssembler(TestCase):
 
     def test_run_method(self):
         """Tests the run method"""
-        request_end_date = random_date().isoformat()
-        request_start_date = random_date().isoformat()
+        request_end_date = random_date(49, 0).isoformat()
+        request_start_date = random_date(100, 50).isoformat()
         run = RightsAssembler().run(self.rights_ids, request_start_date, request_end_date)
         self.assertIsNot(False, run)
 
@@ -194,40 +195,23 @@ class TestRightsAssembler(TestCase):
         Asserts that the relative delta of the calculated date and the correct end date
         is equal to the end date period of the object.
         """
-        object.end_date_open = False
-        object.start_date = random_date()
-        object.end_date = random_date()
-        start_date, end_date = self.assembler.calculate_dates(object, request_start_date, request_end_date)
-        self.assertEqual(relativedelta(start_date, object.start_date).years, object.start_date_period)
+        start_date, end_date = self.assembler.get_dates(object, request_start_date, request_end_date)
         self.assertTrue(isinstance(start_date, date))
-        self.assertEqual(relativedelta(end_date, object.end_date).years, object.end_date_period)
-        self.assertTrue(isinstance(end_date, date))
+        if object.end_date_open:
+            self.assertEqual(end_date, None)
+        else:
+            self.assertTrue(isinstance(end_date, date))
 
-        object.start_date = None
-        object.end_date = None
-        start_date, end_date = self.assembler.calculate_dates(object, request_start_date, request_end_date)
-        self.assertEqual(relativedelta(
-            start_date,
-            datetime.strptime(request_start_date, "%Y-%m-%d").date()).years,
-            object.start_date_period
-        )
-        self.assertTrue(isinstance(start_date, date))
-        self.assertEqual(relativedelta(
-            end_date,
-            datetime.strptime(request_end_date, "%Y-%m-%d").date()).years,
-            object.end_date_period
-        )
-        self.assertTrue(isinstance(end_date, date))
+        if object.start_date_period:
+            self.assertEqual(relativedelta(start_date, datetime.strptime(request_start_date, "%Y-%m-%d").date()).years, object.start_date_period)
+        if object.end_date_period:
+            self.assertEqual(relativedelta(end_date, datetime.strptime(request_end_date, "%Y-%m-%d").date()).years, object.end_date_period)
 
-        object.end_date_open = True
-        start_date, end_date = self.assembler.calculate_dates(object, request_start_date, request_end_date)
-        self.assertEqual(end_date, None)
-
-    def test_calculate_dates(self):
-        """Tests the calculate_dates method."""
+    def test_get_dates(self):
+        """Tests the get_dates method."""
         shell = random.choice(RightsShell.objects.all())
-        request_end_date = random_date().isoformat()
-        request_start_date = random_date().isoformat()
+        request_end_date = random_date(49, 0).isoformat()
+        request_start_date = random_date(100, 50).isoformat()
         self.check_object_dates(shell, request_start_date, request_end_date)
 
         for granted in shell.rightsgranted_set.all():
@@ -239,8 +223,8 @@ class TestRightsAssembler(TestCase):
                 (RightsShell, RightsShellSerializer),
                 (RightsGranted, RightsGrantedSerializer)]:
             obj = random.choice(obj_cls.objects.all())
-            start_date = random_date().isoformat()
-            end_date = random_date().isoformat()
+            start_date = random_date(75, 50).isoformat()
+            end_date = random_date(49, 5).isoformat()
             serialized = self.assembler.create_json(obj, serializer_cls, start_date, end_date)
             self.assertTrue(isinstance(serialized, dict))
             self.assertEqual(start_date, serialized["start_date"])
