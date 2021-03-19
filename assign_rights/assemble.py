@@ -42,23 +42,6 @@ class RightsAssembler(object):
         """Retrieves rights shells matching identifiers."""
         return [RightsShell.objects.get(pk=ident) for ident in rights_ids]
 
-    def calculate_date_value(self, object, field_name, request_date, period):
-        """Calculates the value for a date.
-
-        Args:
-            object (obj): the RightsShell or RightsGranted object for which a date is to be calculated.
-            field_name (str): the object attribute containing date data.
-            request_date (str): string representation of a date in ISO format.
-            period (int): the number of years to be used in calculating the date.
-
-        Returns:
-            A date object representation of the date after calculation.
-        """
-        if not getattr(object, field_name):
-            return datetime.strptime(request_date, "%Y-%m-%d").date() + relativedelta(years=period)
-        else:
-            return getattr(object, field_name) + relativedelta(years=period)
-
     def get_dates(self, object, request_start_date, request_end_date):
         """Calculate rights start and end dates for a given object.
 
@@ -75,11 +58,11 @@ class RightsAssembler(object):
         object_start = None
         object_end = None
         if getattr(object, "start_date_period"):
-            object_start = self.calculate_date_value(object, "start_date", request_start_date, object.start_date_period)
+            object_start = datetime.strptime(request_start_date, "%Y-%m-%d").date() + relativedelta(years=object.start_date_period)
         else:
             object_start = getattr(object, "start_date")
         if getattr(object, "end_date_period"):
-            object_end = self.calculate_date_value(object, "start_date", request_end_date, object.end_date_period)
+            object_end = datetime.strptime(request_end_date, "%Y-%m-%d").date() + relativedelta(years=object.end_date_period)
         elif getattr(object, "end_date"):
             object_end = getattr(object, "end_date")
         return object_start, object_end

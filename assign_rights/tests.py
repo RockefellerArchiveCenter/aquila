@@ -160,7 +160,7 @@ class TestViews(TestCase):
 class TestRightsAssembler(TestCase):
     def setUp(self):
         add_rights_shells()
-        add_rights_acts()
+        add_rights_acts(count=15)
         self.assembler = RightsAssembler()
         self.rights_ids = [obj.pk for obj in RightsShell.objects.all()]
 
