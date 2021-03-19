@@ -193,37 +193,20 @@ class TestRightsAssembler(TestCase):
         Asserts that the relative delta of the calculated date and the correct end date
         is equal to the end date period of the object.
         """
-        object.end_date_open = False
-        object.start_date = random_date(125, 50)
-        object.end_date = random_date(50, 10)
-        start_date, end_date = self.assembler.calculate_dates(object, request_start_date, request_end_date)
-        self.assertEqual(relativedelta(start_date, object.start_date).years, object.start_date_period)
+        start_date, end_date = self.assembler.get_dates(object, request_start_date, request_end_date)
         self.assertTrue(isinstance(start_date, date))
-        self.assertEqual(relativedelta(end_date, object.end_date).years, object.end_date_period)
-        self.assertTrue(isinstance(end_date, date))
+        if object.end_date_open:
+            self.assertEqual(end_date, None)
+        else:
+            self.assertTrue(isinstance(end_date, date))
 
-        object.start_date = None
-        object.end_date = None
-        start_date, end_date = self.assembler.calculate_dates(object, request_start_date, request_end_date)
-        self.assertEqual(relativedelta(
-            start_date,
-            datetime.strptime(request_start_date, "%Y-%m-%d").date()).years,
-            object.start_date_period
-        )
-        self.assertTrue(isinstance(start_date, date))
-        self.assertEqual(relativedelta(
-            end_date,
-            datetime.strptime(request_end_date, "%Y-%m-%d").date()).years,
-            object.end_date_period
-        )
-        self.assertTrue(isinstance(end_date, date))
+        if object.start_date_period:
+            self.assertEqual(relativedelta(start_date, datetime.strptime(request_start_date, "%Y-%m-%d").date()).years, object.start_date_period)
+        if object.end_date_period:
+            self.assertEqual(relativedelta(end_date, datetime.strptime(request_end_date, "%Y-%m-%d").date()).years, object.end_date_period)
 
-        object.end_date_open = True
-        start_date, end_date = self.assembler.calculate_dates(object, request_start_date, request_end_date)
-        self.assertEqual(end_date, None)
-
-    def test_calculate_dates(self):
-        """Tests the calculate_dates method."""
+    def test_get_dates(self):
+        """Tests the get_dates method."""
         shell = random.choice(RightsShell.objects.all())
         request_end_date = random_date(49, 0).isoformat()
         request_start_date = random_date(100, 50).isoformat()

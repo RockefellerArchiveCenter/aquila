@@ -25,10 +25,10 @@ class RightsAssembler(object):
             shell_data = []
             for shell in rights_shells:
                 grant_data = []
-                start_date, end_date = self.calculate_dates(shell, request_start_date, request_end_date)
+                start_date, end_date = self.get_dates(shell, request_start_date, request_end_date)
                 serialized_shell = self.create_json(shell, RightsShellSerializer, start_date, end_date)
                 for grant in shell.rightsgranted_set.all():
-                    start_date, end_date = self.calculate_dates(grant, request_start_date, request_end_date)
+                    start_date, end_date = self.get_dates(grant, request_start_date, request_end_date)
                     grant_data.append(self.create_json(grant, RightsGrantedSerializer, start_date, end_date))
                 serialized_shell["rights_granted"] = grant_data
                 shell_data.append(serialized_shell)
@@ -42,24 +42,7 @@ class RightsAssembler(object):
         """Retrieves rights shells matching identifiers."""
         return [RightsShell.objects.get(pk=ident) for ident in rights_ids]
 
-    def get_date_value(self, object, field_name, request_date, period):
-        """Calculates the value for a date.
-
-        Args:
-            object (obj): the RightsShell or RightsGranted object for which a date is to be calculated.
-            field_name (str): the object attribute containing date data.
-            request_date (str): string representation of a date in ISO format.
-            period (int): the number of years to be used in calculating the date.
-
-        Returns:
-            A date object representation of the date after calculation.
-        """
-        if not getattr(object, field_name):
-            return datetime.strptime(request_date, "%Y-%m-%d").date() + relativedelta(years=period)
-        else:
-            return getattr(object, field_name) + relativedelta(years=period)
-
-    def calculate_dates(self, object, request_start_date, request_end_date):
+    def get_dates(self, object, request_start_date, request_end_date):
         """Calculate rights start and end dates for a given object.
 
         Args:
@@ -72,10 +55,16 @@ class RightsAssembler(object):
                 representing the group of objects' start and end dates after
                 calculation.
         """
-        object_start = self.get_date_value(
-            object, "start_date", request_start_date, object.start_date_period)
-        object_end = None if object.end_date_open else self.get_date_value(
-            object, "end_date", request_end_date, object.end_date_period)
+        object_start = None
+        object_end = None
+        if getattr(object, "start_date"):
+            object_start = getattr(object, "start_date")
+        else:
+            object_start = datetime.strptime(request_start_date, "%Y-%m-%d").date() + relativedelta(years=object.start_date_period)
+        if getattr(object, "end_date_period"):
+            object_end = datetime.strptime(request_end_date, "%Y-%m-%d").date() + relativedelta(years=object.end_date_period)
+        elif getattr(object, "end_date"):
+            object_end = getattr(object, "end_date")
         return object_start, object_end
 
     def create_json(self, obj, serializer_class, obj_start, obj_end):

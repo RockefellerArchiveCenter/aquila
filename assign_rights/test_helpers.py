@@ -45,10 +45,10 @@ def set_dates():
     if choice == 1:
         start_date = random_date(100, 25)
         end_date = random_date(24, -50)
-    if choice == 2:
+    elif choice == 2:
         start_date = random_date(100, 25)
         end_date_period = random.randint(20, 75)
-    if choice == 3:
+    elif choice == 3:
         start_date_period = random.randint(0, 10)
         end_date_period = random.randint(20, 75)
     else:
