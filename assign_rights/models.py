@@ -83,7 +83,7 @@ class RightsGranted(models.Model):
 
 class Grouping(models.Model):
     title = models.CharField(max_length=255)
-    description = models.TextField(max_length=255)
+    description = models.TextField()
     rights_shells = models.ManyToManyField(RightsShell)
     created = models.DateTimeField(auto_now=True)
     last_modified = models.DateTimeField(auto_now_add=True)
