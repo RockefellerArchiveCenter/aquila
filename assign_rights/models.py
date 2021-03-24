@@ -47,7 +47,10 @@ class RightsShell(models.Model):
             prefixes.append(self.license_terms)
         elif self.rights_basis == "Statute":
             prefixes.append(self.statute_citation)
-        return "{} - {} ({})".format(self.pk, " / ".join([p for p in prefixes if p]), self.note)
+        note = self.note
+        if len(note) > 115:
+            note = "{}...".format(note[:75])
+        return "{} - {} ({})".format(self.pk, " / ".join([p for p in prefixes if p]), note)
 
 
 class RightsGranted(models.Model):
