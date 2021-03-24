@@ -25,7 +25,7 @@ class RightsShell(models.Model):
         blank=True, null=True, default=datetime.now
     )
     jurisdiction = models.CharField(max_length=2, blank=True, null=True)
-    note = models.TextField(blank=True, null=True)
+    note = models.TextField()
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     start_date_period = models.PositiveSmallIntegerField(blank=True, null=True)
@@ -93,7 +93,7 @@ class RightsGranted(models.Model):
 
 class Grouping(models.Model):
     title = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
+    description = models.TextField(max_length=255)
     rights_shells = models.ManyToManyField(RightsShell)
     created = models.DateTimeField(auto_now=True)
     last_modified = models.DateTimeField(auto_now_add=True)
