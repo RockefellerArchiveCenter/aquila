@@ -25,7 +25,7 @@ class RightsShell(models.Model):
         blank=True, null=True, default=datetime.now
     )
     jurisdiction = models.CharField(max_length=2, blank=True, null=True)
-    note = models.TextField(blank=True, null=True)
+    note = models.TextField()
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     start_date_period = models.PositiveSmallIntegerField(blank=True, null=True)
@@ -40,8 +40,6 @@ class RightsShell(models.Model):
         return reverse("rights-detail", kwargs={"pk": self.pk})
 
     def __str__(self):
-        start = "0 years after creation"
-        end = "open"
         prefixes = [self.get_rights_basis_display()]
         if self.rights_basis == "Copyright":
             prefixes.append(self.copyright_status)
@@ -49,15 +47,10 @@ class RightsShell(models.Model):
             prefixes.append(self.license_terms)
         elif self.rights_basis == "Statute":
             prefixes.append(self.statute_citation)
-        if self.start_date:
-            start = self.start_date
-        elif self.start_date_period:
-            start = "{} years after creation".format(self.start_date_period)
-        if self.end_date:
-            end = self.end_date
-        elif self.end_date_period:
-            end = "{} years after creation".format(self.end_date_period)
-        return "{} ({} until {})".format(" / ".join([p for p in prefixes if p]), start, end)
+        note = self.note
+        if len(note) > 115:
+            note = "{}...".format(note[:75]) if len(note) > 75 else note
+        return "{} - {} ({})".format(self.pk, " / ".join([p for p in prefixes if p]), note)
 
 
 class RightsGranted(models.Model):
@@ -93,7 +86,7 @@ class RightsGranted(models.Model):
 
 class Grouping(models.Model):
     title = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
+    description = models.TextField()
     rights_shells = models.ManyToManyField(RightsShell)
     created = models.DateTimeField(auto_now=True)
     last_modified = models.DateTimeField(auto_now_add=True)
