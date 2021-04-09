@@ -2,6 +2,11 @@
 .archivessnake.yml
 *.pickle
 */config.py
+.coverage
+htmlcov/
+.coverage.*
+coverage.xml
+*.cover
 
 ### Django ###
 *.log

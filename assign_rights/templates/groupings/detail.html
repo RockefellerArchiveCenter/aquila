@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load utils %}
 
 {% block content %}
 
@@ -12,5 +13,10 @@
   {% for rights in object.rights_shells.all %}<li>{{rights}}</li>{% endfor %}
 </ul>
 
+{% if request.user|has_group:"edit" %}
 <a class="btn btn-warning" href="{% url 'groupings-update' pk=object.pk %}">Edit</a>
+{% endif %}
+{% if request.user|has_group:"delete" %}
+<a class="btn btn-danger" href="{% url 'groupings-delete' pk=object.pk %}">Delete</a>
+{% endif %}
 {% endblock %}

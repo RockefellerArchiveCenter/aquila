@@ -1,0 +1,14 @@
+[run]
+source = .
+branch = True
+[report]
+fail_under = 100
+show_missing = True
+omit =
+  */settings.py
+  */config.py
+  */__init__.py
+  manage.py
+  setup_user.py
+  aquila/*.py
+  */migrations/*.py

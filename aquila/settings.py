@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
-from . import config as CF
+from . import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -22,12 +22,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = CF.SECRET_KEY
+SECRET_KEY = config.DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = CF.DEBUG
+DEBUG = config.DJANGO_DEBUG
 
-ALLOWED_HOSTS = CF.ALLOWED_HOSTS
+ALLOWED_HOSTS = config.DJANGO_ALLOWED_HOSTS
 
 
 # Application definition
@@ -40,8 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'assign_rights',
+    'django_auth_adfs',
     'crispy_forms',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -51,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_auth_adfs.middleware.LoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'aquila.urls'
@@ -77,7 +80,16 @@ WSGI_APPLICATION = 'aquila.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = CF.DATABASES
+DATABASES = {
+    "default": {
+        "ENGINE": config.SQL_ENGINE,
+        "NAME": config.SQL_DATABASE,
+        "USER": config.SQL_USER,
+        "PASSWORD": config.SQL_PASSWORD,
+        "HOST": config.SQL_HOST,
+        "PORT": config.SQL_PORT,
+    }
+}
 
 
 # Password validation
@@ -100,6 +112,21 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'assign_rights.User'
 
+AUTHENTICATION_BACKENDS = [
+    'django_auth_adfs.backend.AdfsAuthCodeBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+AUTH_ADFS = {
+    "SERVER": "adfs.rockarch.org",
+    "CLIENT_ID": config.SSO_CLIENT_ID,
+    "RELYING_PARTY_ID": config.SSO_RELYING_PARTY_ID,
+    "AUDIENCE": config.SSO_AUDIENCE,
+    "CLAIM_MAPPING": {"first_name": "given_name",
+                      "last_name": "family_name",
+                      "email": "email"},
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -120,7 +147,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-LOGIN_URL = "login"
+LOGIN_URL = config.LOGIN_URL
 LOGIN_REDIRECT_URL = "groupings-list"
 
 # django-crispy-forms template pack

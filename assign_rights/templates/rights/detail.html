@@ -1,94 +1,100 @@
 {% extends 'base.html' %}
+{% load utils %}
 
 {% block content %}
+<div class="mb-2">
+  <small>Created {{ rightsshell.created }}, last modified {{ rightsshell.last_modified }}</small>
+</div>
 
-<small>Created on {{ rightsshell.created }}</small><br/>
-<small>Last modified on {{ rightsshell.last_modified }}</small>
+{% if rightsshell.note %}
+<p class="lead">{{ rightsshell.note }}</p>
+{% endif %}
 
+<h2>Details</h2>
 <dl class="row">
-  <dt class="col-sm-3">ID</dt>
-  <dd class="col-sm-3">{{ rightsshell.pk }}</dd>
-</dl>
-<dl class="row">
-  <dt class="col-sm-3">Basis</dt>
-  <dd class="col-sm-3">{{ rightsshell.rights_basis }}</dd>
-</dl>
-<dl class="row">
-  <dt class="col-sm-3">Copyright Status</dt>
-  <dd class="col-sm-3">{{ rightsshell.copyright_status }}</dd>
-</dl>
-<dl class="row">
-  <dt class="col-sm-3">Determination Date</dt>
-  <dd class="col-sm-3">{{ rightsshell.determination_date }}</dd>
-</dl>
-<dl class="row">
-  <dt class="col-sm-3">Note</dt>
-  <dd class="col-sm-3">{{ rightsshell.note }}</dd>
-</dl>
-<dl class="row">
-  <dt class="col-sm-3">Start Date</dt>
-  <dd class="col-sm-3">{{ rightsshell.start_date }}</dd>
-</dl>
-<dl class="row">
-  <dt class="col-sm-3">End Date</dt>
-  <dd class="col-sm-3">{{ rightsshell.end_date }}</dd>
-</dl>
-<dl class="row">
-  <dt class="col-sm-3">Start Date Period</dt>
-  <dd class="col-sm-3">{{ rightsshell.start_date_period }}</dd>
-</dl>
-<dl class="row">
-  <dt class="col-sm-3">End Date Period</dt>
-  <dd class="col-sm-3">{{ rightsshell.end_date_period }}</dd>
-</dl>
-<dl class="row">
-  <dt class="col-sm-3">Open End Date</dt>
-  <dd class="col-sm-3">{{ rightsshell.end_date_open }}</dd>
-</dl>
-<dl class="row">
-  <dt class="col-sm-3">License Terms</dt>
-  <dd class="col-sm-3">{{ rightsshell.license_terms }}</dd>
-</dl>
-<dl class="row">
-  <dt class="col-sm-3">Statute Citation</dt>
-  <dd class="col-sm-3">{{ rightsshell.statute_citation }}</dd>
+  <dt class="col-sm-2">Basis</dt>
+  <dd class="col-sm-10">{{ rightsshell.rights_basis }}</dd>
+  {% if rightsshell.get_rights_basis_display == "Copyright" %}
+  <dt class="col-sm-2">Copyright Status</dt>
+  <dd class="col-sm-10">{{ rightsshell.copyright_status }}</dd>
+  <dt class="col-sm-2">Jurisdiction</dt>
+  <dd class="col-sm-10">{{ rightsshell.jurisdiction }}</dd>
+  {% elif rightsshell.get_rights_basis_display == "License" %}
+  <dt class="col-sm-2">License Terms</dt>
+  <dd class="col-sm-10">{{ rightsshell.license_terms }}</dd>
+  {% elif rightsshell.get_rights_basis_display == "Statute" %}
+  <dt class="col-sm-2">Statute Citation</dt>
+  <dd class="col-sm-10">{{ rightsshell.statute_citation }}</dd>
+  <dt class="col-sm-2">Jurisdiction</dt>
+  <dd class="col-sm-10">{{ rightsshell.jurisdiction }}</dd>
+  {% endif %}
+  {% if rightsshell.start_date %}
+  <dt class="col-sm-2">Start Date</dt>
+  <dd class="col-sm-10">{{ rightsshell.start_date }}</dd>
+  {% endif %}
+  {% if rightsshell.start_date_period %}
+  <dt class="col-sm-2">Start Date Embargo Period (in years)</dt>
+  <dd class="col-sm-10">{{ rightsshell.start_date_period }}</dd>
+  {% endif %}
+  {% if rightsshell.end_date %}
+  <dt class="col-sm-2">End Date</dt>
+  <dd class="col-sm-10">{{ rightsshell.end_date }}</dd>
+  {% endif %}
+  {% if rightsshell.end_date_open %}
+  <dt class="col-sm-2">End Date Open?</dt>
+  <dd class="col-sm-10">{{ rightsshell.end_date_open }}</dd>
+  {% endif %}
+  {% if rightsshell.end_date_period %}
+  <dt class="col-sm-2">End Date Embargo Period (in years)</dt>
+  <dd class="col-sm-10">{{ rightsshell.end_date_period }}</dd>
+  {% endif %}
 </dl>
 
-{% for acts in rightsshell.rightsgranted_set.all %}
-<dl class="row">
-  <dt class="col-sm-3">Act</dt>
-  <dd class="col-sm-3">{{acts.act}}</dd>
-</dl>
-<dl class="row">
-  <dt class="col-sm-3">Restriction</dt>
-  <dd class="col-sm-3">{{acts.restriction}}</dd>
-</dl>
-<dl class="row">
-  <dt class="col-sm-3">Act Note</dt>
-  <dd class="col-sm-3">{{acts.note}}</dd>
-</dl>
-<dl class="row">
-  <dt class="col-sm-3">Act Start Date</dt>
-  <dd class="col-sm-3">{{acts.start_date}}</dd>
-</dl>
-<dl class="row">
-  <dt class="col-sm-3">Act End Date</dt>
-  <dd class="col-sm-3">{{acts.end_date}}</dd>
-</dl>
-<dl class="row">
-  <dt class="col-sm-3">Act Start Date Period</dt>
-  <dd class="col-sm-3">{{acts.start_date_period}}</dd>
-</dl>
-<dl class="row">
-  <dt class="col-sm-3">Act End Date Period</dt>
-  <dd class="col-sm-3">{{acts.end_date_period}}</dd>
-</dl>
-<dl class="row">
-  <dt class="col-sm-3">Act Open End Date</dt>
-  <dd class="col-sm-3">{{acts.end_date_open}}</dd>
-</dl>
+{% if rightsshell.rightsgranted_set.all %}
+<h2>Rights Granted</h2>
+<div class="row">
+{% for rights_granted in rightsshell.rightsgranted_set.all %}
+  <div class="col-6">
+    <div class="card mb-4">
+      <div class="card-body">
+        <h3>{{rights_granted}}</h3>
+        {% if rights_granted.note %}
+        <p class="lead">{{rights_granted.note}}</p>
+        {% endif %}
+        <dl>
+        {% if rights_granted.start_date %}
+        <dt>Start Date</dt>
+        <dd>{{rights_granted.start_date}}</dd>
+        {% endif %}
+        {% if rights_granted.start_date_period %}
+        <dt>Start Date Embargo Period (in years)</dt>
+        <dd>{{rights_granted.start_date_period}}</dd>
+        {% endif %}
+        {% if rights_granted.end_date %}
+        <dt>End Date</dt>
+        <dd>{{rights_granted.end_date}}</dd>
+        {% endif %}
+        {% if rights_granted.end_date_open %}
+        <dt>End Date Open?</dt>
+        <dd>{{rights_granted.end_date_open}}</dd>
+        {% endif %}
+        {% if rights_granted.end_date_period %}
+        <dt>End Date Embargo Period (in years)</dt>
+        <dd>{{rights_granted.end_date_period}}</dd>
+        {% endif %}
+        </dl>
+      </div>
+    </div>
+  </div>
 {% endfor %}
+</div>
+{% endif %}
 
+{% if request.user|has_group:"edit" %}
 <a class="btn btn-warning" href="{% url 'rights-update' pk=object.pk %}">Edit</a>
+{% endif %}
+{% if request.user|has_group:"delete" %}
+<a class="btn btn-danger" href="{% url 'rights-delete' pk=object.pk %}">Delete</a>
+{% endif %}
 
 {% endblock %}

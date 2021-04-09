@@ -1,0 +1,64 @@
+/* Improve primary color contrast */
+
+.btn-primary {
+  background-color: #0069d9;
+  border-color: #0069d9;
+}
+
+.btn-primary:hover, .btn-outline-primary:hover {
+    background-color: #004FA3;
+    border-color: #004FA3;
+}
+
+.btn-outline-primary {
+  border-color: #0069d9;
+  color: #0069d9;
+}
+
+.content a {
+  text-decoration: underline;
+}
+
+a.btn {
+  text-decoration: none;
+}
+
+.rights-granted__checkbox, .rights-basis__checkbox {
+  margin-top: 2.5rem;
+}
+
+.skip-link {
+  background: #0069d9;
+  color: #FFFFFF;
+  padding: 15px 20px 18px 20px;
+  position: absolute;
+  left: 15px;
+  top: 56px;
+  font-size: 18px;
+  text-align: center;
+  outline: 0;
+  text-decoration: underline;
+}
+
+.skip-link:hover {
+  background: #004FA3;
+  color: #DDDDDD;
+}
+
+.visually-hidden {
+    clip: rect(1px, 1px, 1px, 1px);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
+
+.visually-hidden:focus {
+  clip: auto;
+  height: auto;
+  overflow: auto;
+  position: absolute;
+  width: auto;
+  z-index: 99;
+}

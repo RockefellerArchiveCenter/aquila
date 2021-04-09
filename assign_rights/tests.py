@@ -1,10 +1,13 @@
+import json
 import random
 from datetime import date, datetime
-from unittest.mock import patch
+from os import listdir
+from os.path import join
 
+from aquila import settings
 from dateutil.relativedelta import relativedelta
-from django.contrib.auth.models import AnonymousUser
-from django.test import RequestFactory, TestCase
+from django.contrib.auth.models import AnonymousUser, Group
+from django.test import RequestFactory, TestCase, TransactionTestCase
 from django.urls import reverse
 from rest_framework.test import APIRequestFactory
 
@@ -19,6 +22,43 @@ from .views import (GroupingCreateView, GroupingDetailView, GroupingListView,
                     RightsShellCreateView, RightsShellDetailView,
                     RightsShellListView, RightsShellUpdateView)
 
+valid_data_fixture_dir = join(settings.BASE_DIR, 'fixtures', 'valid_requests')
+invalid_data_fixture_dir = join(settings.BASE_DIR, 'fixtures', 'invalid_requests')
+
+
+class TestRightsAssemblyView(TransactionTestCase):
+    """ Tests that require stable pks """
+
+    reset_sequences = True
+
+    def setUp(self):
+        self.api_factory = APIRequestFactory()
+        self.factory = RequestFactory()
+        add_rights_shells()
+        add_rights_acts()
+
+    def test_rightsassembly_view(self):
+        """Tests handling of expected returns as well as exceptions."""
+
+        # RightsAssembler returns expected value
+        for f in listdir(valid_data_fixture_dir):
+            with open(join(valid_data_fixture_dir, f), 'r') as json_file:
+                valid_data = json.load(json_file)
+                request = self.factory.post(reverse("rights-assemble"), valid_data, content_type='application/json')
+                response = RightsAssemblerView.as_view()(request)
+                self.assertEqual(response.status_code, 200, "Request error: {}".format(response.data))
+
+        # RightsAssembler throws an exception
+        for fixture_name, message, status_code in [
+                ("invalid_rights_id.json", "Error retrieving rights shell: RightsShell matching query does not exist.", 404),
+                ("no_start_date.json", "Request data must contain 'identifiers', 'start_date' and 'end_date' keys.", 400)]:
+            with open(join(invalid_data_fixture_dir, fixture_name), 'r') as json_file:
+                invalid_data = json.load(json_file)
+                request = self.factory.post(reverse("rights-assemble"), invalid_data, content_type='application/json')
+                response = RightsAssemblerView.as_view()(request)
+                self.assertEqual(response.status_code, status_code, "Request should have returned a {} status code".format(status_code))
+                self.assertEqual(response.data["detail"], message)
+
 
 class TestViews(TestCase):
 
@@ -26,6 +66,8 @@ class TestViews(TestCase):
         self.api_factory = APIRequestFactory()
         self.factory = RequestFactory()
         self.user = User.objects.create_user("test_user", "test@example.com", "testpass")
+        self.group = Group.objects.get(name='edit')
+        self.user.groups.add(self.group)
         add_rights_shells()
         add_groupings()
 
@@ -43,7 +85,11 @@ class TestViews(TestCase):
             self.assertEqual(response.status_code, 200)
 
     def test_grouping_form(self):
-        form_data = {"title": random_string(10), "description": random_string(25), "rights_shells": [random.choice(RightsShell.objects.all())]}
+        """Tests form handles data correctly."""
+        form_data = {
+            "title": random_string(10),
+            "description": random_string(25),
+            "rights_shells": [random.choice(RightsShell.objects.all())]}
         form = GroupingForm(data=form_data)
         self.assertTrue(form.is_valid(), form.errors)
         for field in ["title", "description", "rights_shells"]:
@@ -68,43 +114,24 @@ class TestViews(TestCase):
             self.assertEqual(response.status_code, 200)
 
     def test_rightsshell_form(self):
-        form_data = {"rights_basis": random.choice(["Copyright", "Statute", "License", "Other"]), "note": random_string(), "start_date_period": random.randint(0, 10), "end_date_period": random.randint(0, 10)}
+        """Test form handles data correctly"""
+        form_data = {
+            "rights_basis": random.choice([b[0] for b in RightsShell.RIGHTS_BASIS_CHOICES]),
+            "note": random_string(),
+            "start_date_period": random.randint(0, 10),
+            "end_date_period": random.randint(0, 10),
+            "rights_begin": "start_date_period",
+            "rights_end": "end_date_period",
+        }
         form = RightsShellForm(data=form_data)
         self.assertTrue(form.is_valid(), form.errors)
-        for field in ["rights_basis", "note", "start_date_period", "end_date_period"]:
+        for field in ["rights_basis"]:
             del form_data[field]
             form = RightsShellForm(data=form_data)
             self.assertFalse(form.is_valid(), "Form unexpectedly valid")
             self.assertIsNot(
                 form.errors[field], False,
                 "Field-specific error message not raised for {}".format(field))
-
-    @patch("assign_rights.assemble.RightsAssembler.run")
-    def test_rightsassembly_view(self, mock_assemble):
-        """Tests handling of expected returns as well as exceptions."""
-
-        # RightsAssembler returns expected value
-        mock_assemble.return_value = []
-        data = {"identifiers": ["1", "2", "3"], "start_date": "2010-01-01", "end_date": "2011-01-01"}
-        request = self.factory.post(reverse("rights-assemble"), data, content_type='application/json')
-        response = RightsAssemblerView.as_view()(request)
-        self.assertEqual(response.status_code, 200, "Request error: {}".format(response.data))
-        self.assertEqual(response.data["rights_statements"], [])
-
-        # RightsAssembler throws an exception
-        mock_assemble.side_effect = Exception("Exception text")
-        request = self.factory.post(reverse("rights-assemble"), data, content_type='application/json')
-        response = RightsAssemblerView.as_view()(request)
-        self.assertEqual(response.status_code, 500, "here")
-        self.assertEqual(response.data["detail"], "Exception text")
-        mock_assemble.reset_mock(side_effect=True)
-
-        # Required data is missing from request
-        data.pop(random.choice(list(data)))
-        request = self.factory.post(reverse("rights-assemble"), data, content_type='application/json')
-        response = RightsAssemblerView.as_view()(request)
-        self.assertEqual(response.status_code, 500, "Request should have returned a 500 status code")
-        self.assertEqual(response.data["detail"], "Request data must contain 'identifiers', 'start_date' and 'end_date' keys.")
 
     def test_restricted_views(self):
         """Asserts that restricted views are only available to logged-in users."""
@@ -139,6 +166,13 @@ class TestRightsAssembler(TestCase):
         self.assembler = RightsAssembler()
         self.rights_ids = [obj.pk for obj in RightsShell.objects.all()]
 
+    def test_run_method(self):
+        """Tests the run method"""
+        request_end_date = random_date(49, 0).isoformat()
+        request_start_date = random_date(100, 50).isoformat()
+        run = RightsAssembler().run(self.rights_ids, request_start_date, request_end_date)
+        self.assertIsNot(False, run)
+
     def test_retrieve_rights(self):
         """Tests the retrieve_rights method.
 
@@ -161,52 +195,36 @@ class TestRightsAssembler(TestCase):
         Asserts that the relative delta of the calculated date and the correct end date
         is equal to the end date period of the object.
         """
-        object.end_date_open = False
-        object.start_date = random_date()
-        object.end_date = random_date()
-        start_date, end_date = self.assembler.calculate_dates(object, request_start_date, request_end_date)
-        self.assertEqual(relativedelta(start_date, object.start_date).years, object.start_date_period)
+        start_date, end_date = self.assembler.get_dates(object, request_start_date, request_end_date)
         self.assertTrue(isinstance(start_date, date))
-        self.assertEqual(relativedelta(end_date, object.end_date).years, object.end_date_period)
-        self.assertTrue(isinstance(end_date, date))
+        if object.end_date_open:
+            self.assertEqual(end_date, None)
+        else:
+            self.assertTrue(isinstance(end_date, date))
 
-        object.start_date = None
-        object.end_date = None
-        start_date, end_date = self.assembler.calculate_dates(object, request_start_date, request_end_date)
-        self.assertEqual(relativedelta(
-            start_date,
-            datetime.strptime(request_start_date, "%Y-%m-%d").date()).years,
-            object.start_date_period
-        )
-        self.assertTrue(isinstance(start_date, date))
-        self.assertEqual(relativedelta(
-            end_date,
-            datetime.strptime(request_end_date, "%Y-%m-%d").date()).years,
-            object.end_date_period
-        )
-        self.assertTrue(isinstance(end_date, date))
+        if object.start_date_period:
+            self.assertEqual(relativedelta(start_date, datetime.strptime(request_start_date, "%Y-%m-%d").date()).years, object.start_date_period)
+        if object.end_date_period:
+            self.assertEqual(relativedelta(end_date, datetime.strptime(request_end_date, "%Y-%m-%d").date()).years, object.end_date_period)
 
-        object.end_date_open = True
-        start_date, end_date = self.assembler.calculate_dates(object, request_start_date, request_end_date)
-        self.assertEqual(end_date, None)
-
-    def test_calculate_dates(self):
-        """Tests the calculate_dates method."""
+    def test_get_dates(self):
+        """Tests the get_dates method."""
         shell = random.choice(RightsShell.objects.all())
-        request_end_date = random_date().isoformat()
-        request_start_date = random_date().isoformat()
+        request_end_date = random_date(49, 0).isoformat()
+        request_start_date = random_date(100, 50).isoformat()
         self.check_object_dates(shell, request_start_date, request_end_date)
 
         for granted in shell.rightsgranted_set.all():
             self.check_object_dates(granted, request_start_date, request_end_date)
 
     def test_create_json(self):
+        """Tests that Serialzers are working as expected."""
         for obj_cls, serializer_cls in [
                 (RightsShell, RightsShellSerializer),
                 (RightsGranted, RightsGrantedSerializer)]:
             obj = random.choice(obj_cls.objects.all())
-            start_date = random_date().isoformat()
-            end_date = random_date().isoformat()
+            start_date = random_date(75, 50).isoformat()
+            end_date = random_date(49, 5).isoformat()
             serialized = self.assembler.create_json(obj, serializer_cls, start_date, end_date)
             self.assertTrue(isinstance(serialized, dict))
             self.assertEqual(start_date, serialized["start_date"])
