@@ -11,11 +11,6 @@ import django.utils.timezone
 from django.contrib.auth.models import Group
 from django.db import migrations, models
 
-# Functions from the following migrations need manual copying.
-# Move them and any dependencies into this file, then update the
-# RunPython operations to refer to the local versions:
-# assign_rights.migrations.0005_auto_20200929_1724
-
 
 def create_groups(apps, schema_editor):
     groups_to_add = ('edit', 'delete')
