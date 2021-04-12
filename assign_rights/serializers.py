@@ -30,7 +30,6 @@ class RightsShellSerializer(serializers.ModelSerializer):
     end_date = serializers.CharField()
     status = serializers.CharField(source="copyright_status")
     terms = serializers.CharField(source="license_terms")
-    citation = serializers.CharField(source="statute_citation")
     rights_granted = serializers.ListField(default=[])
     jurisdiction = serializers.SerializerMethodField()
 
@@ -45,7 +44,7 @@ class RightsShellSerializer(serializers.ModelSerializer):
             "note",
             "status",
             "terms",
-            "citation",
+            "statute_citation",
             "rights_granted"
         )
 
