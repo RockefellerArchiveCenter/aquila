@@ -57,9 +57,9 @@ class RightsShellCreateView(PageTitleMixin, EditMixin, CreateView):
             context['license_form'] = LicenseForm(self.request.POST, error_class=StrErrorList)
         else:
             context['rights_granted_form'] = RightsGrantedFormSet()
-            context['copyright_form'] = CopyrightForm()
+            context['copyright_form'] = CopyrightForm(initial={'jurisdiction': 'us'})
             context['other_form'] = OtherForm()
-            context['statute_form'] = StatuteForm()
+            context['statute_form'] = StatuteForm(initial={'jurisdiction': 'us'})
             context['license_form'] = LicenseForm()
         return context
 
