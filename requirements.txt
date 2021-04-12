@@ -6,7 +6,7 @@ clinner==1.12.3
 colorlog==3.2.0
 coverage==5.4
 cryptography==3.4.6
-Django==3.1.7
+Django==3.1.8
 django-auth-adfs==1.6.0
 django-crispy-forms==1.11.1
 djangorestframework==3.12.2
@@ -24,4 +24,4 @@ requests==2.25.1
 six==1.15.0
 smmap==3.0.5
 sqlparse==0.4.1
-urllib3==1.26.3
+urllib3==1.26.4
