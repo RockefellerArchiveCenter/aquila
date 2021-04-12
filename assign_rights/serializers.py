@@ -32,6 +32,7 @@ class RightsShellSerializer(serializers.ModelSerializer):
     terms = serializers.CharField(source="license_terms")
     citation = serializers.CharField(source="statute_citation")
     rights_granted = serializers.ListField(default=[])
+    jurisdiction = serializers.SerializerMethodField()
 
     class Meta:
         model = RightsShell
@@ -47,3 +48,6 @@ class RightsShellSerializer(serializers.ModelSerializer):
             "citation",
             "rights_granted"
         )
+
+    def get_jurisdiction(self, obj):
+        return obj.jurisdiction.lower() if obj.jurisdiction else None
