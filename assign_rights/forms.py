@@ -27,7 +27,8 @@ class RightsShellCommonLayout(Layout):
             Div(
                 Div(Field("rights_begin", v_model="rightsBegin"), css_class="col-5"),
                 Div(Field("start_date", pattern=r"\d{4}-\d{2}-\d{2}", required="required"), css_class="col-4", v_if="rightsBegin=='start_date'"),
-                Div(Field("start_date_period", required="required"), css_class="col-4", v_if="rightsBegin=='start_date_period'"), css_class="row"),
+                Div(Field("start_date_period", required="required"), css_class="col-4", v_if="rightsBegin=='start_date_period'"),
+                Div(Hidden(name="start_date_period", value="0"), v_if="rightsBegin=='start_date_period_zero'"), css_class="row"),
             Div(
                 Div(Field("rights_end", v_model="rightsEnd"), css_class="col-5"),
                 Div(Field("end_date", pattern=r"\d{4}-\d{2}-\d{2}", required="required"), css_class="col-4", v_if="rightsEnd=='end_date'"),
@@ -50,7 +51,8 @@ class RightsShellForm(ModelForm):
         label="Start of Rights",
         choices=(("", "---------"),
                  ("start_date", "These rights start on a specific date"),
-                 ("start_date_period", "These rights start after an embargo period")))
+                 ("start_date_period", "These rights start after an embargo period"),
+                 ("start_date_period_zero", "These rights start on creation date of materials")))
     rights_end = ChoiceField(
         label="End of Rights",
         choices=(("", "---------"),
