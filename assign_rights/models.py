@@ -50,7 +50,7 @@ class RightsShell(models.Model):
         note = self.note
         if len(note) > 115:
             note = "{}...".format(note[:75]) if len(note) > 75 else note
-        return "{} - {} ({})".format(self.pk, " / ".join([p for p in prefixes if p]), note)
+        return "ID# {} - {} ({})".format(self.pk, " / ".join([p for p in prefixes if p]), note)
 
 
 class RightsGranted(models.Model):
