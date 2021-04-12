@@ -1,6 +1,6 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Field, Hidden, Layout
-from django.forms import (ChoiceField, ModelForm, Select, Textarea, TextInput,
+from django.forms import (CheckboxSelectMultiple, ChoiceField, ModelForm, Select, Textarea, TextInput,
                           inlineformset_factory)
 from django.forms.utils import ErrorList
 
@@ -42,7 +42,10 @@ class RightsShellCommonLayout(Layout):
 class GroupingForm(ModelForm):
     class Meta:
         model = Grouping
-        fields = ["title", "description", "rights_shells"]
+        fields = ["title", "description", 'rights_shells']
+        widgets = {
+            'rights_shells': CheckboxSelectMultiple
+        }
 
 
 class RightsShellForm(ModelForm):
