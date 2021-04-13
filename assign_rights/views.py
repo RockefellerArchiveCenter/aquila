@@ -93,7 +93,6 @@ class RightsShellUpdateView(PageTitleMixin, EditMixin, UpdateView):
         context["act_choices"] = RightsGranted.ACT_CHOICES
         context["restriction_choices"] = RightsGranted.RESTRICTION_CHOICES
         if self.request.POST:
-            print("here")
             context["rights_granted_form"] = RightsGrantedFormSet(
                 self.request.POST, instance=self.object, error_class=StrErrorList)
             context["basis_form"] = form_cls(self.request.POST, instance=self.object)

@@ -226,6 +226,9 @@ class TestRightsAssembler(TestCase):
             start_date = random_date(75, 50).isoformat()
             end_date = random_date(49, 5).isoformat()
             serialized = self.assembler.create_json(obj, serializer_cls, start_date, end_date)
+            if obj_cls == RightsShell:
+                if obj.jurisdiction:
+                    self.assertTrue(serialized['jurisdiction'].islower())
             self.assertTrue(isinstance(serialized, dict))
             self.assertEqual(start_date, serialized["start_date"])
             self.assertEqual(end_date, serialized["end_date"])

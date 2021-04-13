@@ -64,7 +64,7 @@ def add_rights_shells(count=15):
         basis = random.choice(["copyright", "policy", "donor", "statute", "license"])
         new_shell.rights_basis = basis
         if basis in ["copyright", "statute"]:
-            new_shell.jurisdiction = "us"
+            new_shell.jurisdiction = "US"
         if basis == "copyright":
             new_shell.copyright_status = random.choice(["copyrighted", "public domain", "unknown"])
         elif basis == "statute":
