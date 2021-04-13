@@ -228,9 +228,7 @@ class TestRightsAssembler(TestCase):
             serialized = self.assembler.create_json(obj, serializer_cls, start_date, end_date)
             if obj_cls == RightsShell:
                 if obj.jurisdiction:
-                    self.assertEqual(serialized['jurisdiction'], 'us')
-                else:
-                    self.assertEqual(serialized['jurisdiction'], None)
+                    self.assertTrue(serialized['jurisdiction'].islower())
             self.assertTrue(isinstance(serialized, dict))
             self.assertEqual(start_date, serialized["start_date"])
             self.assertEqual(end_date, serialized["end_date"])
