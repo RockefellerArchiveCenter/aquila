@@ -5,7 +5,14 @@
 
 <form action="." method="POST" accept-charset="utf-8">
   {% csrf_token %}
-	{{ form | crispy }}
+	{{ form.title | as_crispy_field }}
+	{{ form.description | as_crispy_field }}
+	<fieldset>
+		<legend>Choose Associated Rights Shell/s*</legend>
+		<div class="overflow-auto border p-2 mb-3" style="max-height:250px;">
+			{{ form.rights_shells | as_crispy_field }}
+		</div>
+	</fieldset>
 	<button class="btn btn-primary" type="submit">Save</button>
 </form>
 

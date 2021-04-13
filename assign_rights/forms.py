@@ -1,7 +1,7 @@
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Div, Field, Hidden, Layout
-from django.forms import (CheckboxSelectMultiple, ChoiceField, ModelForm, Select, Textarea, TextInput,
-                          inlineformset_factory)
+from crispy_forms.layout import Div, Field, Fieldset, Hidden, Layout
+from django.forms import (CheckboxSelectMultiple, ChoiceField, ModelForm,
+                          Select, Textarea, TextInput, inlineformset_factory)
 from django.forms.utils import ErrorList
 
 from .models import Grouping, RightsGranted, RightsShell
@@ -40,6 +40,14 @@ class RightsShellCommonLayout(Layout):
 
 
 class GroupingForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.field_template = "forms/custom_field.html"
+        self.fields['rights_shells'].label = False
+        self.helper.form_tag = False
+        self.helper.disable_csrf = True
+
     class Meta:
         model = Grouping
         fields = ["title", "description", 'rights_shells']
