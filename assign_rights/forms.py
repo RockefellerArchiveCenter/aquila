@@ -1,5 +1,5 @@
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Div, Field, Fieldset, Hidden, Layout
+from crispy_forms.layout import Div, Field, Hidden, Layout
 from django.forms import (CheckboxSelectMultiple, ChoiceField, ModelForm,
                           Select, Textarea, TextInput, inlineformset_factory)
 from django.forms.utils import ErrorList
