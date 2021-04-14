@@ -40,14 +40,12 @@ class RightsShellCommonLayout(Layout):
 
 
 class GroupingForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
-        self.fields['rights_shells'].label = False
-
     class Meta:
         model = Grouping
         fields = ["title", "description", 'rights_shells']
+        labels = {
+            'rights_shells': False
+        }
         widgets = {
             'rights_shells': CheckboxSelectMultiple
         }
