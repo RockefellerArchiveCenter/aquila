@@ -9,6 +9,7 @@ from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import AnonymousUser, Group
 from django.test import RequestFactory, TestCase, TransactionTestCase
 from django.urls import reverse
+from rac_schemas import is_valid
 from rest_framework.test import APIRequestFactory
 
 from .assemble import RightsAssembler
@@ -220,13 +221,17 @@ class TestRightsAssembler(TestCase):
         """Tests that Serialzers are working as expected."""
         for obj_cls in [RightsShell, RightsGranted]:
             obj = random.choice(obj_cls.objects.all())
+
             start_date = random_date(75, 50).isoformat()
             end_date = random_date(49, 5).isoformat()
             serialized = self.assembler.create_json(obj, start_date, end_date)
             if obj_cls == RightsShell:
+                if obj.rights_basis in ["policy", "donor"]:
+                    basis_json = "other_basis.json"
+                else:
+                    basis_json = "{}_basis.json".format(obj.rights_basis)
+                    self.assertTrue(is_valid(serialized, basis_json))
                 if obj.rights_basis == "copyright" and obj.jurisdiction:
-                    print(obj.jurisdiction)
-                    print(serialized)
                     self.assertTrue(serialized['jurisdiction'].islower())
             self.assertTrue(isinstance(serialized, dict))
             self.assertEqual(start_date, serialized["start_date"])
