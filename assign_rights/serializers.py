@@ -40,18 +40,6 @@ class RightsShellSerializer(serializers.ModelSerializer):
             "note",
             "rights_granted"
         )
-        # fields = (
-        #     "rights_basis",
-        #     "determination_date",
-        #     "jurisdiction",
-        #     "start_date",
-        #     "end_date",
-        #     "note",
-        #     "status",
-        #     "terms",
-        #     "statute_citation",
-        #     "rights_granted"
-        # )
 
 
 class CopyrightSerializer(RightsShellSerializer):
