@@ -62,3 +62,7 @@ a.btn {
   width: auto;
   z-index: 99;
 }
+
+.fixed-height {
+  max-height: 250px;
+}
