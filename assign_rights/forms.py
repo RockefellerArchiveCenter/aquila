@@ -44,7 +44,7 @@ class GroupingForm(ModelForm):
         model = Grouping
         fields = ["title", "description", 'rights_shells']
         labels = {
-            'rights_shells': False
+            'rights_shells': ''  # legend is used instead of label
         }
         widgets = {
             'rights_shells': CheckboxSelectMultiple
