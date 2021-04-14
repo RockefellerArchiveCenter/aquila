@@ -28,25 +28,58 @@ class RightsShellSerializer(serializers.ModelSerializer):
     """
     start_date = serializers.CharField()
     end_date = serializers.CharField()
-    status = serializers.CharField(source="copyright_status")
-    terms = serializers.CharField(source="license_terms")
+    # terms = serializers.CharField(source="license_terms")
     rights_granted = serializers.ListField(default=[])
-    jurisdiction = serializers.SerializerMethodField()
 
     class Meta:
         model = RightsShell
         fields = (
             "rights_basis",
-            "determination_date",
-            "jurisdiction",
             "start_date",
             "end_date",
             "note",
-            "status",
-            "terms",
-            "statute_citation",
             "rights_granted"
         )
+        # fields = (
+        #     "rights_basis",
+        #     "determination_date",
+        #     "jurisdiction",
+        #     "start_date",
+        #     "end_date",
+        #     "note",
+        #     "status",
+        #     "terms",
+        #     "statute_citation",
+        #     "rights_granted"
+        # )
+
+
+class CopyrightSerializer(RightsShellSerializer):
+    jurisdiction = serializers.SerializerMethodField()
+    status = serializers.CharField(source="copyright_status")
+
+    class Meta:
+        model = RightsShell
+        fields = RightsShellSerializer.Meta.fields + ('determination_date', 'jurisdiction', 'status')
 
     def get_jurisdiction(self, obj):
         return obj.jurisdiction.lower() if obj.jurisdiction else None
+
+
+class StatuteSerializer(RightsShellSerializer):
+    jurisdiction = serializers.SerializerMethodField()
+
+    class Meta:
+        model = RightsShell
+        fields = RightsShellSerializer.Meta.fields + ('determination_date', 'jurisdiction', 'statute_citation')
+
+    def get_jurisdiction(self, obj):
+        return obj.jurisdiction.lower() if obj.jurisdiction else None
+
+
+class LicenseSerializer(RightsShellSerializer):
+    terms = serializers.CharField(source="license_terms")
+
+    class Meta:
+        model = RightsShell
+        fields = RightsShellSerializer.Meta.fields + ('terms',)

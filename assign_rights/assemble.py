@@ -5,7 +5,9 @@ from dateutil.relativedelta import relativedelta
 from rest_framework.renderers import JSONRenderer
 
 from .models import RightsShell
-from .serializers import RightsGrantedSerializer, RightsShellSerializer
+from .serializers import (CopyrightSerializer, LicenseSerializer,
+                          RightsGrantedSerializer, RightsShellSerializer,
+                          StatuteSerializer)
 
 
 class RightsAssembler(object):
@@ -77,7 +79,14 @@ class RightsAssembler(object):
         obj.start_date = obj_start
         obj.end_date = obj_end
         if obj.__class__ == RightsShell:
-            serializer = RightsShellSerializer(obj)
+            if obj.rights_basis == "copyright":
+                serializer = CopyrightSerializer(obj)
+            elif obj.rights_basis == "statute":
+                serializer = StatuteSerializer(obj)
+            elif obj.rights_basis == "license":
+                serializer = LicenseSerializer(obj)
+            else:
+                serializer = RightsShellSerializer(obj)
         else:
             serializer = RightsGrantedSerializer(obj)
         bytes = JSONRenderer().render(serializer.data)

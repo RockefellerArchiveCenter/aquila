@@ -14,7 +14,6 @@ from rest_framework.test import APIRequestFactory
 from .assemble import RightsAssembler
 from .forms import GroupingForm, RightsShellForm
 from .models import Grouping, RightsGranted, RightsShell, User
-from .serializers import RightsGrantedSerializer, RightsShellSerializer
 from .test_helpers import (add_groupings, add_rights_acts, add_rights_shells,
                            random_date, random_string)
 from .views import (GroupingCreateView, GroupingDetailView, GroupingListView,
@@ -219,15 +218,15 @@ class TestRightsAssembler(TestCase):
 
     def test_create_json(self):
         """Tests that Serialzers are working as expected."""
-        for obj_cls, serializer_cls in [
-                (RightsShell, RightsShellSerializer),
-                (RightsGranted, RightsGrantedSerializer)]:
+        for obj_cls in [RightsShell, RightsGranted]:
             obj = random.choice(obj_cls.objects.all())
             start_date = random_date(75, 50).isoformat()
             end_date = random_date(49, 5).isoformat()
             serialized = self.assembler.create_json(obj, start_date, end_date)
             if obj_cls == RightsShell:
-                if obj.jurisdiction:
+                if obj.rights_basis == "copyright" and obj.jurisdiction:
+                    print(obj.jurisdiction)
+                    print(serialized)
                     self.assertTrue(serialized['jurisdiction'].islower())
             self.assertTrue(isinstance(serialized, dict))
             self.assertEqual(start_date, serialized["start_date"])
