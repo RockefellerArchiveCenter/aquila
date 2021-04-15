@@ -230,7 +230,7 @@ class TestRightsAssembler(TestCase):
                     basis_json = "other_basis.json"
                 else:
                     basis_json = "{}_basis.json".format(obj.rights_basis)
-                    self.assertTrue(is_valid(serialized, basis_json))
+                self.assertTrue(is_valid(serialized, basis_json))
                 if obj.jurisdiction:
                     self.assertTrue(serialized['jurisdiction'].islower())
             self.assertTrue(isinstance(serialized, dict))

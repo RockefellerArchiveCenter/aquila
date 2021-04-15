@@ -41,6 +41,21 @@ class RightsShellSerializer(serializers.ModelSerializer):
         )
 
 
+class OtherSerializer(RightsShellSerializer):
+    rights_basis = serializers.SerializerMethodField()
+    other_basis = serializers.SerializerMethodField()
+
+    class Meta:
+        model = RightsShell
+        fields = RightsShellSerializer.Meta.fields + ('other_basis',)
+
+    def get_rights_basis(self, obj):
+        return "other"
+
+    def get_other_basis(self, obj):
+        return obj.rights_basis
+
+
 class CopyrightSerializer(RightsShellSerializer):
     jurisdiction = serializers.SerializerMethodField()
 

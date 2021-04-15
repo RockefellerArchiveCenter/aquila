@@ -6,7 +6,7 @@ from rest_framework.renderers import JSONRenderer
 
 from .models import RightsShell
 from .serializers import (CopyrightSerializer, LicenseSerializer,
-                          RightsGrantedSerializer, RightsShellSerializer,
+                          OtherSerializer, RightsGrantedSerializer,
                           StatuteSerializer)
 
 
@@ -86,7 +86,7 @@ class RightsAssembler(object):
             elif obj.rights_basis == "license":
                 serializer = LicenseSerializer(obj)
             else:
-                serializer = RightsShellSerializer(obj)
+                serializer = OtherSerializer(obj)
         else:
             serializer = RightsGrantedSerializer(obj)
         bytes = JSONRenderer().render(serializer.data)
