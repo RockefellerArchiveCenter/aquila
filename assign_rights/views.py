@@ -32,7 +32,7 @@ class PageTitleMixin(object):
 
 class HomePage(PageTitleMixin, LoginRequiredMixin, TemplateView):
     """Application landing page."""
-    page_title = "Aquila"
+    page_title = "Aquila 🦅"
     template_name = "index.html"
 
 
