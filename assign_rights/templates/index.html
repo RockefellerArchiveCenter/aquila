@@ -2,21 +2,21 @@
 {% load utils %}
 
 {% block content %}
-<p class="lead">Browse, create and manage rights statement shells and record groupings</p>
+<p class="lead">Browse, create and manage record groupings and rights statement shells.</p>
 <div class="row mb-3">
-  <div class="col">
-    <a class="btn btn-lg btn-block btn-primary" href="{% url 'rights-list' %}">Browse rights shells</a>
-  </div>
   <div class="col">
     <a class="btn btn-lg btn-block btn-primary" href="{% url 'groupings-list' %}">Browse groupings</a>
   </div>
-  </div>
-  <div class="row">
   <div class="col">
-    <a class="btn btn-lg btn-block btn-primary" href="{% url 'rights-create' %}">Create a new rights shell</a>
+    <a class="btn btn-lg btn-block btn-primary" href="{% url 'rights-list' %}">Browse rights shells</a>
   </div>
+</div>
+<div class="row">
   <div class="col">
     <a class="btn btn-lg btn-block btn-primary" href="{% url 'groupings-create' %}">Create a new grouping</a>
+  </div>
+  <div class="col">
+    <a class="btn btn-lg btn-block btn-primary" href="{% url 'rights-create' %}">Create a new rights shell</a>
   </div>
 </div>
 {% endblock %}
