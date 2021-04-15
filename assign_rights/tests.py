@@ -231,7 +231,7 @@ class TestRightsAssembler(TestCase):
                 else:
                     basis_json = "{}_basis.json".format(obj.rights_basis)
                     self.assertTrue(is_valid(serialized, basis_json))
-                if obj.rights_basis == "copyright" and obj.jurisdiction:
+                if obj.jurisdiction:
                     self.assertTrue(serialized['jurisdiction'].islower())
             self.assertTrue(isinstance(serialized, dict))
             self.assertEqual(start_date, serialized["start_date"])
