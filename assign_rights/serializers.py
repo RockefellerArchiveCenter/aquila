@@ -28,7 +28,6 @@ class RightsShellSerializer(serializers.ModelSerializer):
     """
     start_date = serializers.CharField()
     end_date = serializers.CharField()
-    # terms = serializers.CharField(source="license_terms")
     rights_granted = serializers.ListField(default=[])
 
     class Meta:
