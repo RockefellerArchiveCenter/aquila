@@ -23,8 +23,6 @@ class RightsShellCommonLayout(Layout):
     def __init__(self, *args, **kwargs):
         super().__init__(
             Div(
-                Div("determination_date", css_class="col"), css_class="row"),
-            Div(
                 Div(Field("rights_begin", v_model="rightsBegin"), css_class="col-5"),
                 Div(Field("start_date", pattern=r"\d{4}-\d{2}-\d{2}", required="required"), css_class="col-4", v_if="rightsBegin=='start_date'"),
                 Div(Field("start_date_period", required="required"), css_class="col-4", v_if="rightsBegin=='start_date_period'"),
@@ -122,6 +120,8 @@ class CopyrightForm(RightsShellForm):
         super().__init__(*args, **kwargs)
         self.helper.layout = Layout(
             Div(
+                Div("determination_date", css_class="col"), css_class="row"),
+            Div(
                 Div('copyright_status', css_class="col-6"),
                 Div('jurisdiction', css_class="col-6"), css_class="row"),
             RightsShellCommonLayout(),
@@ -150,6 +150,7 @@ class OtherForm(RightsShellForm):
         exclude = (
             'rights_basis',
             'copyright_status',
+            'determination_date',
             'jurisdiction',
             'license_terms',
             'statute_citation'
@@ -169,6 +170,7 @@ class LicenseForm(RightsShellForm):
         exclude = (
             'rights_basis',
             'copyright_status',
+            'determination_date',
             'jurisdiction',
             'statute_citation'
         )
@@ -178,6 +180,8 @@ class StatuteForm(RightsShellForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper.layout = Layout(
+            Div(
+                Div("determination_date", css_class="col"), css_class="row"),
             Div(
                 Div('jurisdiction', css_class="col"), css_class="row"),
             Div(
