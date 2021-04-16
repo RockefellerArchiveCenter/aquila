@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'assign_rights',
     'django_auth_adfs',
     'crispy_forms',
+    'rest_framework',
 ]
 
 
