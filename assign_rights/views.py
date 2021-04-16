@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  UpdateView)
+                                  TemplateView, UpdateView)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -28,6 +28,12 @@ class PageTitleMixin(object):
         context = super().get_context_data(**kwargs)
         context["page_title"] = self.get_page_title(context)
         return context
+
+
+class HomePage(PageTitleMixin, LoginRequiredMixin, TemplateView):
+    """Application landing page."""
+    page_title = "Aquila 🦅"
+    template_name = "index.html"
 
 
 class RightsShellListView(PageTitleMixin, LoginRequiredMixin, ListView):

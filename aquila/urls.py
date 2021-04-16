@@ -16,9 +16,10 @@ Including another URLconf
 from assign_rights.views import (AquilaLoginView, GroupingCreateView,
                                  GroupingDeleteView, GroupingDetailView,
                                  GroupingListView, GroupingUpdateView,
-                                 RightsAssemblerView, RightsShellCreateView,
-                                 RightsShellDeleteView, RightsShellDetailView,
-                                 RightsShellListView, RightsShellUpdateView)
+                                 HomePage, RightsAssemblerView,
+                                 RightsShellCreateView, RightsShellDeleteView,
+                                 RightsShellDetailView, RightsShellListView,
+                                 RightsShellUpdateView)
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.urls import include, path
@@ -26,7 +27,8 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/rights-assemble/', RightsAssemblerView.as_view(), name='rights-assemble'),
-    path('', GroupingListView.as_view(), name="groupings-list"),
+    path('', HomePage.as_view(), name="home"),
+    path('groupings/', GroupingListView.as_view(), name="groupings-list"),
     path('groupings/<int:pk>/', GroupingDetailView.as_view(), name="groupings-detail"),
     path('groupings/create/', GroupingCreateView.as_view(), name="groupings-create"),
     path('groupings/<int:pk>/update/', GroupingUpdateView.as_view(), name="groupings-update"),

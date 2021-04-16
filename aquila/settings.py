@@ -148,7 +148,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOGIN_URL = config.LOGIN_URL
-LOGIN_REDIRECT_URL = "groupings-list"
+LOGIN_REDIRECT_URL = "home"
 
 # django-crispy-forms template pack
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
