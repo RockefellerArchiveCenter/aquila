@@ -57,11 +57,10 @@ def set_dates():
     return start_date, end_date, start_date_period, end_date_period, end_date_open
 
 
-def add_rights_shells(count=15):
-    for x in range(count):
+def add_rights_shells():
+    for basis in ["copyright", "policy", "donor", "statute", "license", "copyright", "donor", "policy", "copyright"]:
         start_date, end_date, start_date_period, end_date_period, end_date_open = set_dates()
         new_shell = RightsShell(determination_date=random_date(10, 0), note=random_string(), start_date=start_date, end_date=end_date, start_date_period=start_date_period, end_date_period=end_date_period, end_date_open=end_date_open)
-        basis = random.choice(["copyright", "policy", "donor", "statute", "license"])
         new_shell.rights_basis = basis
         if basis in ["copyright", "statute"]:
             new_shell.jurisdiction = "US"

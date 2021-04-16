@@ -221,7 +221,6 @@ class TestRightsAssembler(TestCase):
         """Tests that Serialzers are working as expected."""
         for obj_cls in [RightsShell, RightsGranted]:
             obj = random.choice(obj_cls.objects.all())
-
             start_date = random_date(75, 50).isoformat()
             end_date = random_date(49, 5).isoformat()
             serialized = self.assembler.create_json(obj, start_date, end_date)
