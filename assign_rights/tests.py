@@ -9,12 +9,12 @@ from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import AnonymousUser, Group
 from django.test import RequestFactory, TestCase, TransactionTestCase
 from django.urls import reverse
+from rac_schemas import is_valid
 from rest_framework.test import APIRequestFactory
 
 from .assemble import RightsAssembler
 from .forms import GroupingForm, RightsShellForm
 from .models import Grouping, RightsGranted, RightsShell, User
-from .serializers import RightsGrantedSerializer, RightsShellSerializer
 from .test_helpers import (add_groupings, add_rights_acts, add_rights_shells,
                            random_date, random_string)
 from .views import (GroupingCreateView, GroupingDetailView, GroupingListView,
@@ -219,14 +219,18 @@ class TestRightsAssembler(TestCase):
 
     def test_create_json(self):
         """Tests that Serialzers are working as expected."""
-        for obj_cls, serializer_cls in [
-                (RightsShell, RightsShellSerializer),
-                (RightsGranted, RightsGrantedSerializer)]:
+        for obj_cls in [RightsShell, RightsGranted]:
             obj = random.choice(obj_cls.objects.all())
+
             start_date = random_date(75, 50).isoformat()
             end_date = random_date(49, 5).isoformat()
-            serialized = self.assembler.create_json(obj, serializer_cls, start_date, end_date)
+            serialized = self.assembler.create_json(obj, start_date, end_date)
             if obj_cls == RightsShell:
+                if obj.rights_basis in ["policy", "donor"]:
+                    basis_json = "other_basis.json"
+                else:
+                    basis_json = "{}_basis.json".format(obj.rights_basis)
+                    self.assertTrue(is_valid(serialized, basis_json))
                 if obj.jurisdiction:
                     self.assertTrue(serialized['jurisdiction'].islower())
             self.assertTrue(isinstance(serialized, dict))
