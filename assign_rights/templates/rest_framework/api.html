@@ -8,9 +8,10 @@
 
 {% block style %}
 <link rel="stylesheet" type="text/css" href="{% static "bootstrap/css/bootstrap.min.css" %}">
-<link rel="stylesheet" href="{% static "css/styles.css" %}">
+<link rel="stylesheet" href="{% static "css/custom.css" %}">
 {% endblock %}
 
 {% block navbar %}
+  <a href="#main" class="skip-link visually-hidden">Jump directly to main content</a>
   {% include 'navbar.html' %}
 {% endblock %}
