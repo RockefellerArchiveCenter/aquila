@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'assign_rights',
     'django_auth_adfs',
     'crispy_forms',
+    'rest_framework',
 ]
 
 
@@ -125,6 +126,10 @@ AUTH_ADFS = {
     "CLAIM_MAPPING": {"first_name": "given_name",
                       "last_name": "family_name",
                       "email": "email"},
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': []
 }
 
 # Internationalization
