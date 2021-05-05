@@ -14,11 +14,11 @@ class RightsAssembler(object):
     """Assembles and returns a list of rights statements."""
 
     def run(self, rights_ids, request_start_date, request_end_date):
-        """Assembles and returns rights statements given rights shell IDs and
+        """Assembles and returns rights statements given rights statement IDs and
         start and end dates.
 
         Args:
-            rights_ids (list): a list of identifiers for rights shells.
+            rights_ids (list): a list of identifiers for rights statements.
             request_start_date (string): a string representation of the earliest date of a group of records
             request_end_date (string): a string representation of the latest date of a group of records
         """
@@ -36,7 +36,7 @@ class RightsAssembler(object):
         return shell_data
 
     def retrieve_rights(self, rights_ids):
-        """Retrieves rights shells matching identifiers."""
+        """Retrieves rights statements matching identifiers."""
         return [RightsShell.objects.get(pk=ident) for ident in rights_ids]
 
     def get_dates(self, object, request_start_date, request_end_date):
