@@ -1,7 +1,7 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Field, Hidden, Layout
-from django.forms import (ChoiceField, ModelForm, Select, Textarea, TextInput,
-                          inlineformset_factory)
+from django.forms import (CheckboxSelectMultiple, ChoiceField, ModelForm,
+                          Select, Textarea, TextInput, inlineformset_factory)
 from django.forms.utils import ErrorList
 
 from .models import Grouping, RightsGranted, RightsShell
@@ -23,11 +23,10 @@ class RightsShellCommonLayout(Layout):
     def __init__(self, *args, **kwargs):
         super().__init__(
             Div(
-                Div("determination_date", css_class="col"), css_class="row"),
-            Div(
                 Div(Field("rights_begin", v_model="rightsBegin"), css_class="col-5"),
                 Div(Field("start_date", pattern=r"\d{4}-\d{2}-\d{2}", required="required"), css_class="col-4", v_if="rightsBegin=='start_date'"),
-                Div(Field("start_date_period", required="required"), css_class="col-4", v_if="rightsBegin=='start_date_period'"), css_class="row"),
+                Div(Field("start_date_period", required="required"), css_class="col-4", v_if="rightsBegin=='start_date_period'"),
+                Div(Hidden(name="start_date_period", value="0"), v_if="rightsBegin=='start_date_period_zero'"), css_class="row"),
             Div(
                 Div(Field("rights_end", v_model="rightsEnd"), css_class="col-5"),
                 Div(Field("end_date", pattern=r"\d{4}-\d{2}-\d{2}", required="required"), css_class="col-4", v_if="rightsEnd=='end_date'"),
@@ -42,7 +41,13 @@ class RightsShellCommonLayout(Layout):
 class GroupingForm(ModelForm):
     class Meta:
         model = Grouping
-        fields = ["title", "description", "rights_shells"]
+        fields = ["title", "description", 'rights_shells']
+        labels = {
+            'rights_shells': ''  # legend is used instead of label
+        }
+        widgets = {
+            'rights_shells': CheckboxSelectMultiple
+        }
 
 
 class RightsShellForm(ModelForm):
@@ -50,7 +55,8 @@ class RightsShellForm(ModelForm):
         label="Start of Rights",
         choices=(("", "---------"),
                  ("start_date", "These rights start on a specific date"),
-                 ("start_date_period", "These rights start after an embargo period")))
+                 ("start_date_period", "These rights start after an embargo period"),
+                 ("start_date_period_zero", "These rights start on creation date of materials")))
     rights_end = ChoiceField(
         label="End of Rights",
         choices=(("", "---------"),
@@ -114,6 +120,8 @@ class CopyrightForm(RightsShellForm):
         super().__init__(*args, **kwargs)
         self.helper.layout = Layout(
             Div(
+                Div("determination_date", css_class="col"), css_class="row"),
+            Div(
                 Div('copyright_status', css_class="col-6"),
                 Div('jurisdiction', css_class="col-6"), css_class="row"),
             RightsShellCommonLayout(),
@@ -142,6 +150,7 @@ class OtherForm(RightsShellForm):
         exclude = (
             'rights_basis',
             'copyright_status',
+            'determination_date',
             'jurisdiction',
             'license_terms',
             'statute_citation'
@@ -161,6 +170,7 @@ class LicenseForm(RightsShellForm):
         exclude = (
             'rights_basis',
             'copyright_status',
+            'determination_date',
             'jurisdiction',
             'statute_citation'
         )
@@ -170,6 +180,8 @@ class StatuteForm(RightsShellForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper.layout = Layout(
+            Div(
+                Div("determination_date", css_class="col"), css_class="row"),
             Div(
                 Div('jurisdiction', css_class="col"), css_class="row"),
             Div(

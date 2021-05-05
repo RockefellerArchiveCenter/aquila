@@ -97,6 +97,7 @@
                 <option value="">-------</option>
                 <option value="start_date">This restriction starts on a specific date</option>
                 <option value="start_date_period">This restriction starts after an embargo period</option>
+                <option value="start_date_period_zero">This restriction starts on creation date of materials</option>
               </select>
             </div>
             <div v-if="rights_granted.restriction_begin == 'start_date'" class="form-group col-4">
@@ -122,6 +123,12 @@
                      v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'"
                      class="form-control"
                      required="required">
+            </div>
+            <div v-if="rights_granted.restriction_begin == 'start_date_period_zero'" class="form-group col-4">
+              <input type="hidden"
+                     v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'"
+                     v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'"
+                     value="0">
             </div>
           </div>
 
@@ -211,7 +218,7 @@
             marked_for_delete: false,
             act: '{{ nested_form.act.value|default_if_none:"" }}',
             restriction: '{{ nested_form.restriction.value|default_if_none:"" }}',
-            restriction_begin: {% if nested_form.start_date.value %}'start_date'{% elif nested_form.start_date_period.value or nested_form.start_date_period.value == 0 %}'start_date_period'{% else %}''{% endif %},
+            restriction_begin: {% if nested_form.start_date.value %}'start_date'{% elif nested_form.start_date_period.value %}'start_date_period'{% elif nested_form.start_date_period.value == 0 %}'start_date_period_zero'{% else %}''{% endif %},
             restriction_end: {% if nested_form.end_date.value %}'end_date'{% elif nested_form.end_date_period.value or nested_form.end_date_period.value == 0 %}'end_date_period'{% elif nested_form.end_date_open.value %}'end_date_open'{% else %}''{% endif %},
             start_date: '{{ nested_form.start_date.value|isoformat_date_or_string|default_if_none:"" }}',
             start_date_error: '{{ nested_form.errors.start_date|default_if_none:"" }}',
@@ -233,9 +240,11 @@
       rightsBasisSelected: '{{ form.rights_basis.value|default_if_none:""}}',
       rights_basis: rights_basis,
       rightsBegin: {% if basis_form.start_date.value %}'start_date'
-                   {% elif basis_form.start_date_period.value or basis_form.start_date_period.value == 0 %}'start_date_period'
+                   {% elif basis_form.start_date_period.value %}'start_date_period'
+                   {% elif basis_form.start_date_period.value == 0 %}'start_date_period_zero'
                    {% elif form.start_date.value %}'start_date'
-                   {% elif form.start_date_period.value or basis_form.start_date_period.value == 0 %}'start_date_period'
+                   {% elif form.start_date_period.value%}'start_date_period'
+                   {% elif basis_form.start_date_period.value == 0 %}'start_date_period_zero'
                    {% else %}''
                    {% endif %},
       rightsEnd: {% if basis_form.end_date.value %}'end_date'

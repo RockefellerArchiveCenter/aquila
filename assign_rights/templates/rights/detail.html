@@ -12,6 +12,8 @@
 
 <h2>Details</h2>
 <dl class="row">
+  <dt class="col-sm-2">Identifier</dt>
+  <dd class="col-sm-10">{{ rightsshell.pk }}</dd>
   <dt class="col-sm-2">Basis</dt>
   <dd class="col-sm-10">{{ rightsshell.rights_basis }}</dd>
   {% if rightsshell.get_rights_basis_display == "Copyright" %}
@@ -35,6 +37,10 @@
   {% if rightsshell.start_date_period %}
   <dt class="col-sm-2">Start Date Embargo Period (in years)</dt>
   <dd class="col-sm-10">{{ rightsshell.start_date_period }}</dd>
+  {% endif %}
+  {% if rightsshell.start_date_period == 0 %}
+  <dt class="col-sm-2">Start Date</dt>
+  <dd class="col-sm-10">Date of creation of materials</dd>
   {% endif %}
   {% if rightsshell.end_date %}
   <dt class="col-sm-2">End Date</dt>
@@ -69,6 +75,10 @@
         {% if rights_granted.start_date_period %}
         <dt>Start Date Embargo Period (in years)</dt>
         <dd>{{rights_granted.start_date_period}}</dd>
+        {% endif %}
+        {% if rights_granted.start_date_period == 0 %}
+        <dt>Start Date</dt>
+        <dd>Date of creation of materials</dd>
         {% endif %}
         {% if rights_granted.end_date %}
         <dt>End Date</dt>

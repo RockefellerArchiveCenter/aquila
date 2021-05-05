@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  UpdateView)
+                                  TemplateView, UpdateView)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -28,6 +28,12 @@ class PageTitleMixin(object):
         context = super().get_context_data(**kwargs)
         context["page_title"] = self.get_page_title(context)
         return context
+
+
+class HomePage(PageTitleMixin, LoginRequiredMixin, TemplateView):
+    """Application landing page."""
+    page_title = "Aquila 🦅"
+    template_name = "index.html"
 
 
 class RightsShellListView(PageTitleMixin, LoginRequiredMixin, ListView):
@@ -57,9 +63,9 @@ class RightsShellCreateView(PageTitleMixin, EditMixin, CreateView):
             context['license_form'] = LicenseForm(self.request.POST, error_class=StrErrorList)
         else:
             context['rights_granted_form'] = RightsGrantedFormSet()
-            context['copyright_form'] = CopyrightForm()
+            context['copyright_form'] = CopyrightForm(initial={'jurisdiction': 'us'})
             context['other_form'] = OtherForm()
-            context['statute_form'] = StatuteForm()
+            context['statute_form'] = StatuteForm(initial={'jurisdiction': 'us'})
             context['license_form'] = LicenseForm()
         return context
 
@@ -93,7 +99,6 @@ class RightsShellUpdateView(PageTitleMixin, EditMixin, UpdateView):
         context["act_choices"] = RightsGranted.ACT_CHOICES
         context["restriction_choices"] = RightsGranted.RESTRICTION_CHOICES
         if self.request.POST:
-            print("here")
             context["rights_granted_form"] = RightsGrantedFormSet(
                 self.request.POST, instance=self.object, error_class=StrErrorList)
             context["basis_form"] = form_cls(self.request.POST, instance=self.object)

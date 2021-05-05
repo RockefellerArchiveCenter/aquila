@@ -5,7 +5,9 @@ from dateutil.relativedelta import relativedelta
 from rest_framework.renderers import JSONRenderer
 
 from .models import RightsShell
-from .serializers import RightsGrantedSerializer, RightsShellSerializer
+from .serializers import (CopyrightSerializer, LicenseSerializer,
+                          OtherSerializer, RightsGrantedSerializer,
+                          StatuteSerializer)
 
 
 class RightsAssembler(object):
@@ -25,10 +27,10 @@ class RightsAssembler(object):
         for shell in rights_shells:
             grant_data = []
             start_date, end_date = self.get_dates(shell, request_start_date, request_end_date)
-            serialized_shell = self.create_json(shell, RightsShellSerializer, start_date, end_date)
+            serialized_shell = self.create_json(shell, start_date, end_date)
             for grant in shell.rightsgranted_set.all():
                 start_date, end_date = self.get_dates(grant, request_start_date, request_end_date)
-                grant_data.append(self.create_json(grant, RightsGrantedSerializer, start_date, end_date))
+                grant_data.append(self.create_json(grant, start_date, end_date))
             serialized_shell["rights_granted"] = grant_data
             shell_data.append(serialized_shell)
         return shell_data
@@ -62,7 +64,7 @@ class RightsAssembler(object):
             object_end = getattr(object, "end_date")
         return object_start, object_end
 
-    def create_json(self, obj, serializer_class, obj_start, obj_end):
+    def create_json(self, obj, obj_start, obj_end):
         """Runs specific serializer against an object and creates a JSON-structured dict.
 
         Args:
@@ -76,6 +78,16 @@ class RightsAssembler(object):
         """
         obj.start_date = obj_start
         obj.end_date = obj_end
-        serializer = serializer_class(obj)
+        if obj.__class__ == RightsShell:
+            if obj.rights_basis == "copyright":
+                serializer = CopyrightSerializer(obj)
+            elif obj.rights_basis == "statute":
+                serializer = StatuteSerializer(obj)
+            elif obj.rights_basis == "license":
+                serializer = LicenseSerializer(obj)
+            else:
+                serializer = OtherSerializer(obj)
+        else:
+            serializer = RightsGrantedSerializer(obj)
         bytes = JSONRenderer().render(serializer.data)
         return json.loads(bytes.decode("utf-8"))

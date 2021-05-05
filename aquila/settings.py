@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'assign_rights',
     'django_auth_adfs',
     'crispy_forms',
+    'rest_framework',
 ]
 
 
@@ -127,6 +128,10 @@ AUTH_ADFS = {
                       "email": "email"},
 }
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': []
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -148,7 +153,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOGIN_URL = config.LOGIN_URL
-LOGIN_REDIRECT_URL = "groupings-list"
+LOGIN_REDIRECT_URL = "home"
 
 # django-crispy-forms template pack
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

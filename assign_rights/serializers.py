@@ -28,22 +28,51 @@ class RightsShellSerializer(serializers.ModelSerializer):
     """
     start_date = serializers.CharField()
     end_date = serializers.CharField()
-    status = serializers.CharField(source="copyright_status")
-    terms = serializers.CharField(source="license_terms")
-    citation = serializers.CharField(source="statute_citation")
     rights_granted = serializers.ListField(default=[])
+    jurisdiction = serializers.SerializerMethodField()
 
     class Meta:
         model = RightsShell
         fields = (
             "rights_basis",
-            "determination_date",
-            "jurisdiction",
             "start_date",
             "end_date",
             "note",
-            "status",
-            "terms",
-            "citation",
             "rights_granted"
         )
+
+    def get_jurisdiction(self, obj):
+        return obj.jurisdiction.lower() if obj.jurisdiction else None
+
+
+class OtherSerializer(RightsShellSerializer):
+    rights_basis = serializers.SerializerMethodField()
+    other_basis = serializers.CharField(source='rights_basis')
+
+    class Meta:
+        model = RightsShell
+        fields = RightsShellSerializer.Meta.fields + ('other_basis',)
+
+    def get_rights_basis(self, obj):
+        return "other"
+
+
+class CopyrightSerializer(RightsShellSerializer):
+
+    class Meta:
+        model = RightsShell
+        fields = RightsShellSerializer.Meta.fields + ('determination_date', 'jurisdiction', 'copyright_status')
+
+
+class StatuteSerializer(RightsShellSerializer):
+
+    class Meta:
+        model = RightsShell
+        fields = RightsShellSerializer.Meta.fields + ('determination_date', 'jurisdiction', 'statute_citation')
+
+
+class LicenseSerializer(RightsShellSerializer):
+
+    class Meta:
+        model = RightsShell
+        fields = RightsShellSerializer.Meta.fields + ('license_terms',)

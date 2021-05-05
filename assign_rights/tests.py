@@ -9,12 +9,12 @@ from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import AnonymousUser, Group
 from django.test import RequestFactory, TestCase, TransactionTestCase
 from django.urls import reverse
+from rac_schemas import is_valid
 from rest_framework.test import APIRequestFactory
 
 from .assemble import RightsAssembler
 from .forms import GroupingForm, RightsShellForm
 from .models import Grouping, RightsGranted, RightsShell, User
-from .serializers import RightsGrantedSerializer, RightsShellSerializer
 from .test_helpers import (add_groupings, add_rights_acts, add_rights_shells,
                            random_date, random_string)
 from .views import (GroupingCreateView, GroupingDetailView, GroupingListView,
@@ -217,15 +217,28 @@ class TestRightsAssembler(TestCase):
         for granted in shell.rightsgranted_set.all():
             self.check_object_dates(granted, request_start_date, request_end_date)
 
-    def test_create_json(self):
-        """Tests that Serialzers are working as expected."""
-        for obj_cls, serializer_cls in [
-                (RightsShell, RightsShellSerializer),
-                (RightsGranted, RightsGrantedSerializer)]:
-            obj = random.choice(obj_cls.objects.all())
+    def test_create_basis_json(self):
+        """Tests that Rights Shell Serializers are working as expected."""
+        for basis in ["copyright", "policy", "donor", "statute", "license"]:
+            obj = random.choice(RightsShell.objects.filter(rights_basis=basis))
             start_date = random_date(75, 50).isoformat()
             end_date = random_date(49, 5).isoformat()
-            serialized = self.assembler.create_json(obj, serializer_cls, start_date, end_date)
+            serialized = self.assembler.create_json(obj, start_date, end_date)
+            if obj.rights_basis in ["policy", "donor"]:
+                basis_json = "other_basis.json"
+            else:
+                basis_json = "{}_basis.json".format(obj.rights_basis)
+            self.assertTrue(is_valid(serialized, basis_json))
+            if obj.jurisdiction:
+                self.assertTrue(serialized['jurisdiction'].islower())
             self.assertTrue(isinstance(serialized, dict))
-            self.assertEqual(start_date, serialized["start_date"])
-            self.assertEqual(end_date, serialized["end_date"])
+
+    def test_create_granted_json(self):
+        """Tests that Rights Granted Serializer is working as expected."""
+        obj = random.choice(RightsGranted.objects.all())
+        start_date = random_date(75, 50).isoformat()
+        end_date = random_date(49, 5).isoformat()
+        serialized = self.assembler.create_json(obj, start_date, end_date)
+        self.assertTrue(isinstance(serialized, dict))
+        self.assertEqual(start_date, serialized["start_date"])
+        self.assertEqual(end_date, serialized["end_date"])
