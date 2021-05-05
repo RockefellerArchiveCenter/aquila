@@ -29,7 +29,7 @@ class RightsShellSerializer(serializers.ModelSerializer):
     start_date = serializers.CharField()
     end_date = serializers.CharField()
     rights_granted = serializers.ListField(default=[])
-    jurisdiction = serializers.SerializerMethodField()
+    jurisdiction = serializers.CharField()
 
     class Meta:
         model = RightsShell
@@ -40,9 +40,6 @@ class RightsShellSerializer(serializers.ModelSerializer):
             "note",
             "rights_granted"
         )
-
-    def get_jurisdiction(self, obj):
-        return obj.jurisdiction.lower() if obj.jurisdiction else None
 
 
 class OtherSerializer(RightsShellSerializer):
