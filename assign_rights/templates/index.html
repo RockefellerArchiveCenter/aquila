@@ -5,18 +5,33 @@
 <p class="lead">Browse, create and manage record groupings and rights statement shells.</p>
 <div class="row mb-3">
   <div class="col">
-    <a class="btn btn-lg btn-block btn-primary" href="{% url 'groupings-list' %}">Browse groupings</a>
+    <div class="card full-height">
+      <div class="card-body">
+        <h2>Groupings</h2>
+        <p>
+          Aggregations of records with the same rights statuses. Groupings don't
+          necessarily equate to record groups, and are not required to be from
+          the same source.
+        </p>
+      </div>
+      <div class="card-footer d-flex justify-content-between">
+        <a class="btn btn-lg btn-secondary" href="{% url 'groupings-list' %}">Browse groupings</a>
+        <a class="btn btn-lg btn-primary" href="{% url 'groupings-create' %}">Create a new grouping</a>
+      </div>
+    </div>
   </div>
   <div class="col">
-    <a class="btn btn-lg btn-block btn-primary" href="{% url 'rights-list' %}">Browse rights shells</a>
+    <div class="card full-height">
+      <div class="card-body">
+        <h2>Rights Shells</h2>
+        <p>Structured, machine-actionable statements of what can or can't be done with a group of records.</p>
+      </div>
+      <div class="card-footer d-flex justify-content-between">
+        <a class="btn btn-lg btn-secondary" href="{% url 'rights-list' %}">Browse rights shells</a>
+        <a class="btn btn-lg btn-primary" href="{% url 'rights-create' %}">Create a new rights shell</a>
+      </div>
+    </div>
   </div>
 </div>
-<div class="row">
-  <div class="col">
-    <a class="btn btn-lg btn-block btn-primary" href="{% url 'groupings-create' %}">Create a new grouping</a>
-  </div>
-  <div class="col">
-    <a class="btn btn-lg btn-block btn-primary" href="{% url 'rights-create' %}">Create a new rights shell</a>
-  </div>
-</div>
+
 {% endblock %}

@@ -66,3 +66,7 @@ a.btn {
 .fixed-height {
   max-height: 250px;
 }
+
+.full-height {
+  height: 100%;
+}
