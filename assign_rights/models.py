@@ -39,6 +39,11 @@ class RightsShell(models.Model):
     def get_absolute_url(self):
         return reverse("rights-detail", kwargs={"pk": self.pk})
 
+    def save(self, *args, **kwargs):
+        """Custom save method to coerce jurisdiction to lowercase."""
+        self.jurisdiction = self.jurisdiction.lower() if self.jurisdiction else None
+        super(RightsShell, self).save(*args, **kwargs)
+
     def __str__(self):
         prefixes = [self.get_rights_basis_display()]
         if self.rights_basis == "Copyright":

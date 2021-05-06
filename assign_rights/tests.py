@@ -218,9 +218,8 @@ class TestRightsAssembler(TestCase):
             self.check_object_dates(granted, request_start_date, request_end_date)
 
     def test_create_basis_json(self):
-        """Tests that Rights Statement Serializers are working as expected."""
-        for basis in ["copyright", "policy", "donor", "statute", "license"]:
-            obj = random.choice(RightsShell.objects.filter(rights_basis=basis))
+        """Tests that Rights Shell Serializers are working as expected."""
+        for obj in RightsShell.objects.all():
             start_date = random_date(75, 50).isoformat()
             end_date = random_date(49, 5).isoformat()
             serialized = self.assembler.create_json(obj, start_date, end_date)
@@ -230,6 +229,7 @@ class TestRightsAssembler(TestCase):
                 basis_json = "{}_basis.json".format(obj.rights_basis)
             self.assertTrue(is_valid(serialized, basis_json))
             if obj.jurisdiction:
+                self.assertTrue(obj.jurisdiction.islower())
                 self.assertTrue(serialized['jurisdiction'].islower())
             self.assertTrue(isinstance(serialized, dict))
 
