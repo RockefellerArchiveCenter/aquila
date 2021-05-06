@@ -37,18 +37,18 @@ class HomePage(PageTitleMixin, LoginRequiredMixin, TemplateView):
 
 
 class RightsShellListView(PageTitleMixin, LoginRequiredMixin, ListView):
-    """Browse and search rights shells."""
+    """Browse and search rights statements."""
     model = RightsShell
     template_name = "rights/list.html"
-    page_title = "Rights Shells"
+    page_title = "Rights Statements"
 
 
 class RightsShellCreateView(PageTitleMixin, EditMixin, CreateView):
-    """Create a rights shell. Only available to 'edit' group."""
+    """Create a rights statement. Only available to 'edit' group."""
     model = RightsShell
     template_name = "rights/manage.html"
     form_class = RightsShellForm
-    page_title = "Create New Rights Shell"
+    page_title = "Create New Rights Statement"
 
     def get_context_data(self, **kwargs):
         """Load specific rights basis form based on logic in rights create template. Returns subclass of RightsShellForm"""
@@ -87,7 +87,7 @@ class RightsShellCreateView(PageTitleMixin, EditMixin, CreateView):
 
 
 class RightsShellUpdateView(PageTitleMixin, EditMixin, UpdateView):
-    """Update a rights shell. Only available to 'edit' group."""
+    """Update a rights statement. Only available to 'edit' group."""
     model = RightsShell
     template_name = "rights/manage.html"
     form_class = RightsShellUpdateForm
@@ -135,7 +135,7 @@ class RightsShellUpdateView(PageTitleMixin, EditMixin, UpdateView):
 
 
 class RightsShellDeleteView(PageTitleMixin, DeleteMixin, DeleteView):
-    """Delete a rights shell."""
+    """Delete a rights statement."""
     model = RightsShell
     template_name = "rights/confirm_delete.html"
     page_title = "Confirm Delete"
@@ -143,7 +143,7 @@ class RightsShellDeleteView(PageTitleMixin, DeleteMixin, DeleteView):
 
 
 class RightsShellDetailView(PageTitleMixin, LoginRequiredMixin, DetailView):
-    """View a rights shell."""
+    """View a rights statement."""
     model = RightsShell
     template_name = "rights/detail.html"
 
@@ -213,7 +213,7 @@ class RightsAssemblerView(APIView):
             rights = RightsAssembler().run(rights_ids, request_start_date, request_end_date)
             return Response({"rights_statements": rights}, status=200)
         except RightsShell.DoesNotExist as e:
-            return Response({"detail": "Error retrieving rights shell: {}".format(str(e))}, status=404)
+            return Response({"detail": "Error retrieving rights statement: {}".format(str(e))}, status=404)
         except ValueError as e:
             return Response({"detail": "Unable to parse date: {}".format(e)}, status=500)
         except Exception as e:

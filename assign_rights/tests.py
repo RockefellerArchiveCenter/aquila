@@ -50,7 +50,7 @@ class TestRightsAssemblyView(TransactionTestCase):
 
         # RightsAssembler throws an exception
         for fixture_name, message, status_code in [
-                ("invalid_rights_id.json", "Error retrieving rights shell: RightsShell matching query does not exist.", 404),
+                ("invalid_rights_id.json", "Error retrieving rights statement: RightsShell matching query does not exist.", 404),
                 ("no_start_date.json", "Request data must contain 'identifiers', 'start_date' and 'end_date' keys.", 400)]:
             with open(join(invalid_data_fixture_dir, fixture_name), 'r') as json_file:
                 invalid_data = json.load(json_file)

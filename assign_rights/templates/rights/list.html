@@ -3,7 +3,7 @@
 
 {% block header_button %}
   {% if request.user|has_group:"edit" %}
-  <a class="btn btn-primary mt-2 float-right" href="{% url 'rights-create' %}">Create new rights shell</a>
+  <a class="btn btn-primary mt-2 float-right" href="{% url 'rights-create' %}">Create new rights statement</a>
   {% endif %}
 {% endblock %}
 
