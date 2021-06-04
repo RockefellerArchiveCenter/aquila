@@ -6,29 +6,33 @@
 <div class="row mb-3">
   <div class="col">
     <div class="card full-height">
-      <div class="card-body">
-        <h2>Groupings</h2>
-        <p>
-          Aggregations of records with the same rights statuses. Groupings don't
-          necessarily equate to record groups, and are not required to be from
-          the same source.
-        </p>
-      </div>
-      <div class="card-footer d-flex justify-content-between">
-        <a class="btn btn-lg btn-secondary" href="{% url 'groupings-list' %}">Browse groupings</a>
-        <a class="btn btn-lg btn-primary" href="{% url 'groupings-create' %}">Create a new grouping</a>
+      <div class="card-body d-flex flex-column justify-content-between">
+        <div class="card__text">
+          <h2>Groupings</h2>
+          <p>
+            Aggregations of records with the same rights statuses. Groupings don't
+            necessarily equate to record groups, and are not required to be from
+            the same source.
+          </p>
+        </div>
+        <div class="card__buttons">
+          <a class="btn btn-secondary btn-block" href="{% url 'groupings-list' %}">Browse groupings</a>
+          <a class="btn btn-primary btn-block " href="{% url 'groupings-create' %}">Create a new grouping</a>
+        </div>
       </div>
     </div>
   </div>
   <div class="col">
     <div class="card full-height">
-      <div class="card-body">
-        <h2>Rights Statements</h2>
-        <p>Structured, machine-actionable statements of what can or can't be done with a group of records.</p>
-      </div>
-      <div class="card-footer d-flex justify-content-between">
-        <a class="btn btn-lg btn-secondary" href="{% url 'rights-list' %}">Browse rights statements</a>
-        <a class="btn btn-lg btn-primary" href="{% url 'rights-create' %}">Create a new rights statement</a>
+      <div class="card-body d-flex flex-column justify-content-between">
+        <div class="card__text">
+          <h2>Rights Statements</h2>
+          <p>Structured, machine-actionable statements of what can or can't be done with a group of records.</p>
+        </div>
+        <div class="card__buttons">
+          <a class="btn btn-secondary btn-block" href="{% url 'rights-list' %}">Browse rights statements</a>
+          <a class="btn btn-primary btn-block" href="{% url 'rights-create' %}">Create a new rights statement</a>
+        </div>
       </div>
     </div>
   </div>
