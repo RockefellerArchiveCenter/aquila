@@ -112,6 +112,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'assign_rights.User'
+SUPERUSER_USERNAME = config.SUPERUSER_USERNAME
+SUPERUSER_EMAIL = config.SUPERUSER_EMAIL
 
 AUTHENTICATION_BACKENDS = [
     'django_auth_adfs.backend.AdfsAuthCodeBackend',

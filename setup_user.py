@@ -1,5 +1,5 @@
-from aquila import config
+from aquila import settings
 from assign_rights.models import User
 
-if not User.objects.filter(username=config.SUPERUSER_USERNAME).exists():
-    user = User.objects.create_superuser(config.SUPERUSER_USERNAME, config.SUPERUSER_EMAIL, "testpassword")
+if not User.objects.filter(username=settings.SUPERUSER_USERNAME).exists():
+    user = User.objects.create_superuser(settings.SUPERUSER_USERNAME, settings.SUPERUSER_EMAIL, "testpassword")
