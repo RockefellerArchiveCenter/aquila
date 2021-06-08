@@ -21,13 +21,18 @@
           <a class="nav-link text-light" href="{% url 'rights-assemble' %}">Rights Assembler API</a>
         </li>
       </ul>
+      <div class="navbar-nav my-lg-0">
+      {% if request.user.is_staff %}
+        <span class="nav-item">
+          <a class="nav-link text-light" href="{% url 'admin:index' %}">Admin</a>
+        </span>
+      {% endif %}
       {% if request.user.is_authenticated %}
-        <div class="navbar-nav my-lg-0">
           <span class="nav-item">
             <a class="nav-link text-light" href="{% url 'logout' %}">Log out {{request.user.username}}</a>
           </span>
-        </div>
       {% endif %}
+      </div>
     </div>
   </nav>
 
