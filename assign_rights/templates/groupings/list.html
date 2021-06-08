@@ -20,7 +20,7 @@
     {% for object in object_list %}
     <tr>
       <td><a href="{% url 'groupings-detail' pk=object.pk %}">{{ object.title  }}</a></td>
-      <td>{{ object.description }}</td>
+      <td>{{ object.description | linebreaks }}</td>
       <td>{% for rights in object.rights_shells.all %}{{rights}}{% if not forloop.last %}<br/>{% endif %}{% endfor %}</td>
     </tr>
     {% endfor %}
