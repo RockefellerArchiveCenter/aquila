@@ -70,3 +70,7 @@ a.btn {
 .full-height {
   height: 100%;
 }
+
+.nav-link:hover {
+  text-decoration: underline;
+}
