@@ -14,7 +14,10 @@ def has_group(user, group_name):
     Returns:
         boolean: True or False depending on whether user belongs to a group.
     """
-    return user.groups.filter(name=group_name).exists()
+    if user.is_superuser:
+        return True
+    else:
+        return user.groups.filter(name=group_name).exists()
 
 
 @register.filter
