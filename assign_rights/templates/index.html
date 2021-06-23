@@ -17,7 +17,9 @@
         </div>
         <div class="card__buttons">
           <a class="btn btn-secondary btn-block" href="{% url 'groupings-list' %}">Browse groupings</a>
+          {% if request.user|has_group:"edit" %}
           <a class="btn btn-primary btn-block " href="{% url 'groupings-create' %}">Create a new grouping</a>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -31,7 +33,9 @@
         </div>
         <div class="card__buttons">
           <a class="btn btn-secondary btn-block" href="{% url 'rights-list' %}">Browse rights statements</a>
+          {% if request.user|has_group:"edit" %}
           <a class="btn btn-primary btn-block" href="{% url 'rights-create' %}">Create a new rights statement</a>
+          {% endif %}
         </div>
       </div>
     </div>
