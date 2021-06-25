@@ -128,6 +128,7 @@ AUTH_ADFS = {
     "CLAIM_MAPPING": {"first_name": "given_name",
                       "last_name": "family_name",
                       "email": "email"},
+    'LOGIN_EXEMPT_URLS': ['^api'],
 }
 
 REST_FRAMEWORK = {
