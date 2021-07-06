@@ -1,4 +1,3 @@
-coverage==5.5
 Django==3.2.5
 django-auth-adfs==1.6.0
 django-crispy-forms==1.12.0
