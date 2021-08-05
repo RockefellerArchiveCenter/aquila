@@ -69,7 +69,7 @@ def add_rights_shells():
         elif basis == "statute":
             new_shell.statute_citation = random_string()
         elif basis == "license":
-            new_shell.license_terms = random_string()
+            new_shell.terms = random_string()
         new_shell.save()
 
 

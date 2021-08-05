@@ -31,7 +31,7 @@ class RightsShell(models.Model):
     start_date_period = models.PositiveSmallIntegerField(blank=True, null=True)
     end_date_period = models.PositiveSmallIntegerField(blank=True, null=True)
     end_date_open = models.BooleanField(default=False)
-    license_terms = models.TextField(blank=True, null=True)
+    terms = models.TextField(blank=True, null=True)
     statute_citation = models.TextField(blank=True, null=True)
     created = models.DateTimeField(auto_now=True)
     last_modified = models.DateTimeField(auto_now_add=True)
@@ -49,7 +49,7 @@ class RightsShell(models.Model):
         if self.rights_basis == "Copyright":
             prefixes.append(self.copyright_status)
         elif self.rights_basis == "License":
-            prefixes.append(self.license_terms)
+            prefixes.append(self.terms)
         elif self.rights_basis == "Statute":
             prefixes.append(self.statute_citation)
         note = self.note

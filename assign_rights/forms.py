@@ -84,7 +84,7 @@ class RightsShellForm(ModelForm):
             'start_date_period',
             'end_date_period',
             'end_date_open',
-            'license_terms',
+            'terms',
             'statute_citation'
         ]
         labels = {
@@ -130,7 +130,7 @@ class CopyrightForm(RightsShellForm):
     class Meta(RightsShellForm.Meta):
         exclude = (
             'rights_basis',
-            'license_terms',
+            'terms',
             'statute_citation'
         )
         widgets = {
@@ -152,7 +152,7 @@ class OtherForm(RightsShellForm):
             'copyright_status',
             'determination_date',
             'jurisdiction',
-            'license_terms',
+            'terms',
             'statute_citation'
         )
 
@@ -162,7 +162,7 @@ class LicenseForm(RightsShellForm):
         super().__init__(*args, **kwargs)
         self.helper.layout = Layout(
             Div(
-                Div('license_terms', css_class="col"), css_class="row"),
+                Div('terms', css_class="col"), css_class="row"),
             RightsShellCommonLayout()
         )
 
@@ -193,7 +193,7 @@ class StatuteForm(RightsShellForm):
         exclude = (
             'rights_basis',
             'copyright_status',
-            'license_terms',
+            'terms',
         )
         widgets = {
             'jurisdiction': TextInput(attrs={'maxlength': '2', 'required': True}),
