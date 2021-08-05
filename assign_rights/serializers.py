@@ -9,12 +9,13 @@ class RightsGrantedSerializer(serializers.ModelSerializer):
     """
     start_date = serializers.CharField()
     end_date = serializers.CharField()
+    grant_restriction = serializers.CharField(source='restriction')
 
     class Meta:
         model = RightsGranted
         fields = (
             "act",
-            "restriction",
+            "grant_restriction",
             "start_date",
             "end_date",
             "note"
@@ -72,4 +73,4 @@ class LicenseSerializer(RightsShellSerializer):
 
     class Meta:
         model = RightsShell
-        fields = RightsShellSerializer.Meta.fields + ('license_terms',)
+        fields = RightsShellSerializer.Meta.fields + ('terms',)
