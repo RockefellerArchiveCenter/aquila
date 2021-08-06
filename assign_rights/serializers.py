@@ -29,6 +29,7 @@ class RightsShellSerializer(serializers.ModelSerializer):
     """
     start_date = serializers.CharField()
     end_date = serializers.CharField()
+    rights_basis = serializers.CharField(source='get_rights_basis_display')
     rights_granted = serializers.ListField(default=[])
     jurisdiction = serializers.CharField()
 
@@ -52,7 +53,7 @@ class OtherSerializer(RightsShellSerializer):
         fields = RightsShellSerializer.Meta.fields + ('other_basis',)
 
     def get_rights_basis(self, obj):
-        return "other"
+        return "Other"
 
 
 class CopyrightSerializer(RightsShellSerializer):
