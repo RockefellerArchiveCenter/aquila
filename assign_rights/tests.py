@@ -117,7 +117,7 @@ class TestViews(TestCase):
         """Test form handles data correctly"""
         form_data = {
             "rights_basis": random.choice([b[0] for b in RightsShell.RIGHTS_BASIS_CHOICES]),
-            "note": random_string(),
+            "basis_note": random_string(),
             "start_date_period": random.randint(0, 10),
             "end_date_period": random.randint(0, 10),
             "rights_begin": "start_date_period",

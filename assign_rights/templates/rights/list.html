@@ -20,7 +20,7 @@
     {% for rightsshell in object_list %}
     <tr>
       <td><a href=' {{ rightsshell.get_absolute_url }}'>{{ rightsshell }}</a></td>
-      <td>{{ rightsshell.note }}</td>
+      <td>{{ rightsshell.basis_note }}</td>
       <td>{% for rights_granted in rightsshell.rightsgranted_set.all %}{{rights_granted}}{% if not forloop.last %}<br/>{% endif %}{% endfor %}</td>
     </tr>
     {% endfor %}
