@@ -6,8 +6,8 @@
   <small>Created {{ rightsshell.created }}, last modified {{ rightsshell.last_modified }}</small>
 </div>
 
-{% if rightsshell.note %}
-<p class="lead">{{ rightsshell.note }}</p>
+{% if rightsshell.basis_note %}
+<p class="lead">{{ rightsshell.basis_note }}</p>
 {% endif %}
 
 <h2>Details</h2>
@@ -64,8 +64,8 @@
     <div class="card mb-4">
       <div class="card-body">
         <h3>{{rights_granted}}</h3>
-        {% if rights_granted.note %}
-        <p class="lead">{{rights_granted.note}}</p>
+        {% if rights_granted.granted_note %}
+        <p class="lead">{{rights_granted.granted_note}}</p>
         {% endif %}
         <dl>
         {% if rights_granted.start_date %}

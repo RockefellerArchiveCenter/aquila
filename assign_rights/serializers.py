@@ -18,7 +18,7 @@ class RightsGrantedSerializer(serializers.ModelSerializer):
             "grant_restriction",
             "start_date",
             "end_date",
-            "note"
+            "granted_note"
         )
 
 
@@ -38,7 +38,7 @@ class RightsShellSerializer(serializers.ModelSerializer):
             "rights_basis",
             "start_date",
             "end_date",
-            "note",
+            "basis_note",
             "rights_granted"
         )
 

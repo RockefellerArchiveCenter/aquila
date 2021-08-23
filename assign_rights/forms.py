@@ -33,7 +33,7 @@ class RightsShellCommonLayout(Layout):
                 Div(Field("end_date_period", required="required"), css_class="col-4", v_if="rightsEnd=='end_date_period'"),
                 Div(Hidden(name="end_date_open", value="true",), v_if="rightsEnd=='end_date_open'"), css_class="row"),
             Div(
-                Div("note", css_class="form-group col"),
+                Div("basis_note", css_class="form-group col"),
                 css_class="row")
         )
 
@@ -78,7 +78,7 @@ class RightsShellForm(ModelForm):
             'copyright_status',
             'jurisdiction',
             'determination_date',
-            'note',
+            'basis_note',
             'start_date',
             'end_date',
             'start_date_period',
@@ -208,7 +208,7 @@ class RightsGrantedForm(ModelForm):
             'basis',
             'act',
             'restriction',
-            'note',
+            'granted_note',
             'start_date',
             'end_date',
             'start_date_period',
