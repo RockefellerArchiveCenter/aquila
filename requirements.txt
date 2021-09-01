@@ -20,7 +20,7 @@ colorlog==3.2.0
     # via clinner
 cryptography==3.4.6
     # via django-auth-adfs
-django==3.2.5
+django==3.2.7
     # via
     #   -r requirements.in
     #   django-auth-adfs
