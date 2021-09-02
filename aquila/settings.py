@@ -129,7 +129,7 @@ AUTH_ADFS = {
                       "last_name": "family_name",
                       "email": "email"},
     'LOGIN_EXEMPT_URLS': ['^api'],
-    'GROUP_CLAIMS': None,
+    'GROUPS_CLAIM': None,
 }
 
 REST_FRAMEWORK = {
