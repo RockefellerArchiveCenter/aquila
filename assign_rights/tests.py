@@ -50,7 +50,7 @@ class TestRightsAssemblyView(TransactionTestCase):
 
         # RightsAssembler throws an exception
         for fixture_name, message, status_code in [
-                ("invalid_rights_id.json", "Error retrieving rights shell: RightsShell matching query does not exist.", 404),
+                ("invalid_rights_id.json", "Error retrieving rights statement: RightsShell matching query does not exist.", 404),
                 ("no_start_date.json", "Request data must contain 'identifiers', 'start_date' and 'end_date' keys.", 400)]:
             with open(join(invalid_data_fixture_dir, fixture_name), 'r') as json_file:
                 invalid_data = json.load(json_file)
@@ -117,7 +117,7 @@ class TestViews(TestCase):
         """Test form handles data correctly"""
         form_data = {
             "rights_basis": random.choice([b[0] for b in RightsShell.RIGHTS_BASIS_CHOICES]),
-            "note": random_string(),
+            "basis_note": random_string(),
             "start_date_period": random.randint(0, 10),
             "end_date_period": random.randint(0, 10),
             "rights_begin": "start_date_period",
@@ -219,8 +219,7 @@ class TestRightsAssembler(TestCase):
 
     def test_create_basis_json(self):
         """Tests that Rights Shell Serializers are working as expected."""
-        for basis in ["copyright", "policy", "donor", "statute", "license"]:
-            obj = random.choice(RightsShell.objects.filter(rights_basis=basis))
+        for obj in RightsShell.objects.all():
             start_date = random_date(75, 50).isoformat()
             end_date = random_date(49, 5).isoformat()
             serialized = self.assembler.create_json(obj, start_date, end_date)
@@ -230,6 +229,7 @@ class TestRightsAssembler(TestCase):
                 basis_json = "{}_basis.json".format(obj.rights_basis)
             self.assertTrue(is_valid(serialized, basis_json))
             if obj.jurisdiction:
+                self.assertTrue(obj.jurisdiction.islower())
                 self.assertTrue(serialized['jurisdiction'].islower())
             self.assertTrue(isinstance(serialized, dict))
 

@@ -25,13 +25,13 @@ class RightsShell(models.Model):
         blank=True, null=True, default=datetime.now
     )
     jurisdiction = models.CharField(max_length=2, blank=True, null=True)
-    note = models.TextField()
+    basis_note = models.TextField()
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     start_date_period = models.PositiveSmallIntegerField(blank=True, null=True)
     end_date_period = models.PositiveSmallIntegerField(blank=True, null=True)
     end_date_open = models.BooleanField(default=False)
-    license_terms = models.TextField(blank=True, null=True)
+    terms = models.TextField(blank=True, null=True)
     statute_citation = models.TextField(blank=True, null=True)
     created = models.DateTimeField(auto_now=True)
     last_modified = models.DateTimeField(auto_now_add=True)
@@ -39,18 +39,23 @@ class RightsShell(models.Model):
     def get_absolute_url(self):
         return reverse("rights-detail", kwargs={"pk": self.pk})
 
+    def save(self, *args, **kwargs):
+        """Custom save method to coerce jurisdiction to lowercase."""
+        self.jurisdiction = self.jurisdiction.lower() if self.jurisdiction else None
+        super(RightsShell, self).save(*args, **kwargs)
+
     def __str__(self):
         prefixes = [self.get_rights_basis_display()]
         if self.rights_basis == "Copyright":
             prefixes.append(self.copyright_status)
         elif self.rights_basis == "License":
-            prefixes.append(self.license_terms)
+            prefixes.append(self.terms)
         elif self.rights_basis == "Statute":
             prefixes.append(self.statute_citation)
-        note = self.note
-        if len(note) > 115:
-            note = "{}...".format(note[:75]) if len(note) > 75 else note
-        return "ID# {} - {} ({})".format(self.pk, " / ".join([p for p in prefixes if p]), note)
+        basis_note = self.basis_note
+        if len(basis_note) > 115:
+            basis_note = "{}...".format(basis_note[:75]) if len(basis_note) > 75 else basis_note
+        return "ID# {} - {} ({})".format(self.pk, " / ".join([p for p in prefixes if p]), basis_note)
 
 
 class RightsGranted(models.Model):
@@ -76,7 +81,7 @@ class RightsGranted(models.Model):
     start_date_period = models.PositiveSmallIntegerField(blank=True, null=True)
     end_date_period = models.PositiveSmallIntegerField(blank=True, null=True)
     end_date_open = models.BooleanField(default=False)
-    note = models.TextField(blank=True, null=True)
+    granted_note = models.TextField(blank=True, null=True)
     created = models.DateTimeField(auto_now=True)
     last_modified = models.DateTimeField(auto_now_add=True)
 

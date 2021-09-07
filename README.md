@@ -23,6 +23,11 @@ Or, if you want to remove all data
 
     $ docker-compose down -v
 
+
+## Default Superuser
+
+When you start the container for the first time, a superuser will be created. Make sure you change the password for this user (the easiest way is through the Django shell).
+
 ## Services
 
 ### Routes

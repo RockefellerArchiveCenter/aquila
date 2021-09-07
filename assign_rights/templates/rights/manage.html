@@ -180,10 +180,10 @@
 
           <div class="row">
             <div class="form-group col">
-              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-note'">Note</label>
-              <textarea v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-note'"
-                        v-model="rights_granted.note"
-                        v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-note'"
+              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-granted_note'">Note</label>
+              <textarea v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-granted_note'"
+                        v-model="rights_granted.granted_note"
+                        v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-granted_note'"
                         class="form-control"
                         rows="5">
               </textarea>
@@ -227,7 +227,7 @@
             end_date_error: '{{ nested_form.errors.end_date|default_if_none:"" }}',
             end_date_period: '{{ nested_form.end_date_period.value|default_if_none:"" }}',
             end_date_open: '{{ nested_form.end_date_open.value|default_if_none:"" }}',
-            note: '{{ nested_form.note.value|default_if_none:"" }}',
+            granted_note: '{{ nested_form.granted_note.value|default_if_none:"" }}',
         },
         {% endfor %}
       {% endif %}

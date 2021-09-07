@@ -112,6 +112,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'assign_rights.User'
+SUPERUSER_USERNAME = config.SUPERUSER_USERNAME
+SUPERUSER_EMAIL = config.SUPERUSER_EMAIL
 
 AUTHENTICATION_BACKENDS = [
     'django_auth_adfs.backend.AdfsAuthCodeBackend',
@@ -126,6 +128,8 @@ AUTH_ADFS = {
     "CLAIM_MAPPING": {"first_name": "given_name",
                       "last_name": "family_name",
                       "email": "email"},
+    'LOGIN_EXEMPT_URLS': ['^api'],
+    'GROUPS_CLAIM': None,
 }
 
 REST_FRAMEWORK = {
@@ -157,3 +161,5 @@ LOGIN_REDIRECT_URL = "home"
 
 # django-crispy-forms template pack
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

@@ -9,15 +9,16 @@ class RightsGrantedSerializer(serializers.ModelSerializer):
     """
     start_date = serializers.CharField()
     end_date = serializers.CharField()
+    grant_restriction = serializers.CharField(source='restriction')
 
     class Meta:
         model = RightsGranted
         fields = (
             "act",
-            "restriction",
+            "grant_restriction",
             "start_date",
             "end_date",
-            "note"
+            "granted_note"
         )
 
 
@@ -29,7 +30,7 @@ class RightsShellSerializer(serializers.ModelSerializer):
     start_date = serializers.CharField()
     end_date = serializers.CharField()
     rights_granted = serializers.ListField(default=[])
-    jurisdiction = serializers.SerializerMethodField()
+    jurisdiction = serializers.CharField()
 
     class Meta:
         model = RightsShell
@@ -37,12 +38,9 @@ class RightsShellSerializer(serializers.ModelSerializer):
             "rights_basis",
             "start_date",
             "end_date",
-            "note",
+            "basis_note",
             "rights_granted"
         )
-
-    def get_jurisdiction(self, obj):
-        return obj.jurisdiction.lower() if obj.jurisdiction else None
 
 
 class OtherSerializer(RightsShellSerializer):
@@ -75,4 +73,4 @@ class LicenseSerializer(RightsShellSerializer):
 
     class Meta:
         model = RightsShell
-        fields = RightsShellSerializer.Meta.fields + ('license_terms',)
+        fields = RightsShellSerializer.Meta.fields + ('terms',)
