@@ -12,7 +12,7 @@ before_install:
   - docker-compose up -d
   -  pre-commit
 install:
-  - ./wait-for-it.sh ${SERVICE_NAME}:8009 -- docker-compose exec ${SERVICE_NAME} pip install coverage
+  - ./wait-for-it.sh ${SERVICE_NAME}:8009 -- docker-compose exec ${SERVICE_NAME} pip install coverage pre-commit
   - docker-compose exec ${SERVICE_NAME} pre-commit install
 script:
   - docker-compose exec ${SERVICE_NAME} pre-commit run --all-files --show-diff-on-failure
