@@ -1,24 +1,19 @@
 language: python
+cache: pip
 services:
   - docker
 env:
   global:
-    - DOCKER_COMPOSE_VERSION: 1.25.5
     - APPLICATION_NAME: aquila
     - SERVICE_NAME: aquila-web
 before_install:
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
   - cp ${APPLICATION_NAME}/config.py.example ${APPLICATION_NAME}/config.py
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker-compose build
+  - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
   - docker-compose up -d
-  - docker-compose exec ${SERVICE_NAME} pip install pre-commit
-  - docker-compose exec ${SERVICE_NAME} pip install coverage
+  -  pre-commit
+install:
+  - ./wait-for-it.sh ${SERVICE_NAME}:8009 -- docker-compose exec ${SERVICE_NAME} pip install coverage
   - docker-compose exec ${SERVICE_NAME} pre-commit install
-install: true
 script:
   - docker-compose exec ${SERVICE_NAME} pre-commit run --all-files --show-diff-on-failure
   - docker-compose exec ${SERVICE_NAME} coverage run manage.py test
