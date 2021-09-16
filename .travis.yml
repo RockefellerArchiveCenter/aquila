@@ -17,7 +17,7 @@ script:
   - docker-compose exec ${SERVICE_NAME} pre-commit run --all-files --show-diff-on-failure
   - docker-compose exec ${SERVICE_NAME} coverage run manage.py test
 after_script:
-  - docker-compose exec $CONTAINER coverage report --omit=*/migrations/* -m
+  - docker-compose exec ${SERVICE_NAME} coverage report --omit=*/migrations/* -m
 before_deploy:
   - sudo deploy_scripts/substitute_env.sh
   - sudo deploy_scripts/make_zip.sh $DEPLOY_ZIP_DIR $DEPLOY_ZIP_NAME
