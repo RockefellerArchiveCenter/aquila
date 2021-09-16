@@ -11,7 +11,7 @@ before_install:
   - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
   - docker-compose up -d
 install:
-  - ./wait-for-it.sh ${SERVICE_NAME}:8009 -- docker-compose exec ${SERVICE_NAME} pip install coverage
+  - ./wait-for-it.sh ${SERVICE_NAME}:8009 -- docker-compose exec ${SERVICE_NAME} pip install coverage pre-commit
   - docker-compose exec ${SERVICE_NAME} pre-commit install
 script:
   - docker-compose exec ${SERVICE_NAME} pre-commit run --all-files --show-diff-on-failure
