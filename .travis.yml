@@ -40,7 +40,7 @@ deploy:
     access_key_id: $AWS_ACCESS_KEY
     secret_access_key: $AWS_SECRET_KEY
     application: ${APPLICATION_NAME}
-    deployment_group: AquilaDevelopment
+    deployment_group: $DEPLOYMENT_GROUP
     region: us-east-1
     on: *development
 notifications:
