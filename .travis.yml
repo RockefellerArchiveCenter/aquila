@@ -1,27 +1,24 @@
 language: python
+cache: pip
 services:
   - docker
 env:
   global:
-    - DOCKER_COMPOSE_VERSION: 1.25.5
     - APPLICATION_NAME: aquila
-    - SERVICE_NAME: aquila-web
+    - CONTAINER: aquila-web
+    - DJANGO_PORT: 8009
 before_install:
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
   - cp ${APPLICATION_NAME}/config.py.example ${APPLICATION_NAME}/config.py
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker-compose build
+  - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
   - docker-compose up -d
-  - docker-compose exec ${SERVICE_NAME} pip install pre-commit
-  - docker-compose exec ${SERVICE_NAME} pip install coverage
-  - docker-compose exec ${SERVICE_NAME} pre-commit install
-install: true
+install:
+  - ./wait-for-it.sh ${CONTAINER}:${DJANGO_PORT} -- docker-compose exec ${CONTAINER} pip install coverage pre-commit
+  - docker-compose exec ${CONTAINER} pre-commit install
 script:
-  - docker-compose exec ${SERVICE_NAME} pre-commit run --all-files --show-diff-on-failure
-  - docker-compose exec ${SERVICE_NAME} coverage run manage.py test
+  - docker-compose exec ${CONTAINER} pre-commit run --all-files --show-diff-on-failure
+  - docker-compose exec ${CONTAINER} coverage run manage.py test
+after_script:
+  - docker-compose exec ${CONTAINER} coverage report --omit=*/migrations/* -m
 before_deploy:
   - sudo deploy_scripts/substitute_env.sh
   - sudo deploy_scripts/make_zip.sh $DEPLOY_ZIP_DIR $DEPLOY_ZIP_NAME
@@ -31,9 +28,10 @@ deploy:
     secret_access_key: $AWS_SECRET_KEY
     local_dir: $DEPLOY_ZIP_DIR
     skip_cleanup: true
-    on: &development
+    on:
       repo: RockefellerArchiveCenter/${APPLICATION_NAME}
-      branch: development
+      all_branches: true
+      condition: $TRAVIS_BRANCH =~ ^(base|development)$
     bucket: $AWS_BUCKET_NAME
     region: us-east-1
   - provider: codedeploy
@@ -46,6 +44,21 @@ deploy:
     application: ${APPLICATION_NAME}
     deployment_group: AquilaDevelopment
     region: us-east-1
-    on: *development
+    on:
+      repo: RockefellerArchiveCenter/${APPLICATION_NAME}
+      branch: development
+  - provider: codedeploy
+    wait_until_deployed: true
+    bucket: $AWS_BUCKET_NAME
+    key: $DEPLOY_ZIP_NAME
+    bundle_type: zip
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    application: ${APPLICATION_NAME}
+    deployment_group: AquilaProduction
+    region: us-east-1
+    on:
+      repo: RockefellerArchiveCenter/${APPLICATION_NAME}
+      branch: base
 notifications:
   email: false
