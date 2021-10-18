@@ -1,8 +1,10 @@
 # aquila
 
+[![Build Status](https://travis-ci.org/RockefellerArchiveCenter/aquila.svg?branch=base)](https://travis-ci.org/RockefellerArchiveCenter/aquila)
+
 An application to store, calculate, and assign PREMIS rights statements.
 
-## Setup
+## Getting Started
 
 Install [git](https://git-scm.com/) and clone the repository
 
@@ -26,16 +28,31 @@ Or, if you want to remove all data
 
 ## Default Superuser
 
-When you start the container for the first time, a superuser will be created. Make sure you change the password for this user (the easiest way is through the Django shell).
+When you start the container for the first time, a superuser will be created. Make sure you change the password for this user (the easiest way is through the Django shell). E.g.,
 
-## Services
+```
+python manage.py changepassword <SUPERUSER_USERNAME>
+```
 
-### Routes
+## Usage
+
+Aquila includes a front-end interface to create rights statements and groupings, as well as an API to assemble rights statements.
+
+Groupings are groups of content that have similar rights. They may correspond to record types, collections, or projects.
+
+The rights statements contain date rules that are calculated by the Rights Assembler API. Many rights statements can be attached to many groupings.
+
+### API
+
+Aquila contains a Rights Assembler API (available at `api/rights-assemble/`), which uses a start date, an end date, and IDs of rights statements to create rights JSON.
 
 ## Requirements
 
 Using this repo requires having [Docker](https://store.docker.com/search?type=edition&offering=community) installed.
 
+## Development
+
+This repository contains a configuration file for git [pre-commit](https://pre-commit.com/) hooks which help ensure that code is linted before it is checked into version control. It is strongly recommended that you install these hooks locally by installing pre-commit and running `pre-commit install`.
 
 ## License
 
