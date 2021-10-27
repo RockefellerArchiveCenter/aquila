@@ -163,3 +163,6 @@ LOGIN_REDIRECT_URL = "home"
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+# Google Analytics configs
+GTM_ID = config.GTM_ID
