@@ -13,3 +13,4 @@ SSO_AUDIENCE = "microsoft:identityserver:http://aquila-web:8009"
 LOGIN_URL = "login"
 SUPERUSER_USERNAME = "test"
 SUPERUSER_EMAIL = "test@example.com"
+GTM_ID = 'GTM-xxxxxxx'
