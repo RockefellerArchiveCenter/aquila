@@ -10,4 +10,4 @@ python manage.py shell < ./setup_user.py
 
 #Start server
 echo "Starting server"
-python manage.py runserver 0.0.0.0:${PORT}
+python manage.py runserver 0.0.0.0:8009
