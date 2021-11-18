@@ -8,10 +8,12 @@ services:
   aquila-web:
     build: .
     entrypoint: /code/entrypoint.sh
+    environment:
+      - APPLICATION_PORT=${APPLICATION_PORT:-8009}
     volumes:
       - .:/code
     ports:
-      - "8009:8009"
+      - "${APPLICATION_PORT:-8009}:${APPLICATION_PORT:-8009}"
     depends_on:
       - aquila-db
 
