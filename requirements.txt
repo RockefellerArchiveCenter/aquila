@@ -25,7 +25,7 @@ django==3.2.9
     #   -r requirements.in
     #   django-auth-adfs
     #   djangorestframework
-django-auth-adfs==1.9.2
+django-auth-adfs==1.9.3
     # via -r requirements.in
 django-crispy-forms==1.13.0
     # via -r requirements.in
@@ -77,7 +77,9 @@ typing-extensions==3.10.0.2
     #   gitpython
     #   importlib-metadata
 urllib3==1.26.7
-    # via requests
+    # via
+    #   django-auth-adfs
+    #   requests
 zipp==3.6.0
     # via importlib-metadata
 
