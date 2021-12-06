@@ -25,7 +25,7 @@ django==3.2.9
     #   -r requirements.in
     #   django-auth-adfs
     #   djangorestframework
-django-auth-adfs==1.9.1
+django-auth-adfs==1.9.2
     # via -r requirements.in
 django-crispy-forms==1.13.0
     # via -r requirements.in
@@ -43,7 +43,7 @@ importlib-metadata==4.8.2
     # via jsonschema
 jsonschema==3.2.0
     # via rac-schemas
-psycopg2-binary==2.9.1
+psycopg2-binary==2.9.2
     # via -r requirements.in
 pycparser==2.21
     # via cffi
