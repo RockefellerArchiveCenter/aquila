@@ -1,6 +1,6 @@
 # aquila
 
-[![Build Status](https://travis-ci.org/RockefellerArchiveCenter/aquila.svg?branch=base)](https://travis-ci.org/RockefellerArchiveCenter/aquila)
+[![Build Status](https://travis-ci.com/RockefellerArchiveCenter/aquila.svg?branch=base)](https://travis-ci.com/RockefellerArchiveCenter/aquila)
 
 An application to store, calculate, and assign PREMIS rights statements.
 
