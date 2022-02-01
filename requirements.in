@@ -1,4 +1,4 @@
-Django==3.2.11
+Django==4.0.1
 django-auth-adfs==1.9.4
 django-crispy-forms==1.13.0
 djangorestframework==3.13.1

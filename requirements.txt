@@ -20,7 +20,7 @@ colorlog==3.2.0
     # via clinner
 cryptography==36.0.1
     # via django-auth-adfs
-django==3.2.11
+django==4.0.1
     # via
     #   -r requirements.in
     #   django-auth-adfs
@@ -39,8 +39,6 @@ health-check==3.4.1
     # via -r requirements.in
 idna==3.3
     # via requests
-importlib-metadata==4.8.3
-    # via jsonschema
 jsonschema==3.2.0
     # via rac-schemas
 psycopg2-binary==2.9.3
@@ -54,9 +52,7 @@ pyrsistent==0.18.0
 python-dateutil==2.8.2
     # via -r requirements.in
 pytz==2021.3
-    # via
-    #   django
-    #   djangorestframework
+    # via djangorestframework
 pyyaml==6.0
     # via health-check
 rac_schemas==0.29
@@ -73,17 +69,10 @@ smmap==5.0.0
     # via gitdb
 sqlparse==0.4.2
     # via django
-typing-extensions==4.0.1
-    # via
-    #   asgiref
-    #   gitpython
-    #   importlib-metadata
 urllib3==1.26.8
     # via
     #   django-auth-adfs
     #   requests
-zipp==3.6.0
-    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
