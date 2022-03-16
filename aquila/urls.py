@@ -13,6 +13,10 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.contrib import admin
+from django.contrib.auth.views import LogoutView
+from django.urls import include, path
+
 from assign_rights.views import (AquilaLoginView, GroupingCreateView,
                                  GroupingDeleteView, GroupingDetailView,
                                  GroupingListView, GroupingUpdateView,
@@ -20,9 +24,6 @@ from assign_rights.views import (AquilaLoginView, GroupingCreateView,
                                  RightsShellCreateView, RightsShellDeleteView,
                                  RightsShellDetailView, RightsShellListView,
                                  RightsShellUpdateView)
-from django.contrib import admin
-from django.contrib.auth.views import LogoutView
-from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),

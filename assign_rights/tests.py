@@ -4,13 +4,14 @@ from datetime import date, datetime
 from os import listdir
 from os.path import join
 
-from aquila import settings
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import AnonymousUser, Group
 from django.test import RequestFactory, TestCase, TransactionTestCase
 from django.urls import reverse
 from rac_schemas import is_valid
 from rest_framework.test import APIRequestFactory
+
+from aquila import settings
 
 from .assemble import RightsAssembler
 from .forms import GroupingForm, RightsShellForm
