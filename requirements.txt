@@ -35,7 +35,7 @@ psycopg2-binary==2.9.3
     # via -r requirements.in
 pycparser==2.21
     # via cffi
-pyjwt==2.3.0
+pyjwt==2.4.0
     # via django-auth-adfs
 pyrsistent==0.18.1
     # via jsonschema
