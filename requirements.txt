@@ -21,7 +21,7 @@ django==4.0.3
     #   -r requirements.in
     #   django-auth-adfs
     #   djangorestframework
-django-auth-adfs==1.9.5
+django-auth-adfs==1.9.7
     # via -r requirements.in
 django-crispy-forms==1.14.0
     # via -r requirements.in
@@ -35,7 +35,7 @@ psycopg2-binary==2.9.3
     # via -r requirements.in
 pycparser==2.21
     # via cffi
-pyjwt==2.3.0
+pyjwt==2.4.0
     # via django-auth-adfs
 pyrsistent==0.18.1
     # via jsonschema
