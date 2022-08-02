@@ -6,7 +6,7 @@
 #
 asgiref==3.5.2
     # via django
-attrs==21.4.0
+attrs==22.1.0
     # via jsonschema
 certifi==2022.6.15
     # via requests
@@ -29,7 +29,7 @@ djangorestframework==3.13.1
     # via -r requirements.in
 idna==3.3
     # via requests
-jsonschema==4.7.2
+jsonschema==4.9.0
     # via rac-schemas
 psycopg2-binary==2.9.3
     # via -r requirements.in
@@ -53,7 +53,7 @@ six==1.16.0
     # via python-dateutil
 sqlparse==0.4.2
     # via django
-urllib3==1.26.10
+urllib3==1.26.11
     # via
     #   django-auth-adfs
     #   requests
