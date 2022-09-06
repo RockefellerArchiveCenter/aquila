@@ -16,7 +16,7 @@ charset-normalizer==2.1.1
     # via requests
 cryptography==37.0.4
     # via django-auth-adfs
-django==4.1
+django==4.0.7
     # via
     #   -r requirements.in
     #   django-auth-adfs
