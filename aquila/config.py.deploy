@@ -13,5 +13,5 @@ SSO_AUDIENCE = "${SSO_AUDIENCE}"
 LOGIN_URL = "django_auth_adfs:login"
 SUPERUSER_USERNAME = "${SUPERUSER_USERNAME}"
 SUPERUSER_EMAIL = "${SUPERUSER_EMAIL}"
-# Google analytics configs
-GTM_ID = "${GTM_ID}"
+# Matomo analytics configs
+MTM_ID = "${MTM_ID}"
