@@ -3,5 +3,5 @@
 from django.conf import settings
 
 
-def gtm_id(request):
-    return {'gtm_id': settings.GTM_ID}
+def mtm_id(request):
+    return {'mtm_id': settings.MTM_ID}
