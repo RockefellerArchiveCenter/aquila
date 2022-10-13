@@ -13,4 +13,4 @@ SSO_AUDIENCE = "microsoft:identityserver:http://aquila-web:8009"
 LOGIN_URL = "login"
 SUPERUSER_USERNAME = "test"
 SUPERUSER_EMAIL = "test@example.com"
-MTM_ID = https://cdn.matomo.cloud/rockarch.matomo.cloud/container_xxxxxxxx.js
+MTM_ID = 'https://cdn.matomo.cloud/rockarch.matomo.cloud/container_xxxxxxxx.js'
