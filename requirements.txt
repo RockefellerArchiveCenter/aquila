@@ -12,16 +12,16 @@ certifi==2022.12.7
     # via requests
 cffi==1.15.1
     # via cryptography
-charset-normalizer==3.0.1
+charset-normalizer==3.1.0
     # via requests
-cryptography==39.0.1
+cryptography==39.0.2
     # via django-auth-adfs
-django==4.1.7
+django==4.2
     # via
     #   -r requirements.in
     #   django-auth-adfs
     #   djangorestframework
-django-auth-adfs==1.11.4
+django-auth-adfs==1.11.5
     # via -r requirements.in
 django-crispy-forms==1.14.0
     # via -r requirements.in
@@ -31,7 +31,7 @@ idna==3.4
     # via requests
 jsonschema==4.17.3
     # via rac-schemas
-psycopg2-binary==2.9.5
+psycopg2==2.9.6
     # via -r requirements.in
 pycparser==2.21
     # via cffi
@@ -41,7 +41,7 @@ pyrsistent==0.19.3
     # via jsonschema
 python-dateutil==2.8.2
     # via -r requirements.in
-pytz==2022.7.1
+pytz==2023.3
     # via djangorestframework
 rac-schemas==0.30
     # via -r requirements.in
@@ -53,7 +53,7 @@ six==1.16.0
     # via python-dateutil
 sqlparse==0.4.3
     # via django
-urllib3==1.26.14
+urllib3==1.26.15
     # via
     #   django-auth-adfs
     #   requests
