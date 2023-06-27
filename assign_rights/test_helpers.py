@@ -90,6 +90,7 @@ def add_rights_acts(count=5):
             end_date_open=end_date_open,
         )
 
+
 def validate_serialized(data, schema_name):
     base_file = open(join('rac_schemas', 'schemas', 'base.json'), 'r')
     base_schema = json.load(base_file)
