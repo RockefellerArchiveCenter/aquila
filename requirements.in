@@ -4,5 +4,5 @@ django-crispy-forms~=1.14
 djangorestframework~=3.13
 psycopg2~=2.9
 python-dateutil~=2.8
-rac_schemas==0.30
+rac-schema-validator~=0.1
 requests~=2.28
