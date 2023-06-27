@@ -8,7 +8,6 @@ from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import AnonymousUser, Group
 from django.test import RequestFactory, TestCase, TransactionTestCase
 from django.urls import reverse
-from rac_schemas import is_valid
 from rest_framework.test import APIRequestFactory
 
 from aquila import settings
@@ -17,7 +16,7 @@ from .assemble import RightsAssembler
 from .forms import GroupingForm, RightsShellForm
 from .models import Grouping, RightsGranted, RightsShell, User
 from .test_helpers import (add_groupings, add_rights_acts, add_rights_shells,
-                           random_date, random_string)
+                           random_date, random_string, validate_serialized)
 from .views import (GroupingCreateView, GroupingDetailView, GroupingListView,
                     GroupingUpdateView, RightsAssemblerView,
                     RightsShellCreateView, RightsShellDetailView,
@@ -228,7 +227,7 @@ class TestRightsAssembler(TestCase):
                 basis_json = "other_basis.json"
             else:
                 basis_json = "{}_basis.json".format(obj.rights_basis)
-            self.assertTrue(is_valid(serialized, basis_json))
+            self.assertTrue(validate_serialized(serialized, basis_json))
             if obj.jurisdiction:
                 self.assertTrue(obj.jurisdiction.islower())
                 self.assertTrue(serialized['jurisdiction'].islower())

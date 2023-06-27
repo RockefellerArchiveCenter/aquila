@@ -1,7 +1,10 @@
+import json
 import random
 import string
 from datetime import date
+from os.path import join
 
+import rac_schema_validator
 from dateutil.relativedelta import relativedelta
 
 from .models import Grouping, RightsGranted, RightsShell
@@ -86,3 +89,12 @@ def add_rights_acts(count=5):
             end_date_period=end_date_period,
             end_date_open=end_date_open,
         )
+
+
+def validate_serialized(data, schema_name):
+    base_file = open(join('rac_schemas', 'schemas', 'base.json'), 'r')
+    base_schema = json.load(base_file)
+    base_file.close()
+    with open(join('rac_schemas', 'schemas', schema_name), 'r') as object_file:
+        object_schema = json.load(object_file)
+        return rac_schema_validator.is_valid(data, object_schema, base_schema)
