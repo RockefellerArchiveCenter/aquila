@@ -5,6 +5,7 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   TemplateView, UpdateView)
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from .assemble import RightsAssembler
 from .forms import (CopyrightForm, GroupingForm, LicenseForm, OtherForm,
@@ -12,6 +13,7 @@ from .forms import (CopyrightForm, GroupingForm, LicenseForm, OtherForm,
                     RightsShellUpdateForm, StatuteForm, StrErrorList)
 from .mixins.authmixins import DeleteMixin, EditMixin
 from .models import Grouping, RightsGranted, RightsShell
+from .serializers import RightsShellListSerializer
 
 
 class PageTitleMixin(object):
@@ -218,3 +220,10 @@ class RightsAssemblerView(APIView):
             return Response({"detail": "Unable to parse date: {}".format(e)}, status=500)
         except Exception as e:
             return Response({"detail": str(e)}, status=500)
+
+
+class RightsShellAPIView(ReadOnlyModelViewSet):
+    """Lists available RightsShell."""
+
+    queryset = RightsShell.objects.all()
+    serializer_class = RightsShellListSerializer
