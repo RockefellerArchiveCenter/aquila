@@ -19,14 +19,15 @@ from .test_helpers import (add_groupings, add_rights_acts, add_rights_shells,
                            random_date, random_string, validate_serialized)
 from .views import (GroupingCreateView, GroupingDetailView, GroupingListView,
                     GroupingUpdateView, RightsAssemblerView,
-                    RightsShellCreateView, RightsShellDetailView,
-                    RightsShellListView, RightsShellUpdateView)
+                    RightsShellAPIView, RightsShellCreateView,
+                    RightsShellDetailView, RightsShellListView,
+                    RightsShellUpdateView)
 
 valid_data_fixture_dir = join(settings.BASE_DIR, 'fixtures', 'valid_requests')
 invalid_data_fixture_dir = join(settings.BASE_DIR, 'fixtures', 'invalid_requests')
 
 
-class TestRightsAssemblyView(TransactionTestCase):
+class TestAPIViews(TransactionTestCase):
     """ Tests that require stable pks """
 
     reset_sequences = True
@@ -58,6 +59,16 @@ class TestRightsAssemblyView(TransactionTestCase):
                 response = RightsAssemblerView.as_view()(request)
                 self.assertEqual(response.status_code, status_code, "Request should have returned a {} status code".format(status_code))
                 self.assertEqual(response.data["detail"], message)
+
+    def test_rightsshell_list_view(self):
+        """Ensures rights shell list view returns correct data."""
+        request = self.factory.get(reverse('rights-api-list'), content_type='application/json')
+        response = RightsShellAPIView.as_view({'get': 'list'})(request)
+        self.assertEqual(response.status_code, 200, "Request should have returned a 200 status code")
+        self.assertEqual(len(response.data), RightsShell.objects.all().count())
+        for shell in response.data:
+            self.assertTrue("id" in shell)
+            self.assertTrue("title" in shell)
 
 
 class TestViews(TestCase):
