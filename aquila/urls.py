@@ -21,13 +21,14 @@ from assign_rights.views import (AquilaLoginView, GroupingCreateView,
                                  GroupingDeleteView, GroupingDetailView,
                                  GroupingListView, GroupingUpdateView,
                                  HomePage, RightsAssemblerView,
-                                 RightsShellCreateView, RightsShellDeleteView,
-                                 RightsShellDetailView, RightsShellListView,
-                                 RightsShellUpdateView)
+                                 RightsShellAPIView, RightsShellCreateView,
+                                 RightsShellDeleteView, RightsShellDetailView,
+                                 RightsShellListView, RightsShellUpdateView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/rights-assemble/', RightsAssemblerView.as_view(), name='rights-assemble'),
+    path('api/rights/', RightsShellAPIView.as_view({'get': 'list'}), name='rights-api-list'),
     path('', HomePage.as_view(), name="home"),
     path('groupings/', GroupingListView.as_view(), name="groupings-list"),
     path('groupings/<int:pk>/', GroupingDetailView.as_view(), name="groupings-detail"),
