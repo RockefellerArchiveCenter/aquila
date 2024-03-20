@@ -1,76 +1,61 @@
-/* Improve primary color contrast */
+/* Variables */
 
-.btn-primary {
-  background-color: #0069d9;
-  border-color: #0069d9;
+:root {
+/* Colors  */
+  --silver-grey: hsl(45deg 6% 72%);
+  --silver-grey-lighten: #c8c6c1;
 }
 
-.btn-primary:hover, .btn-outline-primary:hover {
-    background-color: #004FA3;
-    border-color: #004FA3;
+/* Remove bottom padding from heading, because we're not using the dotted border
+TODO: adjust this style in the style library so that that padding is attached to 
+the .heading--dotted-border class, not the h2 element */
+h2 {
+  padding-bottom: 0;
 }
 
-.btn-outline-primary {
-  border-color: #0069d9;
-  color: #0069d9;
+.flex--column {
+  flex-direction: column;
 }
 
-.content a {
-  text-decoration: underline;
+#main {
+  grid-column: 2 / span 10;
+  margin-bottom: 30px;
 }
 
-a.btn {
-  text-decoration: none;
+.form--login {
+  grid-column: 1 / span 4;
 }
 
-.rights-granted__checkbox, .rights-basis__checkbox {
-  margin-top: 2.5rem;
+.form--manage {
+  grid-column: 1 / span 7;
 }
 
-.skip-link {
-  background: #0069d9;
-  color: #FFFFFF;
-  padding: 15px 20px 18px 20px;
-  position: absolute;
-  left: 15px;
-  top: 56px;
-  font-size: 18px;
-  text-align: center;
-  outline: 0;
-  text-decoration: underline;
+.form-group {
+  margin-bottom: 10px;
+  width: 100%;
 }
 
-.skip-link:hover {
-  background: #004FA3;
-  color: #DDDDDD;
+.rights-details {
+  grid-column: 1 / span 6;
 }
 
-.visually-hidden {
-    clip: rect(1px, 1px, 1px, 1px);
-    height: 1px;
-    overflow: hidden;
-    position: absolute;
-    white-space: nowrap;
-    width: 1px;
+/* Remove hover and focus styles for cards */
+.card {
+  &:hover,
+  &:focus {
+    box-shadow: 0 0 0 1px var(--silver-grey),0 0 4px 0 var(--silver-grey-lighten);
+  }
 }
 
-.visually-hidden:focus {
-  clip: auto;
-  height: auto;
-  overflow: auto;
-  position: absolute;
-  width: auto;
-  z-index: 99;
+.card-list {
+  @media screen and (min-width: 580px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-.fixed-height {
-  max-height: 250px;
-}
-
-.full-height {
-  height: 100%;
-}
-
-.nav-link:hover {
-  text-decoration: underline;
+/* Enables button clicks by removing the pseudo element so that the entire card is not clickable. */
+.card__title {
+  &::after {
+    position: relative;
+  }
 }

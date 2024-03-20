@@ -4,16 +4,16 @@
 
 {% block content %}
 
-<form class="mb-3" action="." method="POST" accept-charset="utf-8" id="vue-form">
+
+<div class="grid">
+  <form class="form--manage" action="." method="POST" accept-charset="utf-8" id="vue-form">
     {% csrf_token %}
     {% if object.id %}
     <input type="hidden" name="rights_basis" value="{{form.rights_basis.value}}" />
     {% endif %}
-    <div>
-      {{ form.rights_basis | as_crispy_field }}
-    </div>
+    {{ form.rights_basis | as_crispy_field }}
     {% if basis_form %}
-      <div>{% crispy basis_form basis_form.helper %}</div>
+      {% crispy basis_form basis_form.helper %}
     {% else %}
       <div v-if="rightsBasisSelected=='copyright'">{% crispy copyright_form copyright_form.helper %}</div>
       <div v-if="rightsBasisSelected=='statute'">{% crispy statute_form statute_form.helper %}</div>
@@ -21,7 +21,7 @@
       <div v-if="rightsBasisSelected=='policy'">{% crispy other_form other_form.helper %}</div>
       <div v-if="rightsBasisSelected=='donor'">{% crispy other_form other_form.helper %}</div>
     {% endif %}
-    <h2>Rights Granted</h2>
+    <h2 class="mt-30">Rights Granted</h2>
     <input type="hidden"
            v-bind:name="'rightsgranted_set-TOTAL_FORMS'"
            v-bind:id="'id_rightsgranted_set-TOTAL_FORMS'"
@@ -46,161 +46,140 @@
                v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-id'">
       </span>
 
-      <div class="card mb-4">
-        <div class="card-header">
-          <h3 tabindex=-2 class="float-left" :ref="'rights_granted_title-'+rights_granted_index">
-            Rights Granted [[getIndexAmongVisibleRightsGranted(rights_granted_index) + 1]]
-          </h3>
-          <button v-on:click="removeRightsGranted($event, rights_granted_index)"
-            role="button" class="btn btn-danger btn-sm float-right">
-            Remove
-          </button>
-          </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="form-group col-5">
-              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-act'">Act*</label>
-              <select v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-act'"
-                      v-model="rights_granted.act"
-                      v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-act'"
-                      class="form-control"
-                      required="required">
-                <option value="">-------</option>
-                {% for value, text in act_choices %}
-                <option value={{value}}>{{text}}</option>
-                {% endfor %}
-              </select>
-            </div>
-            <div class="form-group col-5">
-              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction'">Restriction*</label>
-              <select v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction'"
-                      v-model="rights_granted.restriction"
-                      v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction'"
-                      class="form-control"
-                      required="required">
-                <option value="">-------</option>
-                {% for value, text in restriction_choices %}
-                <option value={{value}}>{{text}}</option>
-                {% endfor %}
-              </select>
-            </div>
-          </div>
+      <div class="card mb-4 flex--column">
+        <h3 class="card__title" tabindex=-2 :ref="'rights_granted_title-'+rights_granted_index">
+          Rights Granted [[getIndexAmongVisibleRightsGranted(rights_granted_index) + 1]]
+        </h3>
+        <button v-on:click="removeRightsGranted($event, rights_granted_index)"
+          class="btn btn--sm btn--orange mb-20">
+          Remove
+        </button>
 
-          <div class="row">
-            <div class="form-group col-5">
-              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction_begin'">Start of Restriction*</label>
-              <select v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction_begin'"
-                      v-model="rights_granted.restriction_begin"
-                      v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction_begin'"
-                      class="form-control"
-                      required="required">
-                <option value="">-------</option>
-                <option value="start_date">This restriction starts on a specific date</option>
-                <option value="start_date_period">This restriction starts after an embargo period</option>
-                <option value="start_date_period_zero">This restriction starts on creation date of materials</option>
-              </select>
-            </div>
-            <div v-if="rights_granted.restriction_begin == 'start_date'" class="form-group col-4">
-              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'">Start Date (yyyy-mm-dd)*</label>
-              <input type="text"
-                     pattern="\d{4}-\d{2}-\d{2}"
-                     v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'"
-                     v-model="rights_granted.start_date"
-                     v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'"
-                     v-bind:class="'form-control '+[[rights_granted.start_date_error && 'is-invalid']]"
-                     required="required">
-              <span v-if="rights_granted.start_date_error"
-                    v-bind:id="'error_id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'"
-                    class="invalid-feedback">
-                <strong>[[ rights_granted.start_date_error ]]</strong>
-              </span>
-            </div>
-            <div v-if="rights_granted.restriction_begin == 'start_date_period'" class="form-group col-4">
-              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'">Start Date Embargo Period (in years)*</label>
-              <input type="number"
-                     v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'"
-                     v-model="rights_granted.start_date_period"
-                     v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'"
-                     class="form-control"
-                     required="required">
-            </div>
-            <div v-if="rights_granted.restriction_begin == 'start_date_period_zero'" class="form-group col-4">
-              <input type="hidden"
-                     v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'"
-                     v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'"
-                     value="0">
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group col-5">
-              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction_end'">End of Restriction*</label>
-              <select v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction_end'"
-                      v-model="rights_granted.restriction_end"
-                      v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction_end'"
-                      class="form-control"
-                      required="required">
-                <option value="">-------</option>
-                <option value="end_date">This restriction ends on a specific date</option>
-                <option value="end_date_period">This restriction ends after an embargo period</option>
-                <option value="end_date_open">There is no end date for this restriction</option>
-              </select>
-            </div>
-            <div v-if="rights_granted.restriction_end=='end_date'" class="form-group col-4">
-              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'">End Date (yyyy-mm-dd)*</label>
-              <input type="text"
-                     pattern="\d{4}-\d{2}-\d{2}"
-                     v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'"
-                     v-model="rights_granted.end_date"
-                     v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'"
-                     v-bind:class="'form-control '+[[rights_granted.start_date_error && 'is-invalid']]"
-                     required="required">
-               <span v-if="rights_granted.end_date_error"
-                     v-bind:id="'error_id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'"
-                     class="invalid-feedback">
-                 <strong>[[ rights_granted.end_date_error ]]</strong>
-              </span>
-            </div>
-            <div v-if="rights_granted.restriction_end=='end_date_period'" class="form-group col-4">
-              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'">End Date Embargo Period (in years)*</label>
-              <input type="number"
-                     v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'"
-                     v-model="rights_granted.end_date_period"
-                     v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'"
-                     class="form-control"
-                     required="required">
-            </div>
-            <div v-if="rights_granted.restriction_end=='end_date_open'">
-              <input type="hidden"
-                     v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_open'"
-                     v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_open'"
-                     value="true">
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group col">
-              <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-granted_note'">Note</label>
-              <textarea v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-granted_note'"
-                        v-model="rights_granted.granted_note"
-                        v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-granted_note'"
-                        class="form-control"
-                        rows="5">
-              </textarea>
-            </div>
-          </div>
+        <div class="form-group">
+          <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-act'">Act*</label>
+          <select v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-act'"
+                  v-model="rights_granted.act"
+                  v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-act'"
+                  required="required">
+            <option value="">-------</option>
+            {% for value, text in act_choices %}
+            <option value={{value}}>{{text}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction'">Restriction*</label>
+          <select v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction'"
+                  v-model="rights_granted.restriction"
+                  v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction'"
+                  required="required">
+            <option value="">-------</option>
+            {% for value, text in restriction_choices %}
+            <option value={{value}}>{{text}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction_begin'">Start of Restriction*</label>
+          <select v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction_begin'"
+                  v-model="rights_granted.restriction_begin"
+                  v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction_begin'"
+                  required="required">
+            <option value="">-------</option>
+            <option value="start_date">This restriction starts on a specific date</option>
+            <option value="start_date_period">This restriction starts after an embargo period</option>
+            <option value="start_date_period_zero">This restriction starts on creation date of materials</option>
+          </select>
+        </div>
+        <div v-if="rights_granted.restriction_begin == 'start_date'" class="form-group">
+          <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'">Start Date (yyyy-mm-dd)*</label>
+          <input type="text"
+                  pattern="\d{4}-\d{2}-\d{2}"
+                  v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'"
+                  v-model="rights_granted.start_date"
+                  v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'"
+                  v-bind:class="[[rights_granted.start_date_error && 'is-invalid']]"
+                  required="required">
+          <span v-if="rights_granted.start_date_error"
+                v-bind:id="'error_id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'"
+                class="invalid-feedback">
+            <strong>[[ rights_granted.start_date_error ]]</strong>
+          </span>
+        </div>
+        <div v-if="rights_granted.restriction_begin == 'start_date_period'" class="form-group">
+          <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'">Start Date Embargo Period (in years)*</label>
+          <input type="number"
+                  v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'"
+                  v-model="rights_granted.start_date_period"
+                  v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'"
+                  required="required">
+        </div>
+        <div v-if="rights_granted.restriction_begin == 'start_date_period_zero'" class="form-group">
+          <input type="hidden"
+                  v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'"
+                  v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'"
+                  value="0">
+        </div>
+        <div class="form-group">
+          <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction_end'">End of Restriction*</label>
+          <select v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction_end'"
+                  v-model="rights_granted.restriction_end"
+                  v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-restriction_end'"
+                  required="required">
+            <option value="">-------</option>
+            <option value="end_date">This restriction ends on a specific date</option>
+            <option value="end_date_period">This restriction ends after an embargo period</option>
+            <option value="end_date_open">There is no end date for this restriction</option>
+          </select>
+        </div>
+        <div v-if="rights_granted.restriction_end=='end_date'" class="form-group">
+          <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'">End Date (yyyy-mm-dd)*</label>
+          <input type="text"
+                  pattern="\d{4}-\d{2}-\d{2}"
+                  v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'"
+                  v-model="rights_granted.end_date"
+                  v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'"
+                  v-bind:class="[[rights_granted.start_date_error && 'is-invalid']]"
+                  required="required">
+            <span v-if="rights_granted.end_date_error"
+                  v-bind:id="'error_id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'"
+                  class="invalid-feedback">
+              <strong>[[ rights_granted.end_date_error ]]</strong>
+          </span>
+        </div>
+        <div v-if="rights_granted.restriction_end=='end_date_period'" class="form-group">
+          <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'">End Date Embargo Period (in years)*</label>
+          <input type="number"
+                  v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'"
+                  v-model="rights_granted.end_date_period"
+                  v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'"
+                  required="required">
+        </div>
+        <div v-if="rights_granted.restriction_end=='end_date_open'">
+          <input type="hidden"
+                  v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_open'"
+                  v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_open'"
+                  value="true">
+        </div>
+        <div class="form-group">
+          <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-granted_note'">Note</label>
+          <textarea v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-granted_note'"
+                    v-model="rights_granted.granted_note"
+                    v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-granted_note'"
+                    rows="5">
+          </textarea>
         </div>
       </div>
-
     </div>
 
     <div class="mb-4">
       <button v-on:click="addNewRightsGranted($event)"
-              class="btn btn-outline-primary">Add New Rights Granted</button>
+        class="btn btn--sm btn--light-blue">Add New Rights Granted</button>
     </div>
+    <button type="submit" class="btn btn--sm btn--blue">Save</button>
+  </form>
+</div>
 
-    <button type="submit" class="btn btn-primary">Save</button>
-</form>
 <script type="text/javascript">
   var rights_basis = {
     id:  {% if not form.rights_basis.id.value %}

@@ -6,29 +6,18 @@
     {% block extra_css %}{% endblock %}
   </head>
   <body>
-    <a href="#main" class="skip-link visually-hidden">Jump directly to main content</a>
-    <div class="wrapper">
+    <a href="#main" class="skip-link">Skip to main content</a>
 
-      {% include 'navbar.html' %}
+    {% include 'header.html' %}
 
-      <div class="content-wrapper container">
+    <!-- Main content -->
 
-        <!-- Main content -->
-        <main id="main" class="content">
-          <div class="row">
-            <div class="col-sm">
-              <h1 class="float-left">{% block h1_title %}{{page_title}}{% endblock %}</h1>
-              {% block header_button %}{% endblock %}
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm">
-              {% block content %}{% endblock %}
-            </div>
-          </div>
-        </main>
-
-      </div>
+    <div class="container grid">
+      <main id="main">
+        <h1>{% block h1_title %}{{page_title}}{% endblock %}</h1>
+          {% block header_button %}{% endblock %}
+          {% block content %}{% endblock %}
+      </main>
     </div>
 
     {% include 'scripts.html' %}

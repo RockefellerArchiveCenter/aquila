@@ -1,0 +1,103 @@
+{% load i18n %}
+
+<header class="header header--blue">
+  <div class="wrapper">
+    <div class="container flex">
+      <div class="header__brand header__brand--text">
+        <a href="/" class="header__brand-title">Aquila</a>
+      </div>
+      <nav class="nav-right" aria-label="Main">
+        <ul class="nav__list show-on-lg-up">
+          <li class="nav__item btn--navy">
+            <a class="nav__link" href="{% url 'groupings-list' %}">Groupings</a>
+          </li>
+          <li class="nav__item btn--navy">
+            <a class="nav__link" href="{% url 'rights-list' %}">Rights Statements</a>
+          </li>
+          <li class="nav__item btn--navy">
+            <a class="nav__link" href="{% url 'rights-assemble' %}">Rights Assembler API
+              <span class="material-icon" aria-hidden="true"></a>
+          </li>
+          {% if request.user.is_staff %}
+          <li class="nav__item btn--navy">
+            <a class="nav__link" href="{% url 'admin:index' %}">Admin</a>
+          </li>
+          {% endif %}
+          {% if request.user.is_authenticated %}
+          <li class="nav__item btn--navy">
+            <a class="nav__link" href="{% url 'logout' %}">Log out {{request.user.username}}</a>
+          </li>
+          {% endif %}
+        </ul>
+
+        <div class="dropdown hide-on-lg-up">
+          <button
+            class="btn btn--navy nav__btn--mobile closed"
+            tabindex="0"
+            aria-expanded="false"
+          >
+            <span class="material-icon">menu</span>
+          </button>
+          <ul
+            class="dropdown__list dropdown__list--mobile list--unstyled dropdown__list--navy dropdown__list--slide-left closed"
+          >
+            <li>
+              <a
+                id="menu-item-0"
+                class="btn btn--navy dropdown__btn dropdown__btn--mobile"
+                href="{% url 'groupings-list' %}"
+                tabindex="-1"
+              >
+                Groupings
+              </a>
+            </li>
+            <li>
+              <a
+                id="menu-item-1"
+                class="btn btn--navy dropdown__btn dropdown__btn--mobile"
+                href="{% url 'rights-list' %}"
+                tabindex="-1"
+              >
+                Rights Statements
+              </a>
+            </li>
+            <li>
+              <a
+                id="menu-item-2"
+                class="btn btn--navy dropdown__btn dropdown__btn--mobile"
+                href="{% url 'rights-assemble' %}"
+                tabindex="-1"
+              >
+                Rights Assembler API
+              </a>
+            </li>
+            {% if request.user.is_staff %}
+            <li>
+              <a
+                id="menu-item-3"
+                class="btn btn--navy dropdown__btn dropdown__btn--mobile"
+                href="{% url 'admin:index' %}"
+                tabindex="-1"
+              >
+                Admin
+              </a>
+            </li>
+            {% endif %}
+            {% if request.user.is_authenticated %}
+            <li>
+              <a
+                id="menu-item-4"
+                class="btn btn--navy dropdown__btn dropdown__btn--mobile"
+                href="{% url 'logout' %}"
+                tabindex="-1"
+              >
+                Log out {{request.user.username}}
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
