@@ -2,8 +2,10 @@
 
 :root {
 /* Colors  */
+  --desert-grey: hsl(60deg 10% 96%);
   --silver-grey: hsl(45deg 6% 72%);
   --silver-grey-lighten: #c8c6c1;
+  --wan-white-grey: hsl(40deg 10% 88%);
 }
 
 /* Remove bottom padding from heading, because we're not using the dotted border
@@ -47,6 +49,12 @@ h2 {
   }
 }
 
+/* For api.html template that uses card styles to delineated sections of content */
+.card--sm {
+  min-height: 0;
+  padding: 10px;
+}
+
 .card-list {
   @media screen and (min-width: 580px) {
     grid-template-columns: repeat(2, 1fr);
@@ -58,4 +66,23 @@ h2 {
   &::after {
     position: relative;
   }
+}
+
+.breadcrumbs {
+  background-color: var(--wan-white-grey);
+  padding: 10px;
+}
+
+.prettyprint {
+  background-color: var(--desert-grey);
+  padding: 8px;
+  width: 100%;
+}
+
+pre {
+  margin: 0;
+}
+
+.font-weight--bold {
+  font-weight: 700;
 }

@@ -1,17 +1,111 @@
-{% extends "rest_framework/base.html" %}
+{% extends "rest_framework/rac_base.html" %}
 
 {% load static %}
 {% load i18n %}
 {% load rest_framework %}
 
-{% block title %}{% if name %}{{ name }} – {% endif %}Scorpio{% endblock %}
-
 {% block style %}
-<link rel="stylesheet" type="text/css" href="{% static "bootstrap/css/bootstrap.min.css" %}">
-<link rel="stylesheet" href="{% static "css/custom.css" %}">
+<!-- <link rel="stylesheet" type="text/css" href="{% static "bootstrap/css/bootstrap.min.css" %}"> -->
+<link rel="icon" type="image/x-icon" href="https://assets.rockarch.org/assets/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="https://assets.rockarch.org/v0.8.1/main.min.css">
+<link rel="stylesheet" href="{% static "css/styles.css" %}">
 {% endblock %}
+
+{% block title %}{% if name %}{{ name }} – {% endif %}Aquila{% endblock %}
 
 {% block navbar %}
-  <a href="#main" class="skip-link visually-hidden">Jump directly to main content</a>
-  {% include 'navbar.html' %}
+  {% include 'header.html' %}
 {% endblock %}
+
+{% block content %}
+
+  <main id="main">
+    <h1>{{ name }}</h1>
+
+      {% block breadcrumbs %}
+        <nav aria-label="breadcrumbs">
+          <ol class="breadcrumbs mt-20">
+            {% for breadcrumb_name, breadcrumb_url in breadcrumblist %}
+              {% if forloop.last %}
+                <li class="breadcrumbs__item" aria-current="page">{{ breadcrumb_name }}</li>
+              {% else %}
+                <li class="breadcrumbs__item">
+                  <a class="breadcrumbs__link" href="{{ breadcrumb_url }}">{{ breadcrumb_name }}</a>
+                </li>
+              {% endif %}
+            {% empty %}
+              {% block breadcrumbs_empty %}&nbsp;{% endblock breadcrumbs_empty %}
+            {% endfor %}
+          </ul>
+        </nav>
+      {% endblock %}
+
+      {% block description %}
+        <h2>Description</h2>
+      {{ description }}
+
+        <div>
+          <h2>Request Parameters</h2>
+          <div class="parameters">
+          {% if view.filter_fields %}
+            <div class="mr-40">
+              <h3>Filter fields available</h3>
+              <ul>
+              {% for field in view.filter_fields %}
+                <li>{{field}}</li>
+              {% endfor %}
+              {% for field in view.nested_filter_fields %}
+                <li>{{field}}</li>
+              {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+            {% if view.ordering_fields %}
+            <div class="mr-40">
+              <h3>Sort fields available</h3>
+              <ul>
+              {% for field in view.ordering_fields %}
+                <li>{{field}}</li>
+              {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+            {% if view.faceted_search_fields %}
+            <div class="mr-40">
+              <h3>Facets available</h3>
+              <ul>
+              {% for field in view.faceted_search_fields %}
+                <li>{{field}}</li>
+              {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+            <div>
+              <h3>Limiting available</h3>
+              <ul>
+                <li>limit</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      {% endblock %}
+
+      {% if paginator %}
+        <nav aria-label="pagination">
+          {% get_pagination_html paginator %}
+        </nav>
+      {% endif %}
+
+      <h2>Request Info</h2>
+      <div class="request-info card card--sm mb-20">
+        <pre class="prettyprint"><span class="font-weight--bold">{{ request.method }}</span> {{ request.get_full_path }}</pre>
+      </div>
+
+      <h2>Response Info</h2>
+      <div class="response-info card card--sm mb-20">
+        <pre class="prettyprint"><span class="meta nocode"><span class="font-weight--bold">HTTP {{ response.status_code }} {{ response.status_text }}</span>{% autoescape off %}{% for key, val in response_headers|items %}
+        <span class="font-weight--bold">{{ key }}:</span> <span class="lit">{{ val|break_long_headers|urlize }}</span>{% endfor %}
+        </span>{{ content|urlize }}</pre>{% endautoescape %}
+      </div>
+  </main>
+{% endblock content %}

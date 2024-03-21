@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     {% include 'head.html' %}
-    {% block extra_css %}{% endblock %}
   </head>
   <body>
     <a href="#main" class="skip-link">Skip to main content</a>
@@ -19,9 +17,6 @@
           {% block content %}{% endblock %}
       </main>
     </div>
-
-    {% include 'scripts.html' %}
-    {% block extra_js %}{% endblock %}
 
   </body>
 </html>
