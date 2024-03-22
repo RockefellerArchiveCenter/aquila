@@ -35,11 +35,17 @@ TODO: Update this in the RAC style library and remove from local styles */
 }
 
 .form--login {
-  grid-column: 1 / span 4;
+  grid-column: 1 / span 12;
+  @media screen and (min-width: 1024px) {
+    grid-column: 1 / span 4;
+  }
 }
 
 .form--manage {
-  grid-column: 1 / span 7;
+  grid-column: 1 / span 12;
+  @media screen and (min-width: 1024px) {
+    grid-column: 1 / span 6;
+  }
 }
 
 .form-group {
@@ -48,13 +54,15 @@ TODO: Update this in the RAC style library and remove from local styles */
 }
 
 .rights-details {
-  grid-column: 1 / span 6;
+  grid-column: 1 / span 12;
+  @media screen and (min-width: 1024px) {
+    grid-column: 1 / span 6;
+  }
 }
 
 /* Remove hover and focus styles for cards */
 .card {
-  &:hover,
-  &:focus {
+  &:hover, &:focus {
     box-shadow: 0 0 0 1px var(--silver-grey),0 0 4px 0 var(--silver-grey-lighten);
   }
 }
