@@ -32,41 +32,36 @@
 
         <div class="dropdown hide-on-lg-up">
           <button
+            id="nav-toggle"
             class="btn btn--navy nav__btn--mobile closed"
-            tabindex="0"
             aria-expanded="false"
           >
             <span class="material-icon">menu</span>
           </button>
           <ul
             class="dropdown__list dropdown__list--mobile list--unstyled dropdown__list--navy dropdown__list--slide-left closed"
+            id="nav-toggle-menu"
           >
             <li>
               <a
-                id="menu-item-0"
                 class="btn btn--navy dropdown__btn dropdown__btn--mobile"
                 href="{% url 'groupings-list' %}"
-                tabindex="-1"
               >
                 Groupings
               </a>
             </li>
             <li>
               <a
-                id="menu-item-1"
                 class="btn btn--navy dropdown__btn dropdown__btn--mobile"
                 href="{% url 'rights-list' %}"
-                tabindex="-1"
               >
                 Rights Statements
               </a>
             </li>
             <li>
               <a
-                id="menu-item-2"
                 class="btn btn--navy dropdown__btn dropdown__btn--mobile"
                 href="{% url 'rights-assemble' %}"
-                tabindex="-1"
               >
                 Rights Assembler API
               </a>
@@ -74,10 +69,8 @@
             {% if request.user.is_staff %}
             <li>
               <a
-                id="menu-item-3"
                 class="btn btn--navy dropdown__btn dropdown__btn--mobile"
                 href="{% url 'admin:index' %}"
-                tabindex="-1"
               >
                 Admin
               </a>
@@ -86,10 +79,8 @@
             {% if request.user.is_authenticated %}
             <li>
               <a
-                id="menu-item-4"
                 class="btn btn--navy dropdown__btn dropdown__btn--mobile"
                 href="{% url 'logout' %}"
-                tabindex="-1"
               >
                 Log out {{request.user.username}}
               </a>
