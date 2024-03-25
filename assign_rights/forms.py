@@ -23,22 +23,26 @@ class RightsShellCommonLayout(Layout):
     def __init__(self, *args, **kwargs):
         super().__init__(
             Div(
-                Div(Field("rights_begin", v_model="rightsBegin"), css_class="col-5"),
-                Div(Field("start_date", pattern=r"\d{4}-\d{2}-\d{2}", required="required"), css_class="col-4", v_if="rightsBegin=='start_date'"),
-                Div(Field("start_date_period", required="required"), css_class="col-4", v_if="rightsBegin=='start_date_period'"),
-                Div(Hidden(name="start_date_period", value="0"), v_if="rightsBegin=='start_date_period_zero'"), css_class="row"),
+                Div(Field("rights_begin", v_model="rightsBegin")),
+                Div(Field("start_date", pattern=r"\d{4}-\d{2}-\d{2}", required="required"), v_if="rightsBegin=='start_date'"),
+                Div(Field("start_date_period", required="required"), v_if="rightsBegin=='start_date_period'"),
+                Div(Hidden(name="start_date_period", value="0"), v_if="rightsBegin=='start_date_period_zero'")),
             Div(
-                Div(Field("rights_end", v_model="rightsEnd"), css_class="col-5"),
-                Div(Field("end_date", pattern=r"\d{4}-\d{2}-\d{2}", required="required"), css_class="col-4", v_if="rightsEnd=='end_date'"),
-                Div(Field("end_date_period", required="required"), css_class="col-4", v_if="rightsEnd=='end_date_period'"),
-                Div(Hidden(name="end_date_open", value="true",), v_if="rightsEnd=='end_date_open'"), css_class="row"),
-            Div(
-                Div("basis_note", css_class="form-group col"),
-                css_class="row")
+                Div(Field("rights_end", v_model="rightsEnd")),
+                Div(Field("end_date", pattern=r"\d{4}-\d{2}-\d{2}", required="required"), v_if="rightsEnd=='end_date'"),
+                Div(Field("end_date_period", required="required"), v_if="rightsEnd=='end_date_period'"),
+                Div(Hidden(name="end_date_open", value="true",), v_if="rightsEnd=='end_date_open'")),
+            Div("basis_note")
         )
 
 
 class GroupingForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.field_template = "forms/custom_field.html"
+
     class Meta:
         model = Grouping
         fields = ["title", "description", 'rights_shells']
@@ -120,10 +124,10 @@ class CopyrightForm(RightsShellForm):
         super().__init__(*args, **kwargs)
         self.helper.layout = Layout(
             Div(
-                Div("determination_date", css_class="col"), css_class="row"),
+                Div("determination_date")),
             Div(
-                Div('copyright_status', css_class="col-6"),
-                Div('jurisdiction', css_class="col-6"), css_class="row"),
+                Div('copyright_status'),
+                Div('jurisdiction')),
             RightsShellCommonLayout(),
         )
 
@@ -162,7 +166,7 @@ class LicenseForm(RightsShellForm):
         super().__init__(*args, **kwargs)
         self.helper.layout = Layout(
             Div(
-                Div('terms', css_class="col"), css_class="row"),
+                Div('terms')),
             RightsShellCommonLayout()
         )
 
@@ -181,11 +185,11 @@ class StatuteForm(RightsShellForm):
         super().__init__(*args, **kwargs)
         self.helper.layout = Layout(
             Div(
-                Div("determination_date", css_class="col"), css_class="row"),
+                Div("determination_date")),
             Div(
-                Div('jurisdiction', css_class="col"), css_class="row"),
+                Div('jurisdiction')),
             Div(
-                Div('statute_citation', css_class="col"), css_class="row"),
+                Div('statute_citation')),
             RightsShellCommonLayout(),
         )
 

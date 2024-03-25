@@ -1,0 +1,102 @@
+/* Variables */
+
+:root {
+/* Colors  */
+  --desert-grey: hsl(60deg 10% 96%);
+  --silver-grey: hsl(45deg 6% 72%);
+  --silver-grey-lighten: #c8c6c1;
+  --wan-white-grey: hsl(40deg 10% 88%);
+}
+
+/* Remove bottom padding from heading, because we're not using the dotted border
+TODO: adjust this style in the style library so that that padding is attached to 
+the .heading--dotted-border class, not the h2 element */
+h2 {
+  padding-bottom: 0;
+}
+
+.font-weight--bold {
+  font-weight: 700;
+}
+
+.flex--column {
+  flex-direction: column;
+}
+
+#main {
+  grid-column: 2 / span 10;
+  margin-bottom: 30px;
+}
+
+/* Keeps other page content from covering the nav toggle dropdown
+TODO: Update this in the RAC style library and remove from local styles */
+.dropdown__list--mobile {
+  z-index: 999;
+}
+
+.form--login {
+  grid-column: 1 / span 12;
+  @media screen and (min-width: 1024px) {
+    grid-column: 1 / span 4;
+  }
+}
+
+.form--manage {
+  grid-column: 1 / span 12;
+  @media screen and (min-width: 1024px) {
+    grid-column: 1 / span 6;
+  }
+}
+
+.form-group {
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.rights-details {
+  grid-column: 1 / span 12;
+  @media screen and (min-width: 1024px) {
+    grid-column: 1 / span 6;
+  }
+}
+
+/* Remove hover and focus styles for cards */
+.card {
+  &:hover, &:focus {
+    box-shadow: 0 0 0 1px var(--silver-grey),0 0 4px 0 var(--silver-grey-lighten);
+  }
+}
+
+/* For api.html template that uses card styles to delineated sections of content */
+.card--sm {
+  min-height: 0;
+  padding: 10px;
+}
+
+.card-list {
+  @media screen and (min-width: 580px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Enables button clicks by removing the pseudo element so that the entire card is not clickable. */
+.card__title {
+  &::after {
+    position: relative;
+  }
+}
+
+.breadcrumbs {
+  background-color: var(--wan-white-grey);
+  padding: 10px;
+}
+
+.prettyprint {
+  background-color: var(--desert-grey);
+  padding: 8px;
+  width: 100%;
+}
+
+pre {
+  margin: 0;
+}

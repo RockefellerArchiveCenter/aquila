@@ -3,12 +3,12 @@
 
 {% block header_button %}
   {% if request.user|has_group:"edit" %}
-  <a class="btn btn-primary mt-2 float-right" href="{% url 'rights-create' %}">Create new rights statement</a>
+  <a class="btn btn--md btn--blue" href="{% url 'rights-create' %}">Create new rights statement</a>
   {% endif %}
 {% endblock %}
 
 {% block content %}
-<table class="table">
+<table class="table table-striped">
   <thead>
     <tr>
       <th scope="col">Basis</th>

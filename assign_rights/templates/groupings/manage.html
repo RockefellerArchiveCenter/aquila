@@ -8,12 +8,10 @@
 	{{ form.title | as_crispy_field }}
 	{{ form.description | as_crispy_field }}
 	<fieldset>
-		<legend>Choose Associated Rights Statement/s*</legend>
-		<div class="overflow-auto border pt-3 px-3 mb-3 fixed-height">
-			{{ form.rights_shells | as_crispy_field }}
-		</div>
+		<legend class="mb-10">Choose Associated Rights Statement/s*</legend>
+		{{ form.rights_shells | as_crispy_field }}
 	</fieldset>
-	<button class="btn btn-primary" type="submit">Save</button>
+	<button class="btn btn--sm btn--blue" type="submit">Save</button>
 </form>
 
 {% endblock %}
