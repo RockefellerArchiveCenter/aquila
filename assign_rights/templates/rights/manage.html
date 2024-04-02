@@ -6,7 +6,7 @@
 
 
 <div class="grid">
-  <form class="form--manage" action="." method="POST" accept-charset="utf-8" id="vue-form">
+  <form class="form--manage" action="." method="POST" accept-charset="utf-8" id="vue-form" novalidate>
     {% csrf_token %}
     {% if object.id %}
     <input type="hidden" name="rights_basis" value="{{form.rights_basis.value}}" />
@@ -100,11 +100,10 @@
                   v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'"
                   v-bind:class="[[rights_granted.start_date_error && 'is-invalid']]"
                   required="required">
-          <span v-if="rights_granted.start_date_error"
+          <div v-if="rights_granted.start_date_error"
                 v-bind:id="'error_id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date'"
-                class="invalid-feedback">
-            <strong>[[ rights_granted.start_date_error ]]</strong>
-          </span>
+                class="input__error">[[ rights_granted.start_date_error ]]
+          </div>
         </div>
         <div v-if="rights_granted.restriction_begin == 'start_date_period'" class="form-group">
           <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-start_date_period'">Start Date Embargo Period (in years)*</label>
@@ -141,11 +140,10 @@
                   v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'"
                   v-bind:class="[[rights_granted.start_date_error && 'is-invalid']]"
                   required="required">
-            <span v-if="rights_granted.end_date_error"
+            <div v-if="rights_granted.end_date_error"
                   v-bind:id="'error_id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date'"
-                  class="invalid-feedback">
-              <strong>[[ rights_granted.end_date_error ]]</strong>
-          </span>
+                  class="input__error">[[ rights_granted.end_date_error ]]
+            </div>
         </div>
         <div v-if="rights_granted.restriction_end=='end_date_period'" class="form-group">
           <label v-bind:for="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-end_date_period'">End Date Embargo Period (in years)*</label>
