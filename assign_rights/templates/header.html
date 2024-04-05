@@ -14,10 +14,6 @@
           <li class="nav__item btn--navy">
             <a class="nav__link" href="{% url 'rights-list' %}">Rights Statements</a>
           </li>
-          <li class="nav__item btn--navy">
-            <a class="nav__link" href="{% url 'rights-assemble' %}">Rights Assembler API
-              <span class="material-icon" aria-hidden="true"></a>
-          </li>
           {% if request.user.is_staff %}
           <li class="nav__item btn--navy">
             <a class="nav__link" href="{% url 'admin:index' %}">Admin</a>
@@ -56,14 +52,6 @@
                 href="{% url 'rights-list' %}"
               >
                 Rights Statements
-              </a>
-            </li>
-            <li>
-              <a
-                class="btn btn--navy dropdown__btn dropdown__btn--mobile"
-                href="{% url 'rights-assemble' %}"
-              >
-                Rights Assembler API
               </a>
             </li>
             {% if request.user.is_staff %}

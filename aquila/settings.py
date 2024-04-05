@@ -41,8 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'assign_rights',
     'django_auth_adfs',
-    'crispy_forms',
-    'rest_framework',
+    'crispy_forms'
 ]
 
 
@@ -131,10 +130,6 @@ AUTH_ADFS = {
                       "email": "email"},
     'LOGIN_EXEMPT_URLS': ['^api'],
     'GROUPS_CLAIM': None,
-}
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': []
 }
 
 # Internationalization
