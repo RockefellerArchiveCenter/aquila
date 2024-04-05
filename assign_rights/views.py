@@ -3,7 +3,6 @@ from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   TemplateView, UpdateView)
-from rest_framework.response import Response
 
 from .forms import (CopyrightForm, GroupingForm, LicenseForm, OtherForm,
                     RightsGrantedFormSet, RightsShellForm,
