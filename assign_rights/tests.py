@@ -10,8 +10,7 @@ from aquila import settings
 
 from .forms import GroupingForm, RightsShellForm
 from .models import Grouping, RightsShell, User
-from .test_helpers import (add_groupings, add_rights_shells,
-                           random_string)
+from .test_helpers import add_groupings, add_rights_shells, random_string
 from .views import (GroupingCreateView, GroupingDetailView, GroupingListView,
                     GroupingUpdateView, RightsShellCreateView,
                     RightsShellDetailView, RightsShellListView,

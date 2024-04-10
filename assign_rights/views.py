@@ -193,4 +193,3 @@ class GroupingUpdateView(PageTitleMixin, EditMixin, UpdateView):
 class AquilaLoginView(PageTitleMixin, LoginView):
     """Custom Login View to set page title."""
     page_title = "Login"
-
