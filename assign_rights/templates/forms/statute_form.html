@@ -1,0 +1,9 @@
+<div class="form-group">{{ statute_form.determination_date.label_tag }}{{ statute_form.determination_date }}</div>
+
+<div class="form-group">{{ statute_form.jurisdiction.label_tag }}*{{ statute_form.jurisdiction }}</div>
+{% if statute_form.jurisdiction.errors %}<div class="input__error">{{ statute_form.jurisdiction.errors }}</div>{% endif %}
+
+<div class="form-group">{{ statute_form.statute_citation.label_tag }}*{{ statute_form.statute_citation }}</div>
+{% if statute_form.statute_citation.errors %}<div class="input__error">{{ statute_form.statute_citation.errors }}</div>{% endif %}
+
+{% include 'forms/rights_shell_date.html' %}

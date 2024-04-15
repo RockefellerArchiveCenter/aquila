@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
 {% load utils %}
 
 {% block content %}
@@ -11,16 +10,32 @@
     {% if object.id %}
     <input type="hidden" name="rights_basis" value="{{form.rights_basis.value}}" />
     {% endif %}
-    {{ form.rights_basis | as_crispy_field }}
+    <div class="form-group">{{ form.rights_basis.label_tag }}*{{ form.rights_basis }}</div>
+    {% if form.rights_basis.errors %}<div class="input__error">{{ form.rights_basis.errors }}</div>{% endif %}
     {% if basis_form %}
-      {% crispy basis_form basis_form.helper %}
+      {{ basis_form }}
     {% else %}
-      <div v-if="rightsBasisSelected=='copyright'">{% crispy copyright_form copyright_form.helper %}</div>
-      <div v-if="rightsBasisSelected=='statute'">{% crispy statute_form statute_form.helper %}</div>
-      <div v-if="rightsBasisSelected=='license'">{% crispy license_form license_form.helper %}</div>
-      <div v-if="rightsBasisSelected=='policy'">{% crispy other_form other_form.helper %}</div>
-      <div v-if="rightsBasisSelected=='donor'">{% crispy other_form other_form.helper %}</div>
+      <div v-if="rightsBasisSelected=='copyright'">
+        {% include 'forms/copyright_form.html' %}
+      </div>
+
+      <div v-if="rightsBasisSelected=='statute'">
+        {% include 'forms/statute_form.html' %}
+      </div>
+
+      <div v-if="rightsBasisSelected=='license'">
+        {% include 'forms/license_form.html' %}
+      </div>
+
+      <div v-if="rightsBasisSelected=='policy'">
+        {% include 'forms/rights_shell_date.html' %}
+      </div>
+
+      <div v-if="rightsBasisSelected=='donor'">
+        {% include 'forms/rights_shell_date.html' %}
+      </div>
     {% endif %}
+
     <h2 class="mt-30">Rights Granted</h2>
     <input type="hidden"
            v-bind:name="'rightsgranted_set-TOTAL_FORMS'"
@@ -216,21 +231,17 @@
     data: {
       rightsBasisSelected: '{{ form.rights_basis.value|default_if_none:""}}',
       rights_basis: rights_basis,
-      rightsBegin: {% if basis_form.start_date.value %}'start_date'
-                   {% elif basis_form.start_date_period.value %}'start_date_period'
-                   {% elif basis_form.start_date_period.value == 0 %}'start_date_period_zero'
-                   {% elif form.start_date.value %}'start_date'
-                   {% elif form.start_date_period.value%}'start_date_period'
-                   {% elif basis_form.start_date_period.value == 0 %}'start_date_period_zero'
-                   {% else %}''
-                   {% endif %},
-      rightsEnd: {% if basis_form.end_date.value %}'end_date'
-                 {% elif basis_form.end_date_period.value or basis_form.end_date_period.value == 0 %}'end_date_period'
-                 {% elif basis_form.end_date_open.value %}'end_date_open'
-                 {% elif form.end_date.value %}'end_date'
-                 {% elif form.end_date_period.value or basis_form.end_date_period.value == 0 %}'end_date_period'
-                 {% elif form.end_date_open.value %}'end_date_open'
-                 {% else %}''{% endif %},
+      rightsBegin: '{{ form.rights_begin.value }}',
+      rightsEnd: '{{ form.rights_end.value }}'
+      // rightsBegin: {% if form.start_date.value %}'start_date'
+      //              {% elif form.start_date_period.value %}'start_date_period'
+      //              {% elif form.start_date_period.value == 0 %}'start_date_period_zero'
+      //              {% else %}''
+      //              {% endif %},
+      // rightsEnd: {% if form.end_date.value %}'end_date'
+      //            {% elif form.end_date_period.value or basis_form.end_date_period.value == 0 %}'end_date_period'
+      //            {% elif form.end_date_open.value %}'end_date_open'
+      //            {% else %}''{% endif %},
     },
     methods: {
       getIndexAmongVisibleRightsGranted: function (rights_granted_index) {

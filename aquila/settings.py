@@ -40,8 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'assign_rights',
-    'django_auth_adfs',
-    'crispy_forms'
+    'django_auth_adfs'
 ]
 
 
@@ -154,9 +153,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOGIN_URL = config.LOGIN_URL
 LOGIN_REDIRECT_URL = "home"
-
-# django-crispy-forms template pack
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 

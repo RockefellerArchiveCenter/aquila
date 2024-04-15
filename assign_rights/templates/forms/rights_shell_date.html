@@ -1,0 +1,38 @@
+<div class="form-group">{{ form.rights_begin.label_tag }}*{{ form.rights_begin }}</div>
+{% if form.rights_begin.errors %}<div class="input__error">{{ form.rights_begin.errors }}</div>{% endif %}
+<div v-if="rightsBegin=='start_date'" class="form-group">
+  {{ form.start_date.label_tag }}{{ form.start_date }}
+</div>
+{% if form.start_date.errors %}<div class="input__error">{{ form.start_date.errors }}</div>{% endif %}
+
+{% if form.start_date_period.value == 0 %}
+  <div v-if="rightsBegin=='start_date_period_zero'">
+    {{ form.start_date_period }}
+  </div>
+{% else %}
+  <div v-if="rightsBegin=='start_date_period'" class="form-group">
+    {{ form.start_date_period.label_tag }}*{{ form.start_date_period }}
+    {% if form.start_date_period.errors %}<div class="input__error">{{ form.start_date_period.errors }}</div>{% endif %}
+  </div>
+{% endif %}
+
+<div class="form-group">{{ form.rights_end.label_tag }}*{{ form.rights_end }}</div>
+{% if form.rights_end.errors %}<div class="input__error">{{ form.rights_end.errors }}</div>{% endif %}
+<div v-if="rightsEnd=='end_date'" class="form-group">
+  {{ form.end_date.label_tag }}*{{ form.end_date }}
+</div>
+{% if form.end_date.errors %}<div class="input__error">{{ form.end_date.errors }}</div>{% endif %}
+<div v-if="rightsEnd=='end_date_period'" class="form-group">
+  {{ form.end_date_period.label_tag }}*{{ form.end_date_period }}
+</div>
+{% if form.end_date_period.errors %}<div class="input__error">{{ form.end_date_period.errors }}</div>{% endif %}
+<div v-if="rightsEnd=='end_date_open'">
+  {{ form.end_date_open }}
+</div>
+
+<div class="form-group">
+  {{ form.basis_note.label_tag }}*{{ form.basis_note }}
+</div>
+{% if form.basis_note.errors %}<div class="input__error">{{ form.basis_note.errors }}</div>{% endif %}
+
+

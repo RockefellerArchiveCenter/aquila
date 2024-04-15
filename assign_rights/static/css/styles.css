@@ -86,17 +86,11 @@ TODO: Update this in the RAC style library and remove from local styles */
   }
 }
 
-.breadcrumbs {
-  background-color: var(--wan-white-grey);
-  padding: 10px;
-}
-
-.prettyprint {
-  background-color: var(--desert-grey);
-  padding: 8px;
-  width: 100%;
-}
-
-pre {
+/* Removes list styles from default Django forms error list element */
+.input__error ul {
+  font-size: 14px;
+  list-style: none;
   margin: 0;
+  padding: 0;
 }
+
