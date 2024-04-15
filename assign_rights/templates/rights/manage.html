@@ -233,15 +233,6 @@
       rights_basis: rights_basis,
       rightsBegin: '{{ form.rights_begin.value }}',
       rightsEnd: '{{ form.rights_end.value }}'
-      // rightsBegin: {% if form.start_date.value %}'start_date'
-      //              {% elif form.start_date_period.value %}'start_date_period'
-      //              {% elif form.start_date_period.value == 0 %}'start_date_period_zero'
-      //              {% else %}''
-      //              {% endif %},
-      // rightsEnd: {% if form.end_date.value %}'end_date'
-      //            {% elif form.end_date_period.value or basis_form.end_date_period.value == 0 %}'end_date_period'
-      //            {% elif form.end_date_open.value %}'end_date_open'
-      //            {% else %}''{% endif %},
     },
     methods: {
       getIndexAmongVisibleRightsGranted: function (rights_granted_index) {

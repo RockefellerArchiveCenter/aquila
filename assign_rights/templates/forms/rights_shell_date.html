@@ -5,16 +5,14 @@
 </div>
 {% if form.start_date.errors %}<div class="input__error">{{ form.start_date.errors }}</div>{% endif %}
 
-{% if form.start_date_period.value == 0 %}
-  <div v-if="rightsBegin=='start_date_period_zero'">
-    {{ form.start_date_period }}
-  </div>
-{% else %}
-  <div v-if="rightsBegin=='start_date_period'" class="form-group">
-    {{ form.start_date_period.label_tag }}*{{ form.start_date_period }}
-    {% if form.start_date_period.errors %}<div class="input__error">{{ form.start_date_period.errors }}</div>{% endif %}
-  </div>
-{% endif %}
+<div v-if="rightsBegin=='start_date_period_zero'">
+  <input type="text" name="start_date_period" id="id_start_date_period" value="0" hidden>
+</div>
+
+<div v-if="rightsBegin=='start_date_period'" class="form-group">
+  {{ form.start_date_period.label_tag }}*{{ form.start_date_period }}
+  {% if form.start_date_period.errors %}<div class="input__error">{{ form.start_date_period.errors }}</div>{% endif %}
+</div>
 
 <div class="form-group">{{ form.rights_end.label_tag }}*{{ form.rights_end }}</div>
 {% if form.rights_end.errors %}<div class="input__error">{{ form.rights_end.errors }}</div>{% endif %}
