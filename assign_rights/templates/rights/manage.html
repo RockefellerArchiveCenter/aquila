@@ -3,7 +3,6 @@
 
 {% block content %}
 
-
 <div class="grid">
   <form class="form--manage" action="." method="POST" accept-charset="utf-8" id="vue-form" novalidate>
     {% csrf_token %}
@@ -13,26 +12,28 @@
     <div class="form-group">{{ form.rights_basis.label_tag }}*{{ form.rights_basis }}</div>
     {% if form.rights_basis.errors %}<div class="input__error">{{ form.rights_basis.errors }}</div>{% endif %}
     {% if basis_form %}
-      {{ basis_form }}
+      {% for field in basis_form %}
+      <div class="form-group">
+          {{ field.label_tag }}{% if field.field.required %}*{% endif %}
+          {{ field }}
+          {% if field.errors %}
+              <div class="input__error">{{ field.errors }}</div>
+          {% endif %}
+      </div>
+      {% endfor %}
     {% else %}
-      <div v-if="rightsBasisSelected=='copyright'">
-        {% include 'forms/copyright_form.html' %}
-      </div>
 
-      <div v-if="rightsBasisSelected=='statute'">
-        {% include 'forms/statute_form.html' %}
+      <div v-if="rightsBasisSelected == 'copyright'">
+          {% include 'forms/copyright_form.html' %}
       </div>
-
-      <div v-if="rightsBasisSelected=='license'">
-        {% include 'forms/license_form.html' %}
+      <div v-if="rightsBasisSelected == 'statute'">
+          {% include 'forms/statute_form.html' %}
       </div>
-
-      <div v-if="rightsBasisSelected=='policy'">
-        {% include 'forms/rights_shell_date.html' %}
+      <div v-if="rightsBasisSelected == 'license'">
+          {% include 'forms/license_form.html' %}
       </div>
-
-      <div v-if="rightsBasisSelected=='donor'">
-        {% include 'forms/rights_shell_date.html' %}
+      <div v-if="rightsBasisSelected == 'policy' || rightsBasisSelected == 'donor'">
+          {% include 'forms/rights_shell_date.html' %}
       </div>
     {% endif %}
 

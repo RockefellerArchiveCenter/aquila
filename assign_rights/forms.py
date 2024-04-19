@@ -1,6 +1,4 @@
-# from crispy_forms.helper import FormHelper
-# from crispy_forms.layout import Div, Field, Hidden, Layout
-from django.forms import (CheckboxInput, ChoiceField, ModelForm, Select,
+from django.forms import (CheckboxInput, ChoiceField, HiddenInput, ModelForm, Select,
                           Textarea, TextInput, inlineformset_factory)
 from django.forms.utils import ErrorList
 
@@ -79,7 +77,7 @@ class RightsShellForm(ModelForm):
             'start_date_period': TextInput(attrs={'required': True}),
             'end_date': TextInput(attrs={'required': True, 'pattern': "\\d{4}-\\d{2}-\\d{2}"}),
             'end_date_period': TextInput(attrs={'required': True}),
-            'end_date_open': CheckboxInput(attrs={'value': True, 'type': 'hidden'}),
+            'end_date_open': HiddenInput(attrs={'value': True, 'type': 'hidden'}),
         }
 
     def clean(self):
