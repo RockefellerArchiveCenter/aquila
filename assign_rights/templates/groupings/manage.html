@@ -10,9 +10,9 @@
 	{% if form.description.errors %}<div class="input__error">{{form.description.errors}}</div>{% endif %}
 	<fieldset class="mb-20">
 		<legend class="mb-10" required>Choose Associated Rights Statement/s*</legend>
-		<div id="id_rights_sehlls">
+		<div id="id_rights_shells">
 			{% for value, label in form.rights_shells.field.choices %}
-				<div class="input-group">
+				<div class="input-group mb-10">
 					<input type="checkbox"
 						name="rights_shells"
 						value="{{ value }}"
