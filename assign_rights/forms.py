@@ -16,7 +16,6 @@ class StrErrorList(ErrorList):
 
 
 class GroupingForm(ModelForm):
-
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('label_suffix', '')
         super().__init__(*args, **kwargs)
@@ -28,8 +27,7 @@ class GroupingForm(ModelForm):
             'rights_shells': ''  # legend is used instead of label
         }
 
-
-class RightsShellForm(ModelForm):
+class RightsShellDates(ModelForm):
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('label_suffix', '')
         super().__init__(*args, **kwargs)
@@ -52,6 +50,48 @@ class RightsShellForm(ModelForm):
     class Meta:
         model = RightsShell
         fields = [
+            'rights_begin',
+            'rights_end',
+            'start_date',
+            'end_date',
+            'start_date_period',
+            'end_date_period',
+            'end_date_open',
+        ]
+        labels = {
+            'start_date_period': "Start Date Embargo Period (in years)",
+            'end_date_period': "End Date Embargo Period (in years)",
+            'start_date': "Start Date (yyyy-mm-dd)",
+            'end_date': "End Date (yyyy-mm-dd)",
+        }
+        widgets = {
+            'start_date': TextInput(attrs={'required': True, 'pattern': "\\d{4}-\\d{2}-\\d{2}"}),
+            'start_date_period': TextInput(attrs={'required': True}),
+            'end_date': TextInput(attrs={'required': True, 'pattern': "\\d{4}-\\d{2}-\\d{2}"}),
+            'end_date_period': TextInput(attrs={'required': True}),
+            'end_date_open': HiddenInput(attrs={'value': True}),
+        }
+
+    def clean(self):
+            cleaned_data = super().clean()
+            end_date = cleaned_data.get("end_date")
+            start_date = cleaned_data.get("start_date")
+
+            if end_date and start_date:
+                if start_date > end_date:
+                    self.add_error('start_date', "The start date must be before the end date.")
+                    self.add_error('end_date', "The end date must be after the start date.")
+
+class RightsShellForm(ModelForm):
+    dates = RightsShellDates()
+
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('label_suffix', '')
+        super().__init__(*args, **kwargs)
+
+    class Meta:
+        model = RightsShell
+        fields = [
             'rights_basis',
             'copyright_status',
             'jurisdiction',
@@ -65,33 +105,12 @@ class RightsShellForm(ModelForm):
             'terms',
             'statute_citation'
         ]
-        labels = {
-            'start_date_period': "Start Date Embargo Period (in years)",
-            'end_date_period': "End Date Embargo Period (in years)",
-            'start_date': "Start Date (yyyy-mm-dd)",
-            'end_date': "End Date (yyyy-mm-dd)",
-        }
         widgets = {
             'rights_basis': Select(attrs={'required': True, 'v-model': 'rightsBasisSelected'}),
-            'start_date': TextInput(attrs={'required': True, 'pattern': "\\d{4}-\\d{2}-\\d{2}"}),
-            'start_date_period': TextInput(attrs={'required': True}),
-            'end_date': TextInput(attrs={'required': True, 'pattern': "\\d{4}-\\d{2}-\\d{2}"}),
-            'end_date_period': TextInput(attrs={'required': True}),
-            'end_date_open': HiddenInput(attrs={'value': True, 'type': 'hidden'}),
         }
 
-    def clean(self):
-        cleaned_data = super().clean()
-        end_date = cleaned_data.get("end_date")
-        start_date = cleaned_data.get("start_date")
-
-        if end_date and start_date:
-            if start_date > end_date:
-                self.add_error('start_date', "The start date must be before the end date.")
-                self.add_error('end_date', "The end date must be after the start date.")
-
-
 class RightsShellUpdateForm(RightsShellForm):
+    dates = RightsShellDates()
 
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('label_suffix', '')
