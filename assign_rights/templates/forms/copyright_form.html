@@ -1,9 +1,11 @@
-<div class="form-group">{{ copyright_form.determination_date.label_tag }}{{ copyright_form.determination_date }}</div>
-
-<div class="form-group">{{ copyright_form.copyright_status.label_tag }}*{{ copyright_form.copyright_status }}</div>
-{% if copyright_form.copyright_status.errors %}<div class="input__error">{{copyright_form.copyright_status.errors }}</div>{% endif %}
-
-<div class="form-group">{{ copyright_form.jurisdiction.label_tag }}*{{ copyright_form.jurisdiction }}</div>
-{% if copyright_form.jurisdiction.errors %}<div class="input__error">{{ copyright_form.jurisdiction.errors }}</div>{% endif %}
+{% for field in copyright_form %}
+  <div class="form-group">
+      {{ field.label_tag }}{% if field.field.required %}*{% endif %}
+      {{ field }}
+      {% if field.errors %}
+          <div class="input__error">{{ field.errors }}</div>
+      {% endif %}
+  </div>
+{% endfor %}
 
 {% include 'forms/rights_shell_date.html' %}

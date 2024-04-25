@@ -1,4 +1,4 @@
-from django.forms import (CheckboxInput, ChoiceField, HiddenInput, ModelForm, Select,
+from django.forms import (ChoiceField, HiddenInput, ModelForm, Select,
                           Textarea, TextInput, inlineformset_factory)
 from django.forms.utils import ErrorList
 
@@ -26,6 +26,7 @@ class GroupingForm(ModelForm):
         labels = {
             'rights_shells': ''  # legend is used instead of label
         }
+
 
 class RightsShellDates(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -56,7 +57,7 @@ class RightsShellDates(ModelForm):
             'end_date',
             'start_date_period',
             'end_date_period',
-            'end_date_open',
+            'end_date_open'
         ]
         labels = {
             'start_date_period': "Start Date Embargo Period (in years)",
@@ -69,18 +70,9 @@ class RightsShellDates(ModelForm):
             'start_date_period': TextInput(attrs={'required': True}),
             'end_date': TextInput(attrs={'required': True, 'pattern': "\\d{4}-\\d{2}-\\d{2}"}),
             'end_date_period': TextInput(attrs={'required': True}),
-            'end_date_open': HiddenInput(attrs={'value': True}),
+            'end_date_open': HiddenInput(attrs={'value': True, 'type': 'hidden'}),
         }
 
-    def clean(self):
-            cleaned_data = super().clean()
-            end_date = cleaned_data.get("end_date")
-            start_date = cleaned_data.get("start_date")
-
-            if end_date and start_date:
-                if start_date > end_date:
-                    self.add_error('start_date', "The start date must be before the end date.")
-                    self.add_error('end_date', "The end date must be after the start date.")
 
 class RightsShellForm(ModelForm):
     dates = RightsShellDates()
@@ -97,17 +89,23 @@ class RightsShellForm(ModelForm):
             'jurisdiction',
             'determination_date',
             'basis_note',
-            'start_date',
-            'end_date',
-            'start_date_period',
-            'end_date_period',
-            'end_date_open',
             'terms',
             'statute_citation'
         ]
         widgets = {
             'rights_basis': Select(attrs={'required': True, 'v-model': 'rightsBasisSelected'}),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        end_date = cleaned_data.get("end_date")
+        start_date = cleaned_data.get("start_date")
+
+        if end_date and start_date:
+            if start_date > end_date:
+                self.add_error('start_date', "The start date must be before the end date.")
+                self.add_error('end_date', "The end date must be after the start date.")
+
 
 class RightsShellUpdateForm(RightsShellForm):
     dates = RightsShellDates()
@@ -128,7 +126,8 @@ class CopyrightForm(RightsShellForm):
         exclude = (
             'rights_basis',
             'terms',
-            'statute_citation'
+            'statute_citation',
+            'basis_note'
         )
         widgets = {
             'copyright_status': Select(attrs={'required': True}),
@@ -137,8 +136,6 @@ class CopyrightForm(RightsShellForm):
 
 
 class OtherForm(RightsShellForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
     class Meta(RightsShellForm.Meta):
         exclude = (
@@ -147,13 +144,12 @@ class OtherForm(RightsShellForm):
             'determination_date',
             'jurisdiction',
             'terms',
-            'statute_citation'
+            'statute_citation',
+            'basis_note'
         )
 
 
 class LicenseForm(RightsShellForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
     class Meta(RightsShellForm.Meta):
         exclude = (
@@ -161,7 +157,8 @@ class LicenseForm(RightsShellForm):
             'copyright_status',
             'determination_date',
             'jurisdiction',
-            'statute_citation'
+            'statute_citation',
+            'basis_note'
         )
 
 
@@ -171,7 +168,8 @@ class StatuteForm(RightsShellForm):
         exclude = (
             'rights_basis',
             'copyright_status',
-            'terms'
+            'terms',
+            'basis_note'
         )
         widgets = {
             'jurisdiction': TextInput(attrs={'maxlength': '2', 'required': True}),
