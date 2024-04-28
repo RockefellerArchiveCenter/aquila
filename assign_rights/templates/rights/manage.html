@@ -1,67 +1,49 @@
 {% extends 'base.html' %}
 {% load utils %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 
 <div class="grid">
-  <form class="form--manage" action="." method="POST" accept-charset="utf-8" id="vue-form">
+  <form class="form--manage" action="." method="POST" accept-charset="utf-8" id="vue-form" novalidate>
     {% csrf_token %}
     {% if object.id %}
     <input type="hidden" name="rights_basis" value="{{form.rights_basis.value}}" />
     {% endif %}
-    <div class="form-group">{{ form.rights_basis.label_tag }}*{{ form.rights_basis }}</div>
-    {% if form.rights_basis.errors %}<div class="input__error">{{ form.rights_basis.errors }}</div>{% endif %}
+    {{ form.rights_basis | as_crispy_field }}
 
     {% if basis_form %}
-      {% for field in basis_form %}
-      <div class="form-group">
-          {{ field.label_tag }}{% if field.field.required %}*{% endif %}
-          {{ field }}
-          {% if field.errors %}
-              <div class="input__error">{{ field.errors }}</div>
-          {% endif %}
-      </div>
-      {% endfor %}
-      {% include 'forms/rights_shell_date.html' %}
+      {% crispy basis_form basis_form.helper %}
     {% else %}
-
-      <div v-if="rightsBasisSelected == 'copyright'">
-        {% include 'forms/copyright_form.html' %}
-      </div>
-      <div v-if="rightsBasisSelected == 'statute'">
-          {% include 'forms/statute_form.html' %}
-      </div>
-      <div v-if="rightsBasisSelected == 'license'">
-          {% include 'forms/license_form.html' %}
-      </div>
-      <div v-if="rightsBasisSelected == 'policy' || rightsBasisSelected == 'donor'">
-          {% include 'forms/rights_shell_date.html' %}
-      </div>
+    <div v-if="rightsBasisSelected=='copyright'">{% crispy copyright_form copyright_form.helper %}</div>
+    <div v-if="rightsBasisSelected=='statute'">{% crispy statute_form statute_form.helper %}</div>
+    <div v-if="rightsBasisSelected=='license'">{% crispy license_form license_form.helper %}</div>
+    <div v-if="rightsBasisSelected=='policy' || rightsBasisSelected=='donor' ">{% crispy other_form other_form.helper %}</div>
     {% endif %}
 
     <h2 class="mt-30">Rights Granted</h2>
     <input type="hidden"
-           v-bind:name="'rightsgranted_set-TOTAL_FORMS'"
-           v-bind:id="'id_rightsgranted_set-TOTAL_FORMS'"
-           v-model="getTotalRightsGrantedForms()">
+            v-bind:name="'rightsgranted_set-TOTAL_FORMS'"
+            v-bind:id="'id_rightsgranted_set-TOTAL_FORMS'"
+            v-model="getTotalRightsGrantedForms()">
     <input type="hidden"
-           v-bind:name="'rightsgranted_set-INITIAL_FORMS'"
-           v-bind:id="'id_rightsgranted_set-INITIAL_FORMS'"
-           v-model="getInitialRightsGrantedForms()">
+            v-bind:name="'rightsgranted_set-INITIAL_FORMS'"
+            v-bind:id="'id_rightsgranted_set-INITIAL_FORMS'"
+            v-model="getInitialRightsGrantedForms()">
 
     <div v-for="(rights_granted, rights_granted_index) in rights_basis.rights_granted"
-         v-show="rights_granted.marked_for_delete !== true">
+          v-show="rights_granted.marked_for_delete !== true">
 
       <span v-if="rights_granted.id">
         <input type="hidden"
-               v-model="rights_granted.marked_for_delete"
-               v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-DELETE'"
-               v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-DELETE'">
+                v-model="rights_granted.marked_for_delete"
+                v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-DELETE'"
+                v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-DELETE'">
 
         <input type="hidden"
-               v-model="rights_granted.id"
-               v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-id'"
-               v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-id'">
+                v-model="rights_granted.id"
+                v-bind:name="'rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-id'"
+                v-bind:id="'id_rightsgranted_set-'+rights_granted.rights_granted_formset_index+'-id'">
       </span>
 
       <div class="card mb-4 flex--column">
@@ -234,8 +216,21 @@
     data: {
       rightsBasisSelected: '{{ form.rights_basis.value|default_if_none:""}}',
       rights_basis: rights_basis,
-      rightsBegin: '{{ form.rights_begin.value }}',
-      rightsEnd: '{{ form.rights_end.value }}'
+      rightsBegin: {% if basis_form.start_date.value %}'start_date'
+                   {% elif basis_form.start_date_period.value %}'start_date_period'
+                   {% elif basis_form.start_date_period.value == 0 %}'start_date_period_zero'
+                   {% elif form.start_date.value %}'start_date'
+                   {% elif form.start_date_period.value%}'start_date_period'
+                   {% elif basis_form.start_date_period.value == 0 %}'start_date_period_zero'
+                   {% else %}''
+                   {% endif %},
+      rightsEnd: {% if basis_form.end_date.value %}'end_date'
+                 {% elif basis_form.end_date_period.value or basis_form.end_date_period.value == 0 %}'end_date_period'
+                 {% elif basis_form.end_date_open.value %}'end_date_open'
+                 {% elif form.end_date.value %}'end_date'
+                 {% elif form.end_date_period.value or basis_form.end_date_period.value == 0 %}'end_date_period'
+                 {% elif form.end_date_open.value %}'end_date_open'
+                 {% else %}''{% endif %},
     },
     methods: {
       getIndexAmongVisibleRightsGranted: function (rights_granted_index) {

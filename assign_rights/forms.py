@@ -1,5 +1,7 @@
-from django.forms import (ChoiceField, HiddenInput, ModelForm, Select,
-                          Textarea, TextInput, inlineformset_factory)
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Div, Field, Hidden, Layout
+from django.forms import (ChoiceField, ModelForm, Select, Textarea, TextInput,
+                          inlineformset_factory)
 from django.forms.utils import ErrorList
 
 from .models import Grouping, RightsGranted, RightsShell
@@ -28,58 +30,45 @@ class GroupingForm(ModelForm):
         }
 
 
-class RightsShellDates(ModelForm):
-    def __init__(self, *args, **kwargs):
-        kwargs.setdefault('label_suffix', '')
-        super().__init__(*args, **kwargs)
+class RightsShellCommonLayout(Layout):
+    """Form layout for fields used across all RightsShellForms."""
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(
+            Div(
+                Div(Field("rights_begin", v_model="rightsBegin")),
+                Div(Field("start_date", pattern=r"\d{4}-\d{2}-\d{2}", required="required"), v_if="rightsBegin=='start_date'"),
+                Div(Field("start_date_period", required="required"), v_if="rightsBegin=='start_date_period'"),
+                Div(Hidden(name="start_date_period", value="0"), v_if="rightsBegin=='start_date_period_zero'")),
+            Div(
+                Div(Field("rights_end", v_model="rightsEnd")),
+                Div(Field("end_date", pattern=r"\d{4}-\d{2}-\d{2}", required="required"), v_if="rightsEnd=='end_date'"),
+                Div(Field("end_date_period", required="required"), v_if="rightsEnd=='end_date_period'"),
+                Div(Hidden(name="end_date_open", value="true",), v_if="rightsEnd=='end_date_open'")),
+            Div("basis_note")
+        )
+
+
+class RightsShellForm(ModelForm):
     rights_begin = ChoiceField(
         label="Start of Rights",
         choices=(("", "---------"),
                  ("start_date", "These rights start on a specific date"),
                  ("start_date_period", "These rights start after an embargo period"),
-                 ("start_date_period_zero", "These rights start on creation date of materials")),
-        widget=Select(attrs={'required': True, 'v-model': 'rightsBegin'}))
+                 ("start_date_period_zero", "These rights start on creation date of materials")))
     rights_end = ChoiceField(
         label="End of Rights",
         choices=(("", "---------"),
                  ("end_date", "These rights end on a specific date"),
                  ("end_date_period", "These rights end after an embargo period"),
-                 ("end_date_open", "There is no end date for these rights")),
-        widget=Select(attrs={'required': True, 'v-model': 'rightsEnd'}))
-
-    class Meta:
-        model = RightsShell
-        fields = [
-            'rights_begin',
-            'rights_end',
-            'start_date',
-            'end_date',
-            'start_date_period',
-            'end_date_period',
-            'end_date_open'
-        ]
-        labels = {
-            'start_date_period': "Start Date Embargo Period (in years)",
-            'end_date_period': "End Date Embargo Period (in years)",
-            'start_date': "Start Date (yyyy-mm-dd)",
-            'end_date': "End Date (yyyy-mm-dd)",
-        }
-        widgets = {
-            'start_date': TextInput(attrs={'required': True, 'pattern': "\\d{4}-\\d{2}-\\d{2}"}),
-            'start_date_period': TextInput(attrs={'required': True}),
-            'end_date': TextInput(attrs={'required': True, 'pattern': "\\d{4}-\\d{2}-\\d{2}"}),
-            'end_date_period': TextInput(attrs={'required': True}),
-            'end_date_open': HiddenInput(attrs={'value': True, 'type': 'hidden'}),
-        }
-
-
-class RightsShellForm(ModelForm):
-    dates = RightsShellDates()
+                 ("end_date_open", "There is no end date for these rights")))
 
     def __init__(self, *args, **kwargs):
-        kwargs.setdefault('label_suffix', '')
         super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.field_template = "forms/custom_field.html"
+        self.helper.form_tag = False
+        self.helper.disable_csrf = True
 
     class Meta:
         model = RightsShell
@@ -89,9 +78,20 @@ class RightsShellForm(ModelForm):
             'jurisdiction',
             'determination_date',
             'basis_note',
+            'start_date',
+            'start_date_period',
+            'end_date',
+            'end_date_period',
+            'end_date_open',
             'terms',
             'statute_citation'
         ]
+        labels = {
+            'start_date_period': "Start Date Embargo Period (in years)",
+            'end_date_period': "End Date Embargo Period (in years)",
+            'start_date': "Start Date (yyyy-mm-dd)",
+            'end_date': "End Date (yyyy-mm-dd)"
+        }
         widgets = {
             'rights_basis': Select(attrs={'required': True, 'v-model': 'rightsBasisSelected'}),
         }
@@ -108,12 +108,6 @@ class RightsShellForm(ModelForm):
 
 
 class RightsShellUpdateForm(RightsShellForm):
-    dates = RightsShellDates()
-
-    def __init__(self, *args, **kwargs):
-        kwargs.setdefault('label_suffix', '')
-        super().__init__(*args, **kwargs)
-
     class Meta(RightsShellForm.Meta):
         widgets = {
             'rights_basis': Select(attrs={'disabled': 'disabled'}),
@@ -121,13 +115,23 @@ class RightsShellUpdateForm(RightsShellForm):
 
 
 class CopyrightForm(RightsShellForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper.field_template = "forms/custom_field.html"
+        self.helper.layout = Layout(
+            Div(
+                Div("determination_date")),
+            Div(
+                Div('copyright_status'),
+                Div('jurisdiction')),
+            RightsShellCommonLayout(),
+        )
 
     class Meta(RightsShellForm.Meta):
         exclude = (
             'rights_basis',
             'terms',
-            'statute_citation',
-            'basis_note'
+            'statute_citation'
         )
         widgets = {
             'copyright_status': Select(attrs={'required': True}),
@@ -136,6 +140,12 @@ class CopyrightForm(RightsShellForm):
 
 
 class OtherForm(RightsShellForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper.field_template = "forms/custom_field.html"
+        self.helper.layout = Layout(
+            RightsShellCommonLayout(),
+        )
 
     class Meta(RightsShellForm.Meta):
         exclude = (
@@ -144,12 +154,19 @@ class OtherForm(RightsShellForm):
             'determination_date',
             'jurisdiction',
             'terms',
-            'statute_citation',
-            'basis_note'
+            'statute_citation'
         )
 
 
 class LicenseForm(RightsShellForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper.field_template = "forms/custom_field.html"
+        self.helper.layout = Layout(
+            Div(
+                Div('terms')),
+            RightsShellCommonLayout()
+        )
 
     class Meta(RightsShellForm.Meta):
         exclude = (
@@ -158,18 +175,28 @@ class LicenseForm(RightsShellForm):
             'determination_date',
             'jurisdiction',
             'statute_citation',
-            'basis_note'
         )
 
 
 class StatuteForm(RightsShellForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper.field_template = "forms/custom_field.html"
+        self.helper.layout = Layout(
+            Div(
+                Div("determination_date")),
+            Div(
+                Div('jurisdiction')),
+            Div(
+                Div('statute_citation')),
+            RightsShellCommonLayout(),
+        )
 
     class Meta(RightsShellForm.Meta):
         exclude = (
             'rights_basis',
             'copyright_status',
-            'terms',
-            'basis_note'
+            'terms'
         )
         widgets = {
             'jurisdiction': TextInput(attrs={'maxlength': '2', 'required': True}),

@@ -29,6 +29,8 @@ DEBUG = config.DJANGO_DEBUG
 
 ALLOWED_HOSTS = config.DJANGO_ALLOWED_HOSTS
 
+# Django crispy forms
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Application definition
 
@@ -40,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'assign_rights',
-    'django_auth_adfs'
+    'django_auth_adfs',
+    'crispy_forms'
 ]
 
 
