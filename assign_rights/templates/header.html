@@ -42,6 +42,7 @@
               <a
                 class="btn btn--navy dropdown__btn dropdown__btn--mobile"
                 href="{% url 'groupings-list' %}"
+                tabindex="-1"
               >
                 Groupings
               </a>
@@ -50,6 +51,7 @@
               <a
                 class="btn btn--navy dropdown__btn dropdown__btn--mobile"
                 href="{% url 'rights-list' %}"
+                tabindex="-1"
               >
                 Rights Statements
               </a>
@@ -59,6 +61,7 @@
               <a
                 class="btn btn--navy dropdown__btn dropdown__btn--mobile"
                 href="{% url 'admin:index' %}"
+                tabindex="-1"
               >
                 Admin
               </a>
@@ -69,6 +72,7 @@
               <a
                 class="btn btn--navy dropdown__btn dropdown__btn--mobile"
                 href="{% url 'logout' %}"
+                tabindex="-1"
               >
                 Log out {{request.user.username}}
               </a>

@@ -4,9 +4,9 @@
 
 <form action="." method="POST" accept-charset="utf-8" novalidate>
   {% csrf_token %}
-	<div class="form-group">{{ form.title.label_tag }}*{{ form.title }}</div>
+	<div class="form-group input">{{ form.title.label_tag }}*{{ form.title }}</div>
 	{% if form.title.errors %}<div class="input__error">{{form.title.errors}}</div>{% endif %}
-	<div class="form-group">{{ form.description.label_tag }}*{{ form.description }}</div>
+	<div class="form-group input">{{ form.description.label_tag }}*{{ form.description }}</div>
 	{% if form.description.errors %}<div class="input__error">{{form.description.errors}}</div>{% endif %}
 	<fieldset class="mb-20">
 		<legend class="mb-10" required>Choose Associated Rights Statement/s*</legend>

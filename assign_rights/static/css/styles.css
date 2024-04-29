@@ -10,30 +10,9 @@
   --wan-white-grey: hsl(40deg 10% 88%);
 }
 
-/* Remove bottom padding from heading, because we're not using the dotted border
-TODO: adjust this style in the style library so that that padding is attached to 
-the .heading--dotted-border class, not the h2 element */
-h2 {
-  padding-bottom: 0;
-}
-
-.font-weight--bold {
-  font-weight: 700;
-}
-
-.flex--column {
-  flex-direction: column;
-}
-
 #main {
   grid-column: 2 / span 10;
   margin-bottom: 30px;
-}
-
-/* Keeps other page content from covering the nav toggle dropdown
-TODO: Update this in the RAC style library and remove from local styles */
-.dropdown__list--mobile {
-  z-index: 999;
 }
 
 .form--login {
@@ -62,13 +41,6 @@ TODO: Update this in the RAC style library and remove from local styles */
   }
 }
 
-/* Remove hover and focus styles for cards */
-.card {
-  &:hover, &:focus {
-    box-shadow: 0 0 0 1px var(--silver-grey),0 0 4px 0 var(--silver-grey-lighten);
-  }
-}
-
 /* For api.html template that uses card styles to delineated sections of content */
 .card--sm {
   min-height: 0;
@@ -81,14 +53,7 @@ TODO: Update this in the RAC style library and remove from local styles */
   }
 }
 
-/* Enables button clicks by removing the pseudo element so that the entire card is not clickable. */
-.card__title {
-  &::after {
-    position: relative;
-  }
-}
-
-/* Removes list styles from default Django forms error list element */
+/* Removes list styles from default Django forms error list element for Groupings form */
 .input__error ul {
   font-size: 14px;
   list-style: none;
