@@ -37,13 +37,13 @@ class RightsShellCommonLayout(Layout):
         super().__init__(
             Div(
                 Div(Field("rights_begin", template="forms/custom_field.html", v_model="rightsBegin")),
-                Div(Field("start_date", pattern=r"\d{4}-\d{2}-\d{2}", required="required"), v_if="rightsBegin=='start_date'"),
-                Div(Field("start_date_period", required="required"), v_if="rightsBegin=='start_date_period'"),
+                Div(Field("start_date", pattern=r"\d{4}-\d{2}-\d{2}", required="required", template="forms/custom_field.html"), v_if="rightsBegin=='start_date'"),
+                Div(Field("start_date_period", required="required", template="forms/custom_field.html"), v_if="rightsBegin=='start_date_period'"),
                 Div(Hidden(name="start_date_period", value="0"), v_if="rightsBegin=='start_date_period_zero'")),
             Div(
                 Div(Field("rights_end", template="forms/custom_field.html", v_model="rightsEnd")),
-                Div(Field("end_date", pattern=r"\d{4}-\d{2}-\d{2}", required="required"), v_if="rightsEnd=='end_date'"),
-                Div(Field("end_date_period", required="required"), v_if="rightsEnd=='end_date_period'"),
+                Div(Field("end_date", pattern=r"\d{4}-\d{2}-\d{2}", required="required", template="forms/custom_field.html"), v_if="rightsEnd=='end_date'"),
+                Div(Field("end_date_period", required="required", template="forms/custom_field.html"), v_if="rightsEnd=='end_date_period'"),
                 Div(Hidden(name="end_date_open", value="true",), v_if="rightsEnd=='end_date_open'")),
             Div("basis_note")
         )
@@ -68,7 +68,6 @@ class RightsShellForm(ModelForm):
         self.helper = FormHelper(self)
         self.helper.field_template = "forms/custom_field.html"
         self.helper.form_tag = False
-        self.helper.disable_csrf = True
 
     class Meta:
         model = RightsShell
