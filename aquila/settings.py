@@ -29,6 +29,8 @@ DEBUG = config.DJANGO_DEBUG
 
 ALLOWED_HOSTS = config.DJANGO_ALLOWED_HOSTS
 
+# Django crispy forms
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Application definition
 
@@ -41,8 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'assign_rights',
     'django_auth_adfs',
-    'crispy_forms',
-    'rest_framework',
+    'crispy_forms'
 ]
 
 
@@ -133,10 +134,6 @@ AUTH_ADFS = {
     'GROUPS_CLAIM': None,
 }
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': []
-}
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -159,9 +156,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOGIN_URL = config.LOGIN_URL
 LOGIN_REDIRECT_URL = "home"
-
-# django-crispy-forms template pack
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 

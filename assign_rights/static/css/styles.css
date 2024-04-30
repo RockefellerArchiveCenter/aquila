@@ -1,0 +1,86 @@
+/* Variables */
+
+:root {
+/* Colors  */
+  --flame-orange: hsl(17deg 76% 48%);
+  --desert-grey: hsl(60deg 10% 96%);
+  --night-grey: hsl(0deg 0% 18%);
+  --silver-grey: hsl(45deg 6% 72%);
+  --silver-grey-lighten: #c8c6c1;
+  --wan-white-grey: hsl(40deg 10% 88%);
+}
+
+#main {
+  grid-column: 2 / span 10;
+  margin-bottom: 30px;
+}
+
+.form--login {
+  grid-column: 1 / span 12;
+  @media screen and (min-width: 1024px) {
+    grid-column: 1 / span 4;
+  }
+}
+
+.form--manage {
+  grid-column: 1 / span 12;
+  @media screen and (min-width: 1024px) {
+    grid-column: 1 / span 6;
+  }
+}
+
+.form-group {
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.rights-details {
+  grid-column: 1 / span 12;
+  @media screen and (min-width: 1024px) {
+    grid-column: 1 / span 6;
+  }
+}
+
+/* For api.html template that uses card styles to delineated sections of content */
+.card--sm {
+  min-height: 0;
+  padding: 10px;
+}
+
+.card-list {
+  @media screen and (min-width: 580px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Removes list styles from default Django forms error list element for Groupings form */
+.input__error ul {
+  font-size: 14px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Adds .input__error class styles from RAC Style Library to error class
+used in crispy forms bootstrap4 templates */
+.invalid-feedback {
+  background-color: #fbe7e0;
+  border: 1px solid var(--flame-orange);
+  border-radius: 3px;
+  color: var(--night-grey);
+  display: block;
+  font-weight: normal;
+  font-size: 14px;
+  font-style: italic;
+  margin: 10px 0;
+  padding: 10px;
+}
+
+.invalid-feedback strong {
+  font-weight: normal;
+}
+
+
+.table p {
+  margin: 0;
+}

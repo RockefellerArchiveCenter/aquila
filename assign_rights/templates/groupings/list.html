@@ -3,12 +3,12 @@
 
 {% block header_button %}
   {% if request.user|has_group:"edit" %}
-  <a class="btn btn-primary mt-2 float-right" href="{% url 'groupings-create' %}">Create new grouping</a>
+  <a class="btn btn--md btn--blue" href="{% url 'groupings-create' %}">Create new grouping</a>
   {% endif %}
 {% endblock %}
 
 {% block content %}
-<table class="table">
+<table class="table table-striped">
   <thead>
     <tr>
       <th scope="col">Title</th>
