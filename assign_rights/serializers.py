@@ -43,20 +43,6 @@ class RightsShellSerializer(serializers.ModelSerializer):
         )
 
 
-class RightsShellListSerializer(serializers.ModelSerializer):
-    """Provides minimal information for API list view."""
-
-    id = serializers.CharField()
-    title = serializers.SerializerMethodField()
-
-    class Meta:
-        model = RightsShell
-        fields = ('id', 'title')
-
-    def get_title(self, obj):
-        return str(obj)
-
-
 class OtherSerializer(RightsShellSerializer):
     rights_basis = serializers.SerializerMethodField()
     other_basis = serializers.CharField(source='rights_basis')

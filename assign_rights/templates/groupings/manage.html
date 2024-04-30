@@ -1,19 +1,32 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
 
 {% block content %}
 
-<form action="." method="POST" accept-charset="utf-8">
+<form action="." method="POST" accept-charset="utf-8" novalidate>
   {% csrf_token %}
-	{{ form.title | as_crispy_field }}
-	{{ form.description | as_crispy_field }}
-	<fieldset>
-		<legend>Choose Associated Rights Statement/s*</legend>
-		<div class="overflow-auto border pt-3 px-3 mb-3 fixed-height">
-			{{ form.rights_shells | as_crispy_field }}
+	<div class="form-group input">{{ form.title.label_tag }}*{{ form.title }}</div>
+	{% if form.title.errors %}<div class="input__error">{{form.title.errors}}</div>{% endif %}
+	<div class="form-group input">{{ form.description.label_tag }}*{{ form.description }}</div>
+	{% if form.description.errors %}<div class="input__error">{{form.description.errors}}</div>{% endif %}
+	<fieldset class="mb-20">
+		<legend class="mb-10" required>Choose Associated Rights Statement/s*</legend>
+		<div id="id_rights_shells">
+			{% for value, label in form.rights_shells.field.choices %}
+				<div class="input-group mb-10">
+					<input type="checkbox"
+						name="rights_shells"
+						value="{{ value }}"
+						id="id_rights_shells_{{value}}"
+						class="checkbox checkbox--blue"
+						{% if value in form.rights_shells.data %}checked{% endif %}
+						{% if form.rights_shells.errors %}aria-invalid="true"{% endif %}>
+					<label for="id_rights_shells_{{value}}" class="checkbox--blue">{{ label }}</label>
+				</div>
+			{% endfor %}
 		</div>
 	</fieldset>
-	<button class="btn btn-primary" type="submit">Save</button>
+	{% if form.rights_shells.errors %}<div class="input__error">{{form.rights_shells.errors}}</div>{% endif %}
+	<button class="btn btn--sm btn--blue" type="submit">Save</button>
 </form>
 
 {% endblock %}

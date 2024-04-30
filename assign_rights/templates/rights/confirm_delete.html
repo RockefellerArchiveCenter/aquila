@@ -5,8 +5,8 @@
 <form method="post">
   {% csrf_token %}
   <p >Are you sure you want to delete {{ object }}?</p>
-  <input class="btn btn-danger" type="submit" value="Confirm">
-  <a class="btn btn-secondary" href={% url 'rights-detail' pk=object.pk %}>Cancel</a>
+  <button class="btn btn--sm btn--orange" type="submit">Confirm</button>
+  <a class="btn btn--sm btn--gray" href={% url 'rights-detail' pk=object.pk %}>Cancel</a>
 </form>
 
 {% endblock %}

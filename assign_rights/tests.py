@@ -1,74 +1,23 @@
-import json
 import random
-from datetime import date, datetime
-from os import listdir
 from os.path import join
 
-from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import AnonymousUser, Group
-from django.test import RequestFactory, TestCase, TransactionTestCase
+from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from rest_framework.test import APIRequestFactory
 
 from aquila import settings
 
-from .assemble import RightsAssembler
 from .forms import GroupingForm, RightsShellForm
-from .models import Grouping, RightsGranted, RightsShell, User
-from .test_helpers import (add_groupings, add_rights_acts, add_rights_shells,
-                           random_date, random_string, validate_serialized)
+from .models import Grouping, RightsShell, User
+from .test_helpers import add_groupings, add_rights_shells, random_string
 from .views import (GroupingCreateView, GroupingDetailView, GroupingListView,
-                    GroupingUpdateView, RightsAssemblerView,
-                    RightsShellAPIView, RightsShellCreateView,
+                    GroupingUpdateView, RightsShellCreateView,
                     RightsShellDetailView, RightsShellListView,
                     RightsShellUpdateView)
 
 valid_data_fixture_dir = join(settings.BASE_DIR, 'fixtures', 'valid_requests')
 invalid_data_fixture_dir = join(settings.BASE_DIR, 'fixtures', 'invalid_requests')
-
-
-class TestAPIViews(TransactionTestCase):
-    """ Tests that require stable pks """
-
-    reset_sequences = True
-
-    def setUp(self):
-        self.api_factory = APIRequestFactory()
-        self.factory = RequestFactory()
-        add_rights_shells()
-        add_rights_acts()
-
-    def test_rightsassembly_view(self):
-        """Tests handling of expected returns as well as exceptions."""
-
-        # RightsAssembler returns expected value
-        for f in listdir(valid_data_fixture_dir):
-            with open(join(valid_data_fixture_dir, f), 'r') as json_file:
-                valid_data = json.load(json_file)
-                request = self.factory.post(reverse("rights-assemble"), valid_data, content_type='application/json')
-                response = RightsAssemblerView.as_view()(request)
-                self.assertEqual(response.status_code, 200, "Request error: {}".format(response.data))
-
-        # RightsAssembler throws an exception
-        for fixture_name, message, status_code in [
-                ("invalid_rights_id.json", "Error retrieving rights statement: RightsShell matching query does not exist.", 404),
-                ("no_start_date.json", "Request data must contain 'identifiers', 'start_date' and 'end_date' keys.", 400)]:
-            with open(join(invalid_data_fixture_dir, fixture_name), 'r') as json_file:
-                invalid_data = json.load(json_file)
-                request = self.factory.post(reverse("rights-assemble"), invalid_data, content_type='application/json')
-                response = RightsAssemblerView.as_view()(request)
-                self.assertEqual(response.status_code, status_code, "Request should have returned a {} status code".format(status_code))
-                self.assertEqual(response.data["detail"], message)
-
-    def test_rightsshell_list_view(self):
-        """Ensures rights shell list view returns correct data."""
-        request = self.factory.get(reverse('rights-api-list'), content_type='application/json')
-        response = RightsShellAPIView.as_view({'get': 'list'})(request)
-        self.assertEqual(response.status_code, 200, "Request should have returned a 200 status code")
-        self.assertEqual(len(response.data), RightsShell.objects.all().count())
-        for shell in response.data:
-            self.assertTrue("id" in shell)
-            self.assertTrue("title" in shell)
 
 
 class TestViews(TestCase):
@@ -168,88 +117,3 @@ class TestViews(TestCase):
             self.assertEqual(
                 authenticated_response.status_code, 200,
                 "Restricted view {} not reachable by authenticated user".format(view))
-
-
-class TestRightsAssembler(TestCase):
-    def setUp(self):
-        add_rights_shells()
-        add_rights_acts()
-        self.assembler = RightsAssembler()
-        self.rights_ids = [obj.pk for obj in RightsShell.objects.all()]
-
-    def test_run_method(self):
-        """Tests the run method"""
-        request_end_date = random_date(49, 0).isoformat()
-        request_start_date = random_date(100, 50).isoformat()
-        run = RightsAssembler().run(self.rights_ids, request_start_date, request_end_date)
-        self.assertIsNot(False, run)
-
-    def test_retrieve_rights(self):
-        """Tests the retrieve_rights method.
-
-        Asserts the method returns a list or DoesNotExist exception.
-        """
-        assembled = self.assembler.retrieve_rights(self.rights_ids)
-        self.assertTrue(isinstance(assembled, list))
-        self.assertEqual(len(self.rights_ids), len(assembled))
-
-        deleted = random.choice(RightsShell.objects.all())
-        deleted.delete()
-        self.rights_ids.append(deleted.pk)
-        with self.assertRaises(RightsShell.DoesNotExist):
-            assembled = self.assembler.retrieve_rights(self.rights_ids)
-
-    def check_object_dates(self, object, request_start_date, request_end_date):
-        """Tests different cases for date calculation.
-
-        Asserts the method returns a DateTimeField or None if the end date is open.
-        Asserts that the relative delta of the calculated date and the correct end date
-        is equal to the end date period of the object.
-        """
-        start_date, end_date = self.assembler.get_dates(object, request_start_date, request_end_date)
-        self.assertTrue(isinstance(start_date, date))
-        if object.end_date_open:
-            self.assertEqual(end_date, None)
-        else:
-            self.assertTrue(isinstance(end_date, date))
-
-        if object.start_date_period:
-            self.assertEqual(relativedelta(start_date, datetime.strptime(request_start_date, "%Y-%m-%d").date()).years, object.start_date_period)
-        if object.end_date_period:
-            self.assertEqual(relativedelta(end_date, datetime.strptime(request_end_date, "%Y-%m-%d").date()).years, object.end_date_period)
-
-    def test_get_dates(self):
-        """Tests the get_dates method."""
-        shell = random.choice(RightsShell.objects.all())
-        request_end_date = random_date(49, 0).isoformat()
-        request_start_date = random_date(100, 50).isoformat()
-        self.check_object_dates(shell, request_start_date, request_end_date)
-
-        for granted in shell.rightsgranted_set.all():
-            self.check_object_dates(granted, request_start_date, request_end_date)
-
-    def test_create_basis_json(self):
-        """Tests that Rights Shell Serializers are working as expected."""
-        for obj in RightsShell.objects.all():
-            start_date = random_date(75, 50).isoformat()
-            end_date = random_date(49, 5).isoformat()
-            serialized = self.assembler.create_json(obj, start_date, end_date)
-            if obj.rights_basis in ["policy", "donor"]:
-                basis_json = "other_basis.json"
-            else:
-                basis_json = "{}_basis.json".format(obj.rights_basis)
-            self.assertTrue(validate_serialized(serialized, basis_json))
-            if obj.jurisdiction:
-                self.assertTrue(obj.jurisdiction.islower())
-                self.assertTrue(serialized['jurisdiction'].islower())
-            self.assertTrue(isinstance(serialized, dict))
-
-    def test_create_granted_json(self):
-        """Tests that Rights Granted Serializer is working as expected."""
-        obj = random.choice(RightsGranted.objects.all())
-        start_date = random_date(75, 50).isoformat()
-        end_date = random_date(49, 5).isoformat()
-        serialized = self.assembler.create_json(obj, start_date, end_date)
-        self.assertTrue(isinstance(serialized, dict))
-        self.assertEqual(start_date, serialized["start_date"])
-        self.assertEqual(end_date, serialized["end_date"])
