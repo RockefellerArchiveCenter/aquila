@@ -3,12 +3,17 @@ from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   TemplateView, UpdateView)
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.viewsets import ReadOnlyModelViewSet
 
+from .assemble import RightsAssembler
 from .forms import (CopyrightForm, GroupingForm, LicenseForm, OtherForm,
                     RightsGrantedFormSet, RightsShellForm,
                     RightsShellUpdateForm, StatuteForm, StrErrorList)
 from .mixins.authmixins import DeleteMixin, EditMixin
 from .models import Grouping, RightsGranted, RightsShell
+from .serializers import RightsShellListSerializer
 
 
 class PageTitleMixin(object):
@@ -193,3 +198,32 @@ class GroupingUpdateView(PageTitleMixin, EditMixin, UpdateView):
 class AquilaLoginView(PageTitleMixin, LoginView):
     """Custom Login View to set page title."""
     page_title = "Login"
+
+
+class RightsAssemblerView(APIView):
+    """Calls the RightsAssembler class from assemblers."""
+
+    def post(self, request):
+        rights_ids = request.data.get("identifiers")
+        request_start_date = request.data.get("start_date")
+        request_end_date = request.data.get("end_date")
+        if not all([rights_ids, request_start_date, request_end_date]):
+            return Response(
+                {"detail": "Request data must contain 'identifiers', 'start_date' and 'end_date' keys."},
+                status=400)
+        try:
+            rights = RightsAssembler().run(rights_ids, request_start_date, request_end_date)
+            return Response({"rights_statements": rights}, status=200)
+        except RightsShell.DoesNotExist as e:
+            return Response({"detail": "Error retrieving rights statement: {}".format(str(e))}, status=404)
+        except ValueError as e:
+            return Response({"detail": "Unable to parse date: {}".format(e)}, status=500)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=500)
+
+
+class RightsShellAPIView(ReadOnlyModelViewSet):
+    """Lists available RightsShell."""
+
+    queryset = RightsShell.objects.all()
+    serializer_class = RightsShellListSerializer

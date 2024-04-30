@@ -36,11 +36,15 @@ python manage.py changepassword <SUPERUSER_USERNAME>
 
 ## Usage
 
-Aquila includes a front-end interface to create rights statements and groupings.
+Aquila includes a front-end interface to create rights statements and groupings, as well as an API to assemble rights statements.
 
 Groupings are groups of content that have similar rights. They may correspond to record types, collections, or projects.
 
-Many rights statements can be attached to many groupings.
+The rights statements contain date rules that are calculated by the Rights Assembler API. Many rights statements can be attached to many groupings.
+
+### API
+
+Aquila contains a Rights Assembler API (available at `api/rights-assemble/`), which uses a start date, an end date, and IDs of rights statements to create rights JSON.
 
 ## Requirements
 
