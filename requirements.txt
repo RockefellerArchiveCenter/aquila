@@ -16,9 +16,9 @@ cffi==1.16.0
     # via cryptography
 charset-normalizer==3.3.2
     # via requests
-cryptography==42.0.5
+cryptography==42.0.7
     # via django-auth-adfs
-django==5.0.4
+django==5.0.6
     # via
     #   -r requirements.in
     #   django-auth-adfs
@@ -45,15 +45,15 @@ python-dateutil==2.9.0.post0
     # via -r requirements.in
 rac-schema-validator==0.1
     # via -r requirements.in
-referencing==0.35.0
+referencing==0.35.1
     # via
     #   jsonschema
     #   jsonschema-specifications
-requests==2.31.0
+requests==2.32.3
     # via
     #   -r requirements.in
     #   django-auth-adfs
-rpds-py==0.18.0
+rpds-py==0.18.1
     # via
     #   jsonschema
     #   referencing
@@ -61,7 +61,7 @@ six==1.16.0
     # via python-dateutil
 sqlparse==0.5.0
     # via django
-typing-extensions==4.11.0
+typing-extensions==4.12.0
     # via asgiref
 urllib3==2.2.1
     # via
