@@ -1,7 +1,5 @@
 # aquila
 
-[![Build Status](https://travis-ci.com/RockefellerArchiveCenter/aquila.svg?branch=base)](https://travis-ci.com/RockefellerArchiveCenter/aquila)
-
 An application to store, calculate, and assign PREMIS rights statements.
 
 ## Getting Started
@@ -15,7 +13,7 @@ Install [Docker](https://store.docker.com/search?type=edition&offering=community
     $ cd aquila
     $ docker-compose up
 
-A default user with username `test` and password `testpassword` is created on setup. Once the application starts successfully, you should be able to access the application in your browser at `http://localhost:8000`.
+A default user with username `test` and password `testpassword` is created on setup. Once the application starts successfully, you should be able to access the application in your browser at `http://localhost:8009`.
 
 When you're done, shut down docker-compose
 

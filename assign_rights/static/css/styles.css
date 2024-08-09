@@ -1,7 +1,5 @@
-/* Variables */
-
+/* Color variables */
 :root {
-/* Colors  */
   --flame-orange: hsl(17deg 76% 48%);
   --desert-grey: hsl(60deg 10% 96%);
   --night-grey: hsl(0deg 0% 18%);
@@ -41,12 +39,6 @@
   }
 }
 
-/* For api.html template that uses card styles to delineated sections of content */
-.card--sm {
-  min-height: 0;
-  padding: 10px;
-}
-
 .card-list {
   @media screen and (min-width: 580px) {
     grid-template-columns: repeat(2, 1fr);
@@ -80,7 +72,3 @@ used in crispy forms bootstrap4 templates */
   font-weight: normal;
 }
 
-
-.table p {
-  margin: 0;
-}
