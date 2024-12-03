@@ -16,7 +16,7 @@ cffi==1.17.1
     # via cryptography
 charset-normalizer==3.4.0
     # via requests
-cryptography==43.0.3
+cryptography==44.0.0
     # via django-auth-adfs
 django==5.1.3
     # via
@@ -39,7 +39,7 @@ psycopg2==2.9.10
     # via -r requirements.in
 pycparser==2.22
     # via cffi
-pyjwt==2.10.0
+pyjwt==2.10.1
     # via django-auth-adfs
 python-dateutil==2.9.0.post0
     # via -r requirements.in
