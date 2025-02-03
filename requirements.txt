@@ -6,11 +6,11 @@
 #
 asgiref==3.8.1
     # via django
-attrs==24.3.0
+attrs==25.1.0
     # via
     #   jsonschema
     #   referencing
-certifi==2024.12.14
+certifi==2025.1.31
     # via requests
 cffi==1.17.1
     # via cryptography
@@ -18,12 +18,12 @@ charset-normalizer==3.4.1
     # via requests
 cryptography==44.0.0
     # via django-auth-adfs
-django==5.1.4
+django==5.1.5
     # via
     #   -r requirements.in
     #   django-auth-adfs
     #   djangorestframework
-django-auth-adfs==1.14.0
+django-auth-adfs==1.15.0
     # via -r requirements.in
 django-crispy-forms==1.14.0
     # via -r requirements.in
@@ -45,7 +45,7 @@ python-dateutil==2.9.0.post0
     # via -r requirements.in
 rac-schema-validator==1.0
     # via -r requirements.in
-referencing==0.35.1
+referencing==0.36.2
     # via
     #   jsonschema
     #   jsonschema-specifications
@@ -62,7 +62,9 @@ six==1.17.0
 sqlparse==0.5.3
     # via django
 typing-extensions==4.12.2
-    # via asgiref
+    # via
+    #   asgiref
+    #   referencing
 urllib3==2.3.0
     # via
     #   django-auth-adfs
