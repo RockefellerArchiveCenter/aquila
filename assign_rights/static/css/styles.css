@@ -1,6 +1,6 @@
 /* Color variables */
 :root {
-  --flame-orange: hsl(17deg 76% 48%);
+  --umber-brown: hsl(17,87%,38%);
   --desert-grey: hsl(60deg 10% 96%);
   --night-grey: hsl(0deg 0% 18%);
   --silver-grey: hsl(45deg 6% 72%);
@@ -57,7 +57,7 @@
 used in crispy forms bootstrap4 templates */
 .invalid-feedback {
   background-color: #fbe7e0;
-  border: 1px solid var(--flame-orange);
+  border: 1px solid var(--umber-brown);
   border-radius: 3px;
   color: var(--night-grey);
   display: block;
