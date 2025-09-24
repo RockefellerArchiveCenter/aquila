@@ -56,7 +56,10 @@ six==1.17.0
 sqlparse==0.5.3
     # via django
 typing-extensions==4.15.0
-    # via referencing
+    # via
+    #   asgiref
+    #   cryptography
+    #   referencing
 urllib3==2.5.0
     # via
     #   django-auth-adfs
