@@ -19,9 +19,9 @@
             <a class="nav__link" href="{% url 'admin:index' %}">Admin</a>
           </li>
           {% endif %}
-          {% if request.user.is_authenticated %}
+          {% if not request.user.is_authenticated %}
           <li class="nav__item btn--navy">
-            <a class="nav__link" href="{% url 'logout' %}">Log out {{request.user.username}}</a>
+            <a class="nav__link" href="{% url 'microsoft_authentication:microsoft_authentication_login' %}">Log in</a>
           </li>
           {% endif %}
         </ul>
@@ -67,14 +67,14 @@
               </a>
             </li>
             {% endif %}
-            {% if request.user.is_authenticated %}
+            {% if not request.user.is_authenticated %}
             <li>
               <a
                 class="btn btn--navy dropdown__btn dropdown__btn--mobile"
-                href="{% url 'logout' %}"
+                href="{% url 'microsoft_authentication:microsoft_authentication_login' %}"
                 tabindex="-1"
               >
-                Log out {{request.user.username}}
+                Log in
               </a>
             </li>
             {% endif %}
