@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 
 class LoggedInMixinDefaults(LoginRequiredMixin):
     """Sets basic login_url for mixin defaults."""
-    login_url = reverse_lazy("login")
+    login_url = reverse_lazy("microsoft_authentication:microsoft_authentication_login")
 
 
 class EditMixin(LoggedInMixinDefaults, UserPassesTestMixin):
