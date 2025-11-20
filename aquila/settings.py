@@ -42,9 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'assign_rights',
-    'django_auth_adfs',
     'rest_framework',
-    'crispy_forms'
+    'crispy_forms',
+    'microsoft_authentication'
 ]
 
 
@@ -56,7 +56,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_auth_adfs.middleware.LoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'aquila.urls'
@@ -115,25 +114,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'assign_rights.User'
-SUPERUSER_USERNAME = config.SUPERUSER_USERNAME
-SUPERUSER_EMAIL = config.SUPERUSER_EMAIL
 
 AUTHENTICATION_BACKENDS = [
-    'django_auth_adfs.backend.AdfsAuthCodeBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
-
-AUTH_ADFS = {
-    "SERVER": "adfs.rockarch.org",
-    "CLIENT_ID": config.SSO_CLIENT_ID,
-    "RELYING_PARTY_ID": config.SSO_RELYING_PARTY_ID,
-    "AUDIENCE": config.SSO_AUDIENCE,
-    "CLAIM_MAPPING": {"first_name": "given_name",
-                      "last_name": "family_name",
-                      "email": "email"},
-    'LOGIN_EXEMPT_URLS': ['^api'],
-    'GROUPS_CLAIM': None,
-}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': []
@@ -161,9 +145,22 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOGIN_URL = config.LOGIN_URL
-LOGIN_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "/"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Matomo Analytics configs
 MTM_ID = config.MTM_ID
+
+MICROSOFT = {
+    "app_id": config.MS_APP_ID,
+    "app_secret": config.MS_APP_SECRET,
+    "redirect": config.MS_APP_REDIRECT,
+    "scopes": config.MS_APP_SCOPES,
+    "authority": config.MS_APP_AUTHORITY,
+    "valid_email_domains": config.MS_APP_VALID_EMAIL_DOMAINS,
+    "logout_uri": config.MS_APP_LOGOUT_URI
+}
+
+MICROSOFT_CREATE_NEW_DJANGO_USER = False
+MICROSOFT_NEW_DJANGO_USER_IS_STAFF = False
