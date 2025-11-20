@@ -104,4 +104,6 @@ class Grouping(models.Model):
 
 
 class User(AbstractUser):
-    pass
+
+    def __str__(self):
+        return self.email
