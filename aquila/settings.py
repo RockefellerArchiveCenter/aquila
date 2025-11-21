@@ -10,24 +10,24 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-import os
+import json
+from os import getenv
+from pathlib import Path
 
-from . import config
-
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config.DJANGO_SECRET_KEY
+SECRET_KEY = getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config.DJANGO_DEBUG
+DEBUG = getenv('DJANGO_DEBUG')
 
-ALLOWED_HOSTS = config.DJANGO_ALLOWED_HOSTS
+ALLOWED_HOSTS = json.loads(getenv('DJANGO_ALLOWED_HOSTS'))
 
 # Django crispy forms
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -85,12 +85,12 @@ WSGI_APPLICATION = 'aquila.wsgi.application'
 
 DATABASES = {
     "default": {
-        "ENGINE": config.SQL_ENGINE,
-        "NAME": config.SQL_DATABASE,
-        "USER": config.SQL_USER,
-        "PASSWORD": config.SQL_PASSWORD,
-        "HOST": config.SQL_HOST,
-        "PORT": config.SQL_PORT,
+        "ENGINE": getenv('SQL_ENGINE'),
+        "NAME": getenv('SQL_DATABASE'),
+        "USER": getenv('SQL_USER'),
+        "PASSWORD": getenv('SQL_PASSWORD'),
+        "HOST": getenv('SQL_HOST'),
+        "PORT": getenv('SQL_PORT'),
     }
 }
 
@@ -142,25 +142,25 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = 'static/'
 
-LOGIN_URL = config.LOGIN_URL
+LOGIN_URL = getenv('LOGIN_URL')
 LOGIN_REDIRECT_URL = "/"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Matomo Analytics configs
-MTM_ID = config.MTM_ID
+MTM_ID = getenv('MTM_ID')
 
 MICROSOFT = {
-    "app_id": config.MS_APP_ID,
-    "app_secret": config.MS_APP_SECRET,
-    "redirect": config.MS_APP_REDIRECT,
-    "scopes": config.MS_APP_SCOPES,
-    "authority": config.MS_APP_AUTHORITY,
-    "valid_email_domains": config.MS_APP_VALID_EMAIL_DOMAINS,
-    "logout_uri": config.MS_APP_LOGOUT_URI
+    "app_id": getenv('MS_APP_ID'),
+    "app_secret": getenv('MS_APP_SECRET'),
+    "redirect": getenv('MS_APP_REDIRECT'),
+    "scopes": json.loads(getenv('MS_APP_SCOPES')),
+    "authority": getenv('MS_APP_AUTHORITY'),
+    "valid_email_domains": json.loads(getenv('MS_APP_VALID_EMAIL_DOMAINS')),
+    "logout_uri": getenv('MS_APP_LOGOUT_URI')
 }
 
-MICROSOFT_CREATE_NEW_DJANGO_USER = False
+MICROSOFT_CREATE_NEW_DJANGO_USER = True
 MICROSOFT_NEW_DJANGO_USER_IS_STAFF = False
