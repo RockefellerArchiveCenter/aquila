@@ -13,7 +13,7 @@ class EditMixin(LoggedInMixinDefaults, UserPassesTestMixin):
     def test_func(self):
         return any([
             self.request.user.is_superuser,
-            self.request.user.groups.filter(name='edit').exists()
+            self.request.user.is_authenticated
         ])
 
 
@@ -23,5 +23,5 @@ class DeleteMixin(LoggedInMixinDefaults, UserPassesTestMixin):
     def test_func(self):
         return any([
             self.request.user.is_superuser,
-            self.request.user.groups.filter(name='delete').exists()
+            self.request.user.is_authenticated
         ])
