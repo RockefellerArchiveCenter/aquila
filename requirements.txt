@@ -1,10 +1,10 @@
-asgiref==3.10.0
+asgiref==3.11.0
     # via django
 attrs==25.4.0
     # via
     #   jsonschema
     #   referencing
-certifi==2025.10.5
+certifi==2025.11.12
     # via requests
 cffi==2.0.0
     # via cryptography
@@ -12,7 +12,7 @@ charset-normalizer==3.4.4
     # via requests
 cryptography==46.0.3
     # via django-auth-adfs
-django==5.2.7
+django==5.2.8
     # via
     #   -r requirements.in
     #   django-auth-adfs
@@ -47,13 +47,13 @@ requests==2.32.5
     # via
     #   -r requirements.in
     #   django-auth-adfs
-rpds-py==0.28.0
+rpds-py==0.30.0
     # via
     #   jsonschema
     #   referencing
 six==1.17.0
     # via python-dateutil
-sqlparse==0.5.3
+sqlparse==0.5.4
     # via django
 typing-extensions==4.15.0
     # via
