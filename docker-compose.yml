@@ -3,11 +3,11 @@ services:
     image: postgres:14.4
     environment:
       - PGUSER=postgres
-      - POSTGRES_USER=postgres  # name of the application database user
-      - POSTGRES_PASSWORD=postgres  # name of the application database user
-      - POSTGRES_DB=postgres  # name of the application database
+      - POSTGRES_USER=postgres # name of the application database user
+      - POSTGRES_PASSWORD=postgres # name of the application database user
+      - POSTGRES_DB=postgres # name of the application database
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
+      test: [ "CMD-SHELL", "pg_isready" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -25,7 +25,7 @@ services:
       - DJANGO_DEBUG=True
       - DJANGO_ALLOWED_HOSTS=["localhost", "aquila-web"]
       - SQL_ENGINE=django.db.backends.postgresql
-      - SQL_DATABASE=postgres
+      - SQL_DATABASE=${SQL_DATABASE:postgres}
       - SQL_USER=postgres
       - SQL_PASSWORD=postgres
       - SQL_HOST=aquila-db
