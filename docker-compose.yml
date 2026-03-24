@@ -40,6 +40,7 @@ services:
       - MS_APP_AUTHORITY=
       - MS_APP_VALID_EMAIL_DOMAINS=["rockarch.org"]
       - MS_APP_LOGOUT_URI=http://localhost
+    hostname: aquila-web
     volumes:
       - .:/var/www/aquila
     ports:
