@@ -19,6 +19,8 @@ services:
       dockerfile: Dockerfile
       target: base
     command: /var/www/aquila/entrypoint.dev.sh
+    env_file:
+      - stack.env
     environment:
       - APPLICATION_PORT=${APPLICATION_PORT:-80}
       - DJANGO_SECRET_KEY='ny033+z#r)$cpjl9gnbi*v=p8rjl2(%3-f&*v(mhi4#^eur9u8'
