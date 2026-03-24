@@ -1,0 +1,12 @@
+services:
+  aquila-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
+    command: /var/www/aquila/entrypoint.dev.sh
+    hostname: ${HOSTNAME}
+    volumes:
+      - .:/var/www/aquila
+    ports:
+      - "${APPLICATION_PORT:-80}:${APPLICATION_PORT:-80}"
