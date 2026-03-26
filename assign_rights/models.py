@@ -17,7 +17,7 @@ class RightsShell(models.Model):
     rights_basis = models.CharField(choices=RIGHTS_BASIS_CHOICES, max_length=64)
     PREMIS_COPYRIGHT_STATUSES = (
         ("copyrighted", "copyrighted"),
-        ("public domain", "public domain"),
+        ("public_domain", "public_domain"),
         ("unknown", "unknown"),
     )
     copyright_status = models.CharField(choices=PREMIS_COPYRIGHT_STATUSES, max_length=64, blank=True, null=True)
@@ -104,4 +104,6 @@ class Grouping(models.Model):
 
 
 class User(AbstractUser):
-    pass
+
+    def __str__(self):
+        return self.email

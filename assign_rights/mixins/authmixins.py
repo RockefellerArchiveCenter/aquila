@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 
 class LoggedInMixinDefaults(LoginRequiredMixin):
     """Sets basic login_url for mixin defaults."""
-    login_url = reverse_lazy("login")
+    login_url = reverse_lazy("microsoft_authentication:microsoft_authentication_login")
 
 
 class EditMixin(LoggedInMixinDefaults, UserPassesTestMixin):
@@ -13,7 +13,7 @@ class EditMixin(LoggedInMixinDefaults, UserPassesTestMixin):
     def test_func(self):
         return any([
             self.request.user.is_superuser,
-            self.request.user.groups.filter(name='edit').exists()
+            self.request.user.is_authenticated
         ])
 
 
@@ -23,5 +23,5 @@ class DeleteMixin(LoggedInMixinDefaults, UserPassesTestMixin):
     def test_func(self):
         return any([
             self.request.user.is_superuser,
-            self.request.user.groups.filter(name='delete').exists()
+            self.request.user.is_authenticated
         ])

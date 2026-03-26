@@ -1,5 +1,3 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   TemplateView, UpdateView)
@@ -32,13 +30,13 @@ class PageTitleMixin(object):
         return context
 
 
-class HomePage(PageTitleMixin, LoginRequiredMixin, TemplateView):
+class HomePage(PageTitleMixin, TemplateView):
     """Application landing page."""
     page_title = "Aquila 🦅"
     template_name = "index.html"
 
 
-class RightsShellListView(PageTitleMixin, LoginRequiredMixin, ListView):
+class RightsShellListView(PageTitleMixin, ListView):
     """Browse and search rights statements."""
     model = RightsShell
     template_name = "rights/list.html"
@@ -144,7 +142,7 @@ class RightsShellDeleteView(PageTitleMixin, DeleteMixin, DeleteView):
     success_url = reverse_lazy("rights-list")
 
 
-class RightsShellDetailView(PageTitleMixin, LoginRequiredMixin, DetailView):
+class RightsShellDetailView(PageTitleMixin, DetailView):
     """View a rights statement."""
     model = RightsShell
     template_name = "rights/detail.html"
@@ -153,7 +151,7 @@ class RightsShellDetailView(PageTitleMixin, LoginRequiredMixin, DetailView):
         return str(context["object"])
 
 
-class GroupingListView(PageTitleMixin, LoginRequiredMixin, ListView):
+class GroupingListView(PageTitleMixin, ListView):
     """Browse and search groupings."""
     model = Grouping
     template_name = "groupings/list.html"
@@ -176,7 +174,7 @@ class GroupingDeleteView(PageTitleMixin, DeleteMixin, DeleteView):
     page_title = "Confirm Delete"
 
 
-class GroupingDetailView(PageTitleMixin, LoginRequiredMixin, DetailView):
+class GroupingDetailView(PageTitleMixin, DetailView):
     """View a grouping."""
     model = Grouping
     template_name = "groupings/detail.html"
@@ -193,11 +191,6 @@ class GroupingUpdateView(PageTitleMixin, EditMixin, UpdateView):
 
     def get_page_title(self, context):
         return "Update {}".format(context["object"].title)
-
-
-class AquilaLoginView(PageTitleMixin, LoginView):
-    """Custom Login View to set page title."""
-    page_title = "Login"
 
 
 class RightsAssemblerView(APIView):

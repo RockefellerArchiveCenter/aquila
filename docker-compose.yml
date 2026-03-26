@@ -1,25 +1,54 @@
-version: '3'
-
 services:
   aquila-db:
     image: postgres:14.4
     environment:
-      - POSTGRES_USER=postgres  # name of the application database user
-      - POSTGRES_PASSWORD=postgres  # name of the application database user
-      - POSTGRES_DB=postgres  # name of the application database
+      - PGUSER=postgres
+      - POSTGRES_USER=postgres # name of the application database user
+      - POSTGRES_PASSWORD=postgres # name of the application database user
+      - POSTGRES_DB=postgres # name of the application database
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
       - aquiladb:/var/lib/postgresql/data/
   aquila-web:
-    build: .
-    entrypoint: /code/entrypoint.sh
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
+    command: /var/www/aquila/entrypoint.dev.sh
     environment:
-      - APPLICATION_PORT=${APPLICATION_PORT:-8009}
+      - APPLICATION_PORT=${APPLICATION_PORT:-80}
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY:-'ny033+z#r)$cpjl9gnbi*v=p8rjl2(%3-f&*v(mhi4#^eur9u8'}
+      - DJANGO_DEBUG=${DJANGO_DEBUG:-True}
+      - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS:-["localhost", "aquila-web"]}
+      - DJANGO_CSRF_TRUSTED_ORIGINS=${DJANGO_CSRF_TRUSTED_ORIGINS:-["https://aquila-test.rockarch.org", "https://aquila.rockarch.org"]}
+      - SQL_ENGINE=django.db.backends.postgresql
+      - SQL_DATABASE=${SQL_DATABASE:-postgres}
+      - SQL_USER=${SQL_USER:-postgres}
+      - SQL_PASSWORD=${SQL_PASSWORD:-postgres}
+      - SQL_HOST=${SQL_HOST:-aquila-db}
+      - SQL_PORT=${SQL_PORT:-5432}
+      - LOGIN_URL=${LOGIN_URL:-/microsoft_authentication/login}
+      - LOGOUT_URL=${LOGOUT_URL:-/}
+      - MTM_ID=${MTM_ID:-https://cdn.matomo.cloud/rockarch.matomo.cloud/container_xxxxxxxx.js}
+      - MS_APP_ID=${MS_APP_ID:-}
+      - MS_APP_SECRET=${MS_APP_SECRET:-}
+      - MS_APP_REDIRECT=${MS_APP_REDIRECT:-http://localhost/microsoft_authentication/callback}
+      - MS_APP_SCOPES=["user.read"]
+      - MS_APP_AUTHORITY=${MS_APP_AUTHORITY:-}
+      - MS_APP_VALID_EMAIL_DOMAINS=${MS_APP_VALID_EMAIL_DOMAINS:-["rockarch.org"]}
+      - MS_APP_LOGOUT_URI=${MS_APP_LOGOUT_URI:-http://localhost}
+    hostname: ${HOSTNAME}
     volumes:
-      - .:/code
+      - .:/var/www/aquila
     ports:
-      - "${APPLICATION_PORT:-8009}:${APPLICATION_PORT:-8009}"
+      - "${APPLICATION_PORT:-80}:${APPLICATION_PORT:-80}"
     depends_on:
-      - aquila-db
+      aquila-db:
+        condition: service_healthy
 
 volumes:
   aquiladb:

@@ -147,12 +147,8 @@ class TestViews(TestCase):
     def test_restricted_views(self):
         """Asserts that restricted views are only available to logged-in users."""
         restricted_views = [
-            ("groupings-list", GroupingListView, None),
-            ("groupings-detail", GroupingDetailView, random.choice(Grouping.objects.all()).pk),
             ("groupings-create", GroupingCreateView, False),
             ("groupings-update", GroupingUpdateView, random.choice(Grouping.objects.all()).pk),
-            ("rights-list", RightsShellListView, None),
-            ("rights-detail", RightsShellDetailView, random.choice(RightsShell.objects.all()).pk),
             ("rights-create", RightsShellCreateView, False),
             ("rights-update", RightsShellUpdateView, random.choice(RightsShell.objects.all()).pk)]
         for view_name, view, pk in restricted_views:
