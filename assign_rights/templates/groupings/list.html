@@ -2,7 +2,7 @@
 {% load utils %}
 
 {% block header_button %}
-  {% if request.user|has_group:"edit" %}
+  {% if request.user.is_authenticated %}
   <a class="btn btn--md btn--blue" href="{% url 'groupings-create' %}">Create new grouping</a>
   {% endif %}
 {% endblock %}
