@@ -24,6 +24,7 @@ services:
       - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY:-'ny033+z#r)$cpjl9gnbi*v=p8rjl2(%3-f&*v(mhi4#^eur9u8'}
       - DJANGO_DEBUG=${DJANGO_DEBUG:-True}
       - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS:-["localhost", "aquila-web"]}
+      - DJANGO_CSRF_TRUSTED_ORIGINS=${DJANGO_CSRF_TRUSTED_ORIGINS:-["https://aquila-test.rockarch.org", "https://aquila.rockarch.org"]}
       - SQL_ENGINE=django.db.backends.postgresql
       - SQL_DATABASE=${SQL_DATABASE:-postgres}
       - SQL_USER=${SQL_USER:-postgres}
