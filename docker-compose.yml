@@ -29,7 +29,7 @@ services:
       - SQL_DATABASE=${SQL_DATABASE:-postgres}
       - SQL_USER=${SQL_USER:-postgres}
       - SQL_PASSWORD=${SQL_PASSWORD:-postgres}
-      - SQL_HOST=${SQL_HOST:-postgres}
+      - SQL_HOST=${SQL_HOST:-aquila-db}
       - SQL_PORT=${SQL_PORT:-5432}
       - LOGIN_URL=${LOGIN_URL:-/microsoft_authentication/login}
       - LOGOUT_URL=${LOGOUT_URL:-/}
