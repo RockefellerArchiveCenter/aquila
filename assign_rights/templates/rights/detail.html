@@ -89,7 +89,7 @@
 
     {% for rights_granted in rightsshell.rightsgranted_set.all %}
     <div class="card card--container mb-10">
-      <div class="card-body">
+      <div class="card__body">
         <h3 class="card__title">{{rights_granted}}</h3>
         {% if rights_granted.granted_note %}
         <p>{{rights_granted.granted_note}}</p>
