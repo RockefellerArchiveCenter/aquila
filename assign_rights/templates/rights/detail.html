@@ -71,10 +71,10 @@
       </div>
       {% endif %}
       {% if rightsshell.end_date_open %}
-      <div class="summary-list__row"></div>
+      <div class="summary-list__row">
         <dt class="summary-list__key">End Date Open?</dt>
         <dd class="summary-list__value">{{ rightsshell.end_date_open }}</dd>
-      </dl>
+      </div>
       {% endif %}
       {% if rightsshell.end_date_period %}
       <div class="summary-list__row">
@@ -89,7 +89,7 @@
 
     {% for rights_granted in rightsshell.rightsgranted_set.all %}
     <div class="card card--container mb-10">
-      <div class="card-body">
+      <div class="card__body">
         <h3 class="card__title">{{rights_granted}}</h3>
         {% if rights_granted.granted_note %}
         <p>{{rights_granted.granted_note}}</p>
@@ -134,10 +134,8 @@
         </dl>
       </div>
     </div>
-  </div>
-</div>
-{% endfor %}
-{% endif %}
+    {% endfor %}
+    {% endif %}
 
 {% if request.user.is_authenticated %}
 <a class="btn btn--sm btn--blue" href="{% url 'rights-update' pk=object.pk %}">Edit</a>
