@@ -15,14 +15,14 @@
 
 .form--login {
   grid-column: 1 / span 12;
-  @media screen and (min-width: 1024px) {
+  @media screen and (min-width: 64em) {
     grid-column: 1 / span 4;
   }
 }
 
 .form--manage {
   grid-column: 1 / span 12;
-  @media screen and (min-width: 1024px) {
+  @media screen and (min-width: 64em) {
     grid-column: 1 / span 6;
   }
 }
@@ -34,13 +34,13 @@
 
 .rights-details {
   grid-column: 1 / span 12;
-  @media screen and (min-width: 1024px) {
+  @media screen and (min-width: 64em) {
     grid-column: 1 / span 6;
   }
 }
 
 .card-list {
-  @media screen and (min-width: 580px) {
+  @media screen and (min-width: 36.25) {
     grid-template-columns: repeat(2, 1fr);
   }
 }
