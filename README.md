@@ -11,9 +11,7 @@ Install [git](https://git-scm.com/) and clone the repository
 Install [Docker](https://store.docker.com/search?type=edition&offering=community) and run docker-compose from the root directory
 
     $ cd aquila
-    $ docker-compose up
-
-A default user with username `test` and password `testpassword` is created on setup. Once the application starts successfully, you should be able to access the application in your browser at `http://localhost:80`.
+    $ docker compose up
 
 When you're done, shut down docker-compose
 
@@ -23,14 +21,14 @@ Or, if you want to remove all data
 
     $ docker-compose down -v
 
+## Authentication
 
-## Default Superuser
+This application uses Microsoft Entra to manage users. In order to successfully log in, you will need several variables, which should be provided to the application as environment variables:
+- `MS_APP_ID` - ID of the configured Microsoft Entra app.
+- `MS_APP_SECRET` - Secret key for the configured Microsoft Entra app
+- `MS_APP_AUTHORITY` - Authentication endpoint
 
-When you start the container for the first time, a superuser will be created. Make sure you change the password for this user (the easiest way is through the Django shell). E.g.,
-
-```
-python manage.py changepassword <SUPERUSER_USERNAME>
-```
+Additional configurations are available. See the `docker-compose.yml` file for these configurations and their default values.
 
 ## Usage
 
