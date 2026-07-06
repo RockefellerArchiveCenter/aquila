@@ -30,6 +30,12 @@ This application uses Microsoft Entra to manage users. In order to successfully 
 
 Additional configurations are available. See the `docker-compose.yml` file for these configurations and their default values.
 
+For local development, it is also possible to authenticate using a Django admin user:
+1. Start the application by running `docker compose up`
+2. Create a superuser by running `docker compose exec aquila-web python manage.py createsuperuser` and set a name and password
+3. Go to http://localhost/admin/ and enter the login credentials you used to create the superuser account
+4. Go to http://localhost to access the site with admin access
+
 ## Usage
 
 Aquila includes a front-end interface to create rights statements and groupings, as well as an API to assemble rights statements.
