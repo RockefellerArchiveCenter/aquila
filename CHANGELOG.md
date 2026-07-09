@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.2](https://github.com/RockefellerArchiveCenter/aquila/compare/v1.0.1...v1.0.2) (2026-07-09)
+
+
+### Bug Fixes
+
+* update dockerfile ([95f34b7](https://github.com/RockefellerArchiveCenter/aquila/commit/95f34b7c6bc7abd10c53006bc73d60da55d8291c))
+* update dockerfile ([2c905cd](https://github.com/RockefellerArchiveCenter/aquila/commit/2c905cd13449c02183506b3ee76b707493111902))
+* update dockerfile to pin alpine version ([2c905cd](https://github.com/RockefellerArchiveCenter/aquila/commit/2c905cd13449c02183506b3ee76b707493111902))
+
 ## [1.0.1](https://github.com/RockefellerArchiveCenter/aquila/compare/v1.0.0...v1.0.1) (2026-07-06)
 
 
