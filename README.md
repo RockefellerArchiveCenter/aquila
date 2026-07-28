@@ -16,6 +16,7 @@ Install [Docker](https://store.docker.com/search?type=edition&offering=community
 When you're done, shut down docker-compose
 
     $ docker-compose down
+    HELLO
 
 Or, if you want to remove all data
 
