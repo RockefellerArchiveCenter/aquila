@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.5](https://github.com/RockefellerArchiveCenter/aquila/compare/v1.0.4...v1.0.5) (2026-10-05)
+
+
+### Bug Fixes
+
+* **deps:** Scheduled dependency updates ([18137cc](https://github.com/RockefellerArchiveCenter/aquila/commit/18137cc81ffaa801e4189be5ca2837430331f903))
+* **deps:** Scheduled dependency updates ([18137cc](https://github.com/RockefellerArchiveCenter/aquila/commit/18137cc81ffaa801e4189be5ca2837430331f903))
+* **deps:** Scheduled dependency updates ([d743ccd](https://github.com/RockefellerArchiveCenter/aquila/commit/d743ccd88a5f51457a305c35f765ea448fea8da8))
+* **deps:** Scheduled dependency updates ([d743ccd](https://github.com/RockefellerArchiveCenter/aquila/commit/d743ccd88a5f51457a305c35f765ea448fea8da8))
+* **deps:** Scheduled dependency updates ([9b76051](https://github.com/RockefellerArchiveCenter/aquila/commit/9b760519c351e168298d404d4f25aa510de9b39f))
+
 ## [1.0.4](https://github.com/RockefellerArchiveCenter/aquila/compare/v1.0.3...v1.0.4) (2026-09-08)
 
 
