@@ -4,7 +4,7 @@ attrs==26.1.0
     # via
     #   jsonschema
     #   referencing
-certifi==2026.7.22
+certifi==2026.10.19
     # via requests
 cffi==2.1.1
     # via cryptography
@@ -14,7 +14,7 @@ cryptography==50.0.2
     # via
     #   msal
     #   pyjwt
-django==5.2.17
+django==5.2.18
     # via
     #   -r requirements.in
     #   djangorestframework
@@ -22,7 +22,7 @@ django-crispy-forms==1.14.0
     # via -r requirements.in
 django-microsoft-authentication==0.1.6
     # via -r requirements.in
-djangorestframework==3.18.1
+djangorestframework==3.18.3
     # via -r requirements.in
 idna==3.20
     # via requests
@@ -34,7 +34,7 @@ msal==1.39.0
     # via django-microsoft-authentication
 psycopg2==2.9.13
     # via -r requirements.in
-pycparser==3.0
+pycparser==3.11
     # via cffi
 pyjwt[crypto]==2.15.1
     # via
@@ -42,7 +42,7 @@ pyjwt[crypto]==2.15.1
     #   pyjwt
 python-dateutil==2.9.0.post0
     # via -r requirements.in
-rac-schema-validator==1.1.5
+rac-schema-validator==1.1.6
     # via -r requirements.in
 referencing==0.37.0
     # via
@@ -53,7 +53,7 @@ requests==2.34.2
     #   -r requirements.in
     #   django-microsoft-authentication
     #   msal
-rpds-py==2026.6.3
+rpds-py==2026.9.1
     # via
     #   jsonschema
     #   referencing
