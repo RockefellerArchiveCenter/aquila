@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.6](https://github.com/RockefellerArchiveCenter/aquila/compare/v1.0.5...v1.0.6) (2026-10-21)
+
+
+### Bug Fixes
+
+* pip and deps ([b92d92f](https://github.com/RockefellerArchiveCenter/aquila/commit/b92d92f6bd1571915d227ddc74a689decc27e928))
+* pip and deps ([b92d92f](https://github.com/RockefellerArchiveCenter/aquila/commit/b92d92f6bd1571915d227ddc74a689decc27e928))
+* pip and deps ([69a3526](https://github.com/RockefellerArchiveCenter/aquila/commit/69a3526571ebcd954f456e124e515f6ca73408f8))
+* pip and deps ([69a3526](https://github.com/RockefellerArchiveCenter/aquila/commit/69a3526571ebcd954f456e124e515f6ca73408f8))
+* pip and deps ([fd4aef2](https://github.com/RockefellerArchiveCenter/aquila/commit/fd4aef2971338f9b88ebcd2b34ba05047c37b7c5))
+
 ## [1.0.5](https://github.com/RockefellerArchiveCenter/aquila/compare/v1.0.4...v1.0.5) (2026-10-05)
 
 
