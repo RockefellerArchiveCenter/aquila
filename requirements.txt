@@ -1,10 +1,10 @@
-asgiref==3.12.1
+asgiref==3.13.0
     # via django
 attrs==26.1.0
     # via
     #   jsonschema
     #   referencing
-certifi==2026.10.19
+certifi==2026.10.23
     # via requests
 cffi==2.1.1
     # via cryptography
@@ -34,7 +34,7 @@ msal==1.39.0
     # via django-microsoft-authentication
 psycopg2==2.9.13
     # via -r requirements.in
-pycparser==3.11
+pycparser==3.12
     # via cffi
 pyjwt[crypto]==2.15.1
     # via
@@ -42,7 +42,7 @@ pyjwt[crypto]==2.15.1
     #   pyjwt
 python-dateutil==2.9.0.post0
     # via -r requirements.in
-rac-schema-validator==1.1.6
+rac-schema-validator==1.1.7
     # via -r requirements.in
 referencing==0.37.0
     # via
